@@ -13,11 +13,27 @@
 //
 
 //
+// ─── SINGLE EXPRESSIONS ─────────────────────────────────────────────────────────
+//
+
+    SingleExpressions
+        = Literals
+        / Identifier
+
+//
+// ─── LITERALS ───────────────────────────────────────────────────────────────────
+//
+
+    Literals
+        = NumericLiteral
+        / BooleanLiteral
+
+//
 // ─── IDENTIFIERS ────────────────────────────────────────────────────────────────
 //
 
     Identifier
-        = inetiferStart:[a-zA-Z] tail:[0-9a-zA-Z\-]* {
+        = inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
             console.log( name );
             return {
                 type: 'identifier',
@@ -30,7 +46,7 @@
 // ─── BOOLEAN ────────────────────────────────────────────────────────────────────
 //
 
-    Boolean
+    BooleanLiteral
         = switches: ( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
             let result = true
             switch ( switches ) {
@@ -50,10 +66,10 @@
 // ─── NUMBER ─────────────────────────────────────────────────────────────────────
 //
 
-    Numeber
-        = digits: [0-9]+(.[0-9]+)? {
+    NumericLiteral
+        = digits: ('-'?[0-9]+(.[0-9]+)?) {
             return {
-                type: 'number',
+                type: 'numeric',
                 terminal: true,
                 value: parseInt( digits.join( '' ), 10 )
             }
