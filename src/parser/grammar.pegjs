@@ -13,6 +13,20 @@
 //
 
 //
+// ─── IDENTIFIERS ────────────────────────────────────────────────────────────────
+//
+
+    Identifier
+        = inetiferStart:[a-zA-Z] tail:[0-9a-zA-Z\-]* {
+            console.log( name );
+            return {
+                type: 'identifier',
+                terminal: true,
+                value: inetiferStart + tail.join('')
+            }
+        }
+
+//
 // ─── BOOLEAN ────────────────────────────────────────────────────────────────────
 //
 
