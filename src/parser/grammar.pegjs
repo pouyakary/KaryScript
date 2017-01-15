@@ -9,17 +9,38 @@
 //
 
 //
-// Basic syntax rule object is: { type: string, value: any }
+// Basic syntax rule object is: { type: string, terminal: boolean, value: any }
 //
+
+//
+// ─── BOOLEAN ────────────────────────────────────────────────────────────────────
+//
+
+    Boolean
+        = switches: ( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+            let result = true
+            switch ( switches ) {
+                case 'off':
+                case 'false':
+                case 'no':
+                    result = false
+            }
+            return {
+                type: 'boolean',
+                terminal: true,
+                value: result
+            }
+        }
 
 //
 // ─── NUMBER ─────────────────────────────────────────────────────────────────────
 //
 
-    numeber
+    Numeber
         = digits: [0-9]+(.[0-9]+)? {
             return {
-                type: 'number'
+                type: 'number',
+                terminal: true,
                 value: parseInt( digits.join( '' ), 10 )
             }
         }
