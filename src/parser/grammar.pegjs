@@ -12,6 +12,8 @@
 // Basic syntax rule object is: { type: string, terminal: boolean, value: any }
 //
 
+
+
 //
 // ─── SINGLE EXPRESSIONS ─────────────────────────────────────────────────────────
 //
@@ -47,7 +49,7 @@
 //
 
     BooleanLiteral
-        = switches: ( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+        = switches:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
             let result = true
             switch ( switches ) {
                 case 'off':
@@ -67,7 +69,7 @@
 //
 
     NumericLiteral
-        = digits: ('-'?[0-9]+(.[0-9]+)?) {
+        = digits:('-'?[0-9]+(.[0-9]+)?) {
             return {
                 type: 'numeric',
                 terminal: true,
