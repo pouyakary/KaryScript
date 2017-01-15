@@ -25,7 +25,7 @@ async something as number
 end
 ```
 And this compiles to:
-```js
+```TypeScript
 async function something( ): number {
     return ( 2 + ( 5 * ( await kary.terminal.input( "Enter something" ) ) ) )
 }
