@@ -9,16 +9,40 @@
 //
 
 //
-// Basic syntax rule object is: { type: string, terminal: boolean, value: any }
+// Basic syntax rule object is: { 
+//    type: string, // what is the that we have
+//    terminal: boolean, // is terminal or contains children
+//    value: any, // what parser needs
+//    raw: string // exact matching (for formatters)
+//    children?: this[ ] // if it contained any child
+// }
 //
 
-
-
 //
-// ─── SINGLE EXPRESSIONS ─────────────────────────────────────────────────────────
+// ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
-    SingleExpressions
+    Root = '' / Body
+
+//
+// ─── BODY ───────────────────────────────────────────────────────────────────────
+//
+
+    Body =
+        Expression
+
+//
+// ─── LINE ───────────────────────────────────────────────────────────────────────
+//
+
+    Line =
+        Expression (WhiteSpcae+ Expression)*
+
+//
+// ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
+//
+
+    Expression
         = Literals
         / Identifier
 
@@ -35,7 +59,7 @@
 //
 
     Identifier
-        = inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
+        = !ReservedWord inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
             console.log( name );
             return {
                 type: 'identifier',
@@ -45,11 +69,25 @@
         }
 
 //
+// ─── RESERVED WORDS ─────────────────────────────────────────────────────────────
+//
+
+    ReservedWord
+        = Keyword
+
+//
+// ─── KEYWORDS ───────────────────────────────────────────────────────────────────
+//
+
+    Keyword
+        = BooleanLiteral
+
+//
 // ─── BOOLEAN ────────────────────────────────────────────────────────────────────
 //
 
     BooleanLiteral
-        = switches:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+        = switches: ( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
             let result = true
             switch ( switches ) {
                 case 'off':
@@ -60,6 +98,7 @@
             return {
                 type: 'boolean',
                 terminal: true,
+                raw: switches,
                 value: result
             }
         }
@@ -69,12 +108,47 @@
 //
 
     NumericLiteral
-        = digits:('-'?[0-9]+(.[0-9]+)?) {
+        = digits: ('-'?[0-9]+(.[0-9]+)?) {
             return {
                 type: 'numeric',
                 terminal: true,
+                raw: digits.join( '' )
                 value: parseInt( digits.join( '' ), 10 )
             }
         }
+
+//
+// ─── WHITESPACE ─────────────────────────────────────────────────────────────────
+//
+
+    WhiteSpcae
+        = spaces: ( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
+            return {
+                type: 'whitespace',
+                terminal: true
+                raw: spaces.join('')
+                value: spaces.join('')
+            }
+        }
+
+    LineTerminator
+        = [\n\r\u2028\u2029] {
+            return {
+                type: 'line-terminator',
+                raw: '\n',
+                terminal: true
+            }
+        }
+
+    LineTerminatorSequence
+        = ( "\n"  / "\r\n" / "\r" / "\u2028" / "\u2029" ) {
+            return {
+                type: 'line-terminator',
+                raw: '\n',
+                terminal: true
+            }
+        }
+
+    SeperatorSpaces = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
 // ────────────────────────────────────────────────────────────────────────────────
