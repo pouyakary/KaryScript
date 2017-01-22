@@ -37,23 +37,8 @@
 
     Statement
         = DeclerationStatement
-        / AssignStatement
-
-//
-// ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
-//
-
-    AssignStatement
-        = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
-            return {
-                type: 'AssignStatement',
-                terminal: false,
-                value: {
-                    name: name,
-                    value: value
-                }
-            }
-        }
+        / ReturnStatement
+        / Expression
 
 //
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
@@ -72,12 +57,26 @@
         }
 
 //
+// ─── RETURN STATEMENT ───────────────────────────────────────────────────────────
+//
+
+    ReturnStatement
+        = "return" WhiteSpcae+  expr:Expression {
+            return {
+                type: 'ReturnStatement',
+                terminal: false,
+                value: expr
+            }
+        }
+
+//
 // ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
 //
 
     Expression
         = Literals
         / Identifier
+        / Assignment
 
 //
 // ─── LITERALS ───────────────────────────────────────────────────────────────────
@@ -86,6 +85,23 @@
     Literals
         = NumericLiteral
         / BooleanLiteral
+
+
+//
+// ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
+//
+
+    Assignment
+        = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
+            return {
+                type: 'Assignment',
+                terminal: false,
+                value: {
+                    name: name,
+                    value: value
+                }
+            }
+        }
 
 //
 // ─── IDENTIFIERS ────────────────────────────────────────────────────────────────
@@ -139,7 +155,7 @@
 //
 
     NumericLiteral
-        = digits: ('-'?[0-9]+(.[0-9]+)?) {
+        = digits: ( '-'? [0-9]+ ( . [0-9]+ ) ? ) {
             return {
                 type: 'NumericLiteral',
                 terminal: true,
