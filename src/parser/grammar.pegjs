@@ -22,21 +22,37 @@
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
-    Root = '' / Body
+    Root = Statement
 
 //
 // ─── BODY ───────────────────────────────────────────────────────────────────────
 //
 
     Body =
-        Expression
+        Statement
 
 //
-// ─── LINE ───────────────────────────────────────────────────────────────────────
+// ─── STATEMENTS ─────────────────────────────────────────────────────────────────
 //
 
-    Line =
-        Expression (WhiteSpcae+ Expression)*
+    Statement
+        = AssignStatement
+
+//
+// ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
+//
+
+    AssignStatement
+        = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
+            return {
+                type: 'AssignStatement',
+                terminal: false,
+                children: {
+                    name: name,
+                    value: value
+                }
+            }
+        }
 
 //
 // ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
@@ -60,9 +76,8 @@
 
     Identifier
         = !ReservedWord inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
-            console.log( name );
             return {
-                type: 'identifier',
+                type: 'Identifier',
                 terminal: true,
                 value: inetiferStart + tail.join('')
             }
@@ -96,9 +111,8 @@
                     result = false
             }
             return {
-                type: 'boolean',
+                type: 'BooleanLiteral',
                 terminal: true,
-                raw: switches,
                 value: result
             }
         }
@@ -110,9 +124,8 @@
     NumericLiteral
         = digits: ('-'?[0-9]+(.[0-9]+)?) {
             return {
-                type: 'numeric',
+                type: 'NumericLiteral',
                 terminal: true,
-                raw: digits.join( '' )
                 value: parseInt( digits.join( '' ), 10 )
             }
         }
@@ -124,18 +137,17 @@
     WhiteSpcae
         = spaces: ( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
             return {
-                type: 'whitespace',
-                terminal: true
-                raw: spaces.join('')
-                value: spaces.join('')
+                type: 'WhiteSpcae',
+                terminal: true,
+                value: spaces
             }
         }
 
     LineTerminator
         = [\n\r\u2028\u2029] {
             return {
-                type: 'line-terminator',
-                raw: '\n',
+                type: 'LineTerminator',
+                value: '\n',
                 terminal: true
             }
         }
@@ -143,7 +155,7 @@
     LineTerminatorSequence
         = ( "\n"  / "\r\n" / "\r" / "\u2028" / "\u2029" ) {
             return {
-                type: 'line-terminator',
+                type: 'LineTerminatorSequence',
                 raw: '\n',
                 terminal: true
             }
