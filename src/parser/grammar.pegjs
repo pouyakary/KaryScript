@@ -36,7 +36,8 @@
 //
 
     Statement
-        = AssignStatement
+        = DeclerationStatement
+        / AssignStatement
 
 //
 // ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
@@ -47,9 +48,25 @@
             return {
                 type: 'AssignStatement',
                 terminal: false,
-                children: {
+                value: {
                     name: name,
                     value: value
+                }
+            }
+        }
+
+//
+// ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
+//
+
+    DeclerationStatement
+        = type:( "const" /  "let" / "var" ) WhiteSpcae+  assignment:AssignStatement {
+            return {
+                type: 'DeclerationStatement',
+                terminal: false,
+                value: {
+                    type: type,
+                    assignment: assignment
                 }
             }
         }
