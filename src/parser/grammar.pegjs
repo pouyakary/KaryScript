@@ -56,6 +56,23 @@
         / Expression
 
 //
+// ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
+//
+
+    Expression
+        = Literals
+        / Identifier
+        / Assignment
+
+//
+// ─── LITERALS ───────────────────────────────────────────────────────────────────
+//
+
+    Literals
+        = NumericLiteral
+        / BooleanLiteral
+
+//
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
 //
 
@@ -83,24 +100,6 @@
                 value: expr
             }
         }
-
-//
-// ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
-//
-
-    Expression
-        = Literals
-        / Identifier
-        / Assignment
-
-//
-// ─── LITERALS ───────────────────────────────────────────────────────────────────
-//
-
-    Literals
-        = NumericLiteral
-        / BooleanLiteral
-
 
 //
 // ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
