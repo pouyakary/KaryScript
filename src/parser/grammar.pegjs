@@ -22,14 +22,29 @@
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
-    Root = Statement
+    Root = Body
 
 //
 // ─── BODY ───────────────────────────────────────────────────────────────────────
 //
 
-    Body =
-        Statement
+    Body
+        = statements:( SpacesStatements )+ {
+        	return {
+            	type: 'Body',
+                terminal: false,
+                value: statements
+            }
+        }
+
+//
+// ─── SPACES STATEMENTS ──────────────────────────────────────────────────────────
+//
+
+    SpacesStatements
+        = ( WhiteSpcae | EOL )* statement: Statement ( WhiteSpcae | EOL )* {
+            return statement
+        }
 
 //
 // ─── STATEMENTS ─────────────────────────────────────────────────────────────────
@@ -45,7 +60,7 @@
 //
 
     DeclerationStatement
-        = type:( "const" /  "let" / "var" ) WhiteSpcae+  assignment:AssignStatement {
+        = type:( "const" /  "let" / "var" ) WhiteSpcae+  assignment:Assignment {
             return {
                 type: 'DeclerationStatement',
                 terminal: false,
@@ -61,7 +76,7 @@
 //
 
     ReturnStatement
-        = "return" WhiteSpcae+  expr:Expression {
+        = "return" WhiteSpcae+ expr:Expression {
             return {
                 type: 'ReturnStatement',
                 terminal: false,
@@ -173,6 +188,15 @@
                 type: 'WhiteSpcae',
                 terminal: true,
                 value: spaces
+            }
+        }
+
+    EOL
+        = WhiteSpcae* LineTerminator {
+            return {
+                type: 'LineTerminator',
+                value: '\n',
+                terminal: true
             }
         }
 
