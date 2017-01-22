@@ -29,7 +29,7 @@
 //
 
     Body
-        = statements:( SpacesStatements )+ {
+        = statements:( SpacedStatements )+ {
         	return {
             	type: 'Body',
                 terminal: false,
@@ -41,7 +41,7 @@
 // ─── SPACES STATEMENTS ──────────────────────────────────────────────────────────
 //
 
-    SpacesStatements
+    SpacedStatements
         = ( WhiteSpcae | EOL )* statement: Statement ( WhiteSpcae | EOL )* {
             return statement
         }
