@@ -31,7 +31,7 @@
 //
 
     SpacedStatements
-        = FullSpace* statement: Statement FullSpace* {
+        = FullSpace* statement:Statement FullSpace* {
             return statement
         }
 
@@ -47,13 +47,21 @@
         / Expression
 
 //
+// ─── RETURNABLES ────────────────────────────────────────────────────────────────
+//
+
+    Returnables
+        = Assignment
+        / Expression
+
+//
 // ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
 //
 
     Expression
         = Literals
         / Identifier
-        / Assignment
+        / LambdaExpression
         / SExpression
 
 //
@@ -65,11 +73,36 @@
         / BooleanLiteral
 
 //
+// ─── LAMBDA EXPRESSIONS ─────────────────────────────────────────────────────────
+//
+
+    LambdaExpression
+        = "[" FullSpace* args:IdentifierList FullSpace* "=>" FullSpace* code:Returnables FullSpace* "]" {
+            return {
+                type: "LambdaExpression",
+                args: args,
+                code: code
+            }
+        }
+
+//
+// ─── IDENTIFER LIST ─────────────────────────────────────────────────────────────
+//
+
+    IdentifierList
+       = arg:Identifier FullSpace+ more:IdentifierList {
+          return [ arg ].concat( more )
+       } 
+       / subArg:Expression {
+       	  return [ subArg ]
+       }
+
+//
 // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
 //
 
     PipeStatement
-        = origin:Expression FullSpace+ ">" FullSpace+ target: ( Identifier / SExpression / PipeStatement ) {
+        = origin:Returnables FullSpace+ ">" FullSpace+ target:( Identifier / SExpression / PipeStatement ) {
             return {
                 type:"PipeStatement",
                 origin: origin,
@@ -82,7 +115,7 @@
 //
 
     SExpression
-        = "[" FullSpace* name:Identifier FullSpace+ params:SExpressionArugmentArray?  FullSpace* "]" {
+        = "(" FullSpace* name:Identifier FullSpace+ params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
             	type:"SExpression",
                 name: name,
@@ -90,7 +123,7 @@
                 params: params
             }
         }
-        / "[" FullSpace* name:Identifier FullSpace* "]" {
+        / "(" FullSpace* name:Identifier FullSpace* ")" {
         	return {
             	type:"SExpression",
                 name: name,
@@ -112,7 +145,7 @@
 //
 
     DeclerationStatement
-        = type:( "const" /  "let" / "var" ) WhiteSpcae+  assignment:Assignment {
+        = type:( "const" /  "def" ) WhiteSpcae+ assignment:Assignment {
             return {
                 type: 'DeclerationStatement',
                 type: type,
@@ -183,7 +216,7 @@
 //
 
     BooleanLiteral
-        = switches: ( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+        = switches:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
             let result = true
             switch ( switches ) {
                 case 'off':
@@ -202,7 +235,7 @@
 //
 
     NumericLiteral
-        = digits: ( '-'? [0-9]+ ( . [0-9]+ ) ? ) {
+        = digits:('-'?[0-9]+(.[0-9]+)?) {
             return {
                 type: 'NumericLiteral',
                 value: parseInt( digits.join( '' ), 10 )
@@ -222,7 +255,7 @@
 //
 
     WhiteSpcae
-        = spaces: ( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
+        = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
             return {
                 type: 'WhiteSpcae',
                 value: spaces
