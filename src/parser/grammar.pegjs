@@ -19,7 +19,7 @@
 //
 
     Body
-        = statements:( SpacedStatements )+ {
+        = statements:SpacedStatements+ {
         	return {
             	type: 'Body',
                 children: statements
@@ -107,7 +107,7 @@
             return {
                 type:       "PipeStatement",
                 origin:     origin,
-                target:     target
+                target:     target,
             }
         }
 
@@ -116,20 +116,20 @@
 //
 
     SExpression
-        = "(" FullSpace* name:Identifier FullSpace+
+        = "(" FullSpace* address:AddressIdentifier FullSpace+
           params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
             	type:       "SExpression",
-                name:       name.name,
+                address:    address,
                 terminal:   false,
-                params:     params
+                params:     params,
             }
         }
         / "(" FullSpace* name:Identifier FullSpace* ")" {
         	return {
             	type:       "SExpression",
                 name:       name.name,
-                terminal:   true,
+                terminal:   true
             }
         }
     
@@ -201,11 +201,29 @@
 //
 
     Assignment
-        = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
+        = name:AddressIdentifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
             return {
                 type:       'Assignment',
                 name:       name.name,
                 value:      value
+            }
+        }
+
+//
+// ─── ADDRESS IDENTIFIER ─────────────────────────────────────────────────────────
+//
+
+    AddressIdentifier
+        = space:Identifier "/" member:AddressIdentifier {
+            return {
+                type:    "AddressIdentifier",
+                address: [ space.name ].concat( member.address )
+            }
+        }
+        / idef:Identifier {
+            return {
+                type:    "AddressIdentifier",
+                address: [ idef.name ]
             }
         }
 
