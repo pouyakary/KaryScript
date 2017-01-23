@@ -42,7 +42,7 @@
 //
 
     SpacedStatements
-        = ( WhiteSpcae | EOL )* statement: Statement ( WhiteSpcae | EOL )* {
+        = FullSpace* statement: Statement FullSpace* {
             return statement
         }
 
@@ -53,6 +53,7 @@
     Statement
         = DeclerationStatement
         / ReturnStatement
+        / SExpression
         / Expression
 
 //
@@ -63,6 +64,7 @@
         = Literals
         / Identifier
         / Assignment
+        / SExpression
 
 //
 // ─── LITERALS ───────────────────────────────────────────────────────────────────
@@ -71,6 +73,36 @@
     Literals
         = NumericLiteral
         / BooleanLiteral
+
+//
+// ─── S EXPRESSION ───────────────────────────────────────────────────────────────
+//
+
+    SExpression
+        = "[" FullSpace* name:Identifier FullSpace+ params:SExpressionArugmentArray?  FullSpace* "]" {
+        	return {
+            	type:"SExpression",
+                name: name,
+                terminal: false,
+                params: params
+            }
+        }
+        / "[" FullSpace* name:Identifier FullSpace* "]" {
+        	return {
+            	type:"SExpression",
+                name: name,
+                terminal: true,
+            }
+        }
+    
+
+    SExpressionArugmentArray
+       = arg:Expression FullSpace+ more:SExpressionArugmentArray {
+          return [ arg ].concat( more )
+       } 
+       / subArg:Expression {
+       	  return [ subArg ]
+       }
 
 //
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
@@ -176,6 +208,14 @@
                 value: parseInt( digits.join( '' ), 10 )
             }
         }
+
+//
+// ─── FULL SPACE ─────────────────────────────────────────────────────────────────
+//
+
+    FullSpace
+        = EOL
+        / WhiteSpcae
 
 //
 // ─── WHITESPACE ─────────────────────────────────────────────────────────────────
