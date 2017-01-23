@@ -9,16 +9,6 @@
 //
 
 //
-// Basic syntax rule object is: { 
-//    type: string, // what is the that we have
-//    terminal: boolean, // is terminal or contains children
-//    value: any, // what parser needs
-//    raw: string // exact matching (for formatters)
-//    children?: this[ ] // if it contained any child
-// }
-//
-
-//
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
