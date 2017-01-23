@@ -32,8 +32,7 @@
         = statements:( SpacedStatements )+ {
         	return {
             	type: 'Body',
-                terminal: false,
-                value: statements
+                children: statements
             }
         }
 
@@ -53,6 +52,7 @@
     Statement
         = DeclerationStatement
         / ReturnStatement
+        / PipeStatement
         / SExpression
         / Expression
 
@@ -73,6 +73,19 @@
     Literals
         = NumericLiteral
         / BooleanLiteral
+
+//
+// ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
+//
+
+    PipeStatement
+        = origin:Expression FullSpace+ ">" FullSpace+ target: ( Identifier / SExpression / PipeStatement ) {
+            return {
+                type:"PipeStatement",
+                origin: origin,
+                target: target
+            }
+        }
 
 //
 // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
@@ -112,11 +125,8 @@
         = type:( "const" /  "let" / "var" ) WhiteSpcae+  assignment:Assignment {
             return {
                 type: 'DeclerationStatement',
-                terminal: false,
-                value: {
-                    type: type,
-                    assignment: assignment
-                }
+                type: type,
+                assignment: assignment
             }
         }
 
@@ -132,6 +142,12 @@
                 value: expr
             }
         }
+        / "return" {
+            return {
+                type: 'ReturnStatement',
+                terminal: true
+            }
+        }
 
 //
 // ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
@@ -141,11 +157,8 @@
         = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
             return {
                 type: 'Assignment',
-                terminal: false,
-                value: {
-                    name: name,
-                    value: value
-                }
+                name: name,
+                value: value
             }
         }
 
@@ -157,8 +170,7 @@
         = !ReservedWord inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
             return {
                 type: 'Identifier',
-                terminal: true,
-                value: inetiferStart + tail.join('')
+                name: inetiferStart + tail.join('')
             }
         }
 
@@ -191,7 +203,6 @@
             }
             return {
                 type: 'BooleanLiteral',
-                terminal: true,
                 value: result
             }
         }
@@ -204,7 +215,6 @@
         = digits: ( '-'? [0-9]+ ( . [0-9]+ ) ? ) {
             return {
                 type: 'NumericLiteral',
-                terminal: true,
                 value: parseInt( digits.join( '' ), 10 )
             }
         }
@@ -225,7 +235,6 @@
         = spaces: ( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
             return {
                 type: 'WhiteSpcae',
-                terminal: true,
                 value: spaces
             }
         }
@@ -235,7 +244,6 @@
             return {
                 type: 'LineTerminator',
                 value: '\n',
-                terminal: true
             }
         }
 
@@ -244,7 +252,6 @@
             return {
                 type: 'LineTerminator',
                 value: '\n',
-                terminal: true
             }
         }
 
@@ -253,7 +260,6 @@
             return {
                 type: 'LineTerminatorSequence',
                 raw: '\n',
-                terminal: true
             }
         }
 
