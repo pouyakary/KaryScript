@@ -40,11 +40,11 @@
 //
 
     Statement
-        = DeclerationStatement
+        = FunctionDecleration
+        / DeclerationStatement
         / ReturnStatement
         / PipeStatement
         / SExpression
-        / Expression
 
 //
 // ─── RETURNABLES ────────────────────────────────────────────────────────────────
@@ -77,10 +77,11 @@
 //
 
     LambdaExpression
-        = "[" FullSpace* args:IdentifierList FullSpace* "=>" FullSpace* code:Returnables FullSpace* "]" {
+        = "[" FullSpace* args:IdentifierList FullSpace* "=>"
+          FullSpace* code:Body FullSpace* "]" {
             return {
                 type: "LambdaExpression",
-                args: args,
+                args: args.map( x => x.name ),
                 code: code
             }
         }
@@ -92,7 +93,7 @@
     IdentifierList
        = arg:Identifier FullSpace+ more:IdentifierList {
           return [ arg ].concat( more )
-       } 
+       }
        / subArg:Expression {
        	  return [ subArg ]
        }
@@ -104,9 +105,9 @@
     PipeStatement
         = origin:Returnables FullSpace+ ">" FullSpace+ target:( Identifier / SExpression / PipeStatement ) {
             return {
-                type:"PipeStatement",
-                origin: origin,
-                target: target
+                type:       "PipeStatement",
+                origin:     origin,
+                target:     target
             }
         }
 
@@ -115,23 +116,23 @@
 //
 
     SExpression
-        = "(" FullSpace* name:Identifier FullSpace+ params:SExpressionArugmentArray? FullSpace* ")" {
+        = "(" FullSpace* name:Identifier FullSpace+
+          params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
-            	type:"SExpression",
-                name: name,
-                terminal: false,
-                params: params
+            	type:       "SExpression",
+                name:       name.name,
+                terminal:   false,
+                params:     params
             }
         }
         / "(" FullSpace* name:Identifier FullSpace* ")" {
         	return {
-            	type:"SExpression",
-                name: name,
-                terminal: true,
+            	type:       "SExpression",
+                name:       name.name,
+                terminal:   true,
             }
         }
     
-
     SExpressionArugmentArray
        = arg:Expression FullSpace+ more:SExpressionArugmentArray {
           return [ arg ].concat( more )
@@ -141,14 +142,37 @@
        }
 
 //
+// ─── FUNCTION DECLERATION ───────────────────────────────────────────────────────
+//
+
+    FunctionDecleration
+        = "def" WhiteSpcae+ name:Identifier WhiteSpcae* "[" WhiteSpcae*
+          args:IdentifierList WhiteSpcae* "]" FullSpace* code:Body "end" {
+            return {
+                type: "FunctionDecleration",
+                name: name.name,
+                args: args.map( x => x.name ),
+                code: code
+            }
+        }
+        / "def" WhiteSpcae+ name:Identifier WhiteSpcae* EOL code:Body "end" {
+            return {
+                type: "FunctionDecleration",
+                name: name.name,
+                args: null,
+                code: code
+            }
+        }
+
+//
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
 //
 
     DeclerationStatement
         = type:( "const" /  "def" ) WhiteSpcae+ assignment:Assignment {
             return {
-                type: 'DeclerationStatement',
-                type: type,
+                type:       'DeclerationStatement',
+                type:       type,
                 assignment: assignment
             }
         }
@@ -160,15 +184,15 @@
     ReturnStatement
         = "return" WhiteSpcae+ expr:Expression {
             return {
-                type: 'ReturnStatement',
-                terminal: false,
-                value: expr
+                type:       'ReturnStatement',
+                terminal:   false,
+                value:      expr
             }
         }
         / "return" {
             return {
-                type: 'ReturnStatement',
-                terminal: true
+                type:       'ReturnStatement',
+                terminal:   true
             }
         }
 
@@ -179,9 +203,9 @@
     Assignment
         = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
             return {
-                type: 'Assignment',
-                name: name,
-                value: value
+                type:       'Assignment',
+                name:       name.name,
+                value:      value
             }
         }
 
@@ -203,6 +227,13 @@
 
     ReservedWord
         = Keyword
+        / "end"
+        / "def" / "const"
+        / "import" / "from"
+        / "for" / "of" / "in"
+        / "while"
+        / "if"
+        / "try" / "catch"
 
 //
 // ─── KEYWORDS ───────────────────────────────────────────────────────────────────
