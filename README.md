@@ -1,15 +1,13 @@
 
 # KaryScript
-Is a sugar syntactic language like CoffeeScript that targets TypeScript. The only reason for this language is have a much more readable and beautiful syntax for JS/TS. For now it's only about ideas on how the language should look and interact with runtime and nothing more really.
+KaryScript is an experimental project to bring a better syntax for more readability. That's our only goal: Readability in the code. It compiles to JavaScript. If the experiment goes well we might even integrate it to the TypeScript compiler services and let you have a powerful tooling alongside of it.
 
-<img width="739" alt="screen shot 2017-01-15 at 5 11 28 pm" src="https://cloud.githubusercontent.com/assets/2157285/21962969/3fb7ccfa-db46-11e6-8ff0-182d47a1f123.png">
- 
 
 ## Ideas?
 #### Grammar
 Having a clean grammar much like ruby:
 ```
-def function-name param1: string param2: number as boolean
+def function-name param1 param2:
     ...
 end
 ```
@@ -20,13 +18,13 @@ Identifiers can have `dash` in their names like: `my-beloved-name` and also the 
 #### Pipes
 Pipes give so much cleaner look to the language:
 ```
-async something as number
-    await kary/terminal/input "Enter something" > mul 5 > plus 2 > return
+async something
+    (await kary/terminal/input "Enter something") > (mul 5) > (plus 2) > return
 end
 ```
 And this compiles to:
 ```TypeScript
-async function something( ): number {
+async function something( ){
     return ( 2 + ( 5 * ( await kary.terminal.input( "Enter something" ) ) ) )
 }
 ```
@@ -37,9 +35,21 @@ S-Expressions are nice ways to write functions and they are so much cleaner:
 (add 4 5)
 ```
 
+### Lambda Expressions:
+In this form:
+```
+def sum = [ x y => (+ x y) ]
+```
+
+### Comments
+```
+-- inline
+(* multi line *)
+```
+
 #### Better loops:
 ```
 for i from 1 to 5
-    (do something)
+    (do/something)
 end
 ```
