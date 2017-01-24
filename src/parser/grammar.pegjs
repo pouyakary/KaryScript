@@ -125,10 +125,10 @@
                 params:     params,
             }
         }
-        / "(" FullSpace* name:Identifier FullSpace* ")" {
+        / "(" FullSpace* name:AddressIdentifier FullSpace* ")" {
         	return {
             	type:       "SExpression",
-                name:       name.name,
+                name:       name,
                 terminal:   true
             }
         }
@@ -204,7 +204,7 @@
         = name:AddressIdentifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
             return {
                 type:       'Assignment',
-                name:       name.name,
+                name:       name,
                 value:      value
             }
         }
@@ -214,18 +214,14 @@
 //
 
     AddressIdentifier
-        = space:Identifier "/" member:AddressIdentifier {
+        = space:Identifier "/" member:( AddressIdentifier / Identifier ) {
             return {
-                type:    "AddressIdentifier",
-                address: [ space.name ].concat( member.address )
+                type: "AddressIdentifier",
+                address: ( member.type === "Identifier" )?
+                    [ space.name, member.name ] : [ space.name ].concat( member.address )
             }
         }
-        / idef:Identifier {
-            return {
-                type:    "AddressIdentifier",
-                address: [ idef.name ]
-            }
-        }
+        / Identifier
 
 //
 // ─── IDENTIFIERS ────────────────────────────────────────────────────────────────
