@@ -146,8 +146,7 @@
 //
 
     FunctionDecleration
-        = "def" WhiteSpcae+ name:Identifier WhiteSpcae* "[" WhiteSpcae*
-          args:IdentifierList WhiteSpcae* "]" FullSpace* code:Body "end" {
+        = "def" WhiteSpcae+ name:Identifier WhiteSpcae* args:IdentifierList WhiteSpcae* ":" FullSpace* code:Body "end" {
             return {
                 type: "FunctionDecleration",
                 name: name.name,
@@ -155,7 +154,7 @@
                 code: code
             }
         }
-        / "def" WhiteSpcae+ name:Identifier WhiteSpcae* EOL code:Body "end" {
+        / "def" WhiteSpcae+ name:Identifier WhiteSpcae* ":" FullSpace* code:Body "end" {
             return {
                 type: "FunctionDecleration",
                 name: name.name,
