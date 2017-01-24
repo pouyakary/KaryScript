@@ -35,13 +35,19 @@ S-Expressions are nice ways to write functions and they are so much cleaner:
 (add 4 5)
 ```
 
-### Lambda Expressions:
-In this form:
+#### Lambda Expressions
 ```
+-- inline ones
 def sum = [ x y => (+ x y) ]
+( arr/map [ x => (* x 2) ] ) 
+
+-- multi lines (anonymous functions)
+def x = func x:
+    return (^ x 2)
+end
 ```
 
-### Comments
+#### Comments
 ```
 -- inline
 (* multi line *)
