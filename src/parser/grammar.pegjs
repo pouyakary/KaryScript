@@ -116,20 +116,30 @@
 //
 
     SExpression
-        = "(" FullSpace* address:AddressIdentifier FullSpace+
+        = "(" FullSpace* command:( AddressIdentifier / Operator ) FullSpace+
           params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
             	type:       "SExpression",
-                address:    address,
-                terminal:   false,
+                kind:       "FunctionCallWithArgs",
+                command:    command,
                 params:     params,
             }
         }
-        / "(" FullSpace* name:AddressIdentifier FullSpace* ")" {
+        / "(" FullSpace* left:Expression FullSpace* operator:Operator FullSpace*
+          right:Expression FullSpace* ")" {
+            return {
+                type:       "SExpression",
+                kind:       "BinaryOperator",
+                operator:   operator,
+                left:       left,
+                right:      right
+            }
+        }
+        / "(" FullSpace* command:AddressIdentifier FullSpace* ")" {
         	return {
             	type:       "SExpression",
-                name:       name,
-                terminal:   true
+                kind:       "FunctionCallOnly",
+                command:    command
             }
         }
     
@@ -146,7 +156,8 @@
 //
 
     FunctionDecleration
-        = "def" WhiteSpcae+ name:Identifier WhiteSpcae* args:IdentifierList WhiteSpcae* ":" FullSpace* code:Body "end" {
+        = "def" WhiteSpcae+ name:Identifier WhiteSpcae* args:IdentifierList
+          WhiteSpcae* ":" FullSpace* code:Body "end" {
             return {
                 type: "FunctionDecleration",
                 name: name.name,
@@ -168,10 +179,10 @@
 //
 
     DeclerationStatement
-        = type:( "const" /  "def" ) WhiteSpcae+ assignment:Assignment {
+        = modifier:( "const" /  "def" ) WhiteSpcae+ assignment:Assignment {
             return {
-                type:       'DeclerationStatement',
-                type:       type,
+                type: 'DeclerationStatement',
+                modifier: modifier,
                 assignment: assignment
             }
         }
@@ -181,7 +192,7 @@
 //
 
     ReturnStatement
-        = "return" WhiteSpcae+ expr:Expression {
+        = "return" WhiteSpcae+ expr:Returnables {
             return {
                 type:       'ReturnStatement',
                 terminal:   false,
@@ -235,6 +246,18 @@
         }
 
 //
+// ─── BINARY OPERATORS ───────────────────────────────────────────────────────────
+//
+
+    Operator
+        = op:( '/' / '+' / '-' / '*' / '^' / '%' / 'and' / 'or' ) {
+            return {
+                type: 'Operator',
+                operator: op
+            }
+        }
+
+//
 // ─── RESERVED WORDS ─────────────────────────────────────────────────────────────
 //
 
@@ -247,6 +270,7 @@
         / "while"
         / "if"
         / "try" / "catch"
+        / 'and' / 'or'
 
 //
 // ─── KEYWORDS ───────────────────────────────────────────────────────────────────
@@ -260,9 +284,9 @@
 //
 
     BooleanLiteral
-        = switches:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+        = key:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
             let result = true
-            switch ( switches ) {
+            switch ( key ) {
                 case 'off':
                 case 'false':
                 case 'no':
@@ -270,6 +294,7 @@
             }
             return {
                 type: 'BooleanLiteral',
+                key: key,
                 value: result
             }
         }
