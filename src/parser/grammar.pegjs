@@ -154,7 +154,6 @@
 //
 
     SExpression
-        // (function-name arg1 arg2 ...)
         = "(" FullSpace* command:( AddressIdentifier / Operator ) FullSpace+
           params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
@@ -164,19 +163,6 @@
                 params:     params,
             }
         }
-        /*
-        // binary operators (arg1 + arg2)
-        / "(" FullSpace* left:Expression FullSpace+ operator:Operator FullSpace+
-          right:Expression FullSpace* ")" {
-            return {
-                type:       "SExpression",
-                kind:       "BinaryOperator",
-                operator:   operator,
-                left:       left,
-                right:      right
-            }
-        }*/
-        // only function call with no argument (function-name)
         / "(" FullSpace* command:AddressIdentifier FullSpace* ")" {
         	return {
             	type:       "SExpression",
@@ -338,21 +324,112 @@
 //
 
     ReservedWord
-        = "end"     !IdentifierName
-        / "def"     !IdentifierName
-        / "const"   !IdentifierName
-        / "import"  !IdentifierName
-        / "from"    !IdentifierName
-        / "for"     !IdentifierName
-        / "of"      !IdentifierName
-        / "in"      !IdentifierName
-        / "while"   !IdentifierName
-        / "if"      !IdentifierName
-        / "try"     !IdentifierName
-        / "catch"   !IdentifierName
-        / 'and'     !IdentifierName
-        / 'or'      !IdentifierName
-        / "NaN"     !IdentifierName
+        
+        //
+        // ─── KARYSCRIPT KEYWORDS ─────────────────────────────────────────
+        //
+
+            = "end"             !IdentifierName
+            / "def"             !IdentifierName
+            / "unless"          !IdentifierName
+            / "and"             !IdentifierName
+            / "or"              !IdentifierName
+            / "not"             !IdentifierName
+            / "ufo"             !IdentifierName
+            / "sub"             !IdentifierName
+            / "mul"             !IdentifierName
+            / "div"             !IdentifierName
+            / "sum"             !IdentifierName
+            / "exp"             !IdentifierName
+            / "eq"              !IdentifierName
+            / "greater"         !IdentifierName
+            / "less"            !IdentifierName
+            / "on"              !IdentifierName
+            / "off"             !IdentifierName
+            / "true"            !IdentifierName
+            / "false"           !IdentifierName
+            / "yes"             !IdentifierName
+            / "no"              !IdentifierName
+
+        //
+        // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
+        //
+
+            / "let"             !IdentifierName
+            / "var"             !IdentifierName
+            / "const"           !IdentifierName
+            / "class"           !IdentifierName
+            / "function"        !IdentifierName
+            / "import"          !IdentifierName
+            / "from"            !IdentifierName
+            / "for"             !IdentifierName
+            / "of"              !IdentifierName
+            / "in"              !IdentifierName
+            / "while"           !IdentifierName
+            / "continie"        !IdentifierName
+            / "debugger"        !IdentifierName
+            / "delete"          !IdentifierName
+            / "do"              !IdentifierName
+            / "export"          !IdentifierName
+            / "extends"         !IdentifierName
+            / "if"              !IdentifierName
+            / "else"            !IdentifierName
+            / "switch"          !IdentifierName
+            / "case"            !IdentifierName
+            / "default"         !IdentifierName
+            / "try"             !IdentifierName
+            / "catch"           !IdentifierName
+            / "finally"         !IdentifierName
+            / "NaN"             !IdentifierName
+            / "null"            !IdentifierName
+            / "undefined"       !IdentifierName
+            / "typeof"          !IdentifierName
+            / "instanceof"      !IdentifierName
+            / "new"             !IdentifierName
+            / "return"          !IdentifierName
+            / "super"           !IdentifierName
+            / "throw"           !IdentifierName
+            / "void"            !IdentifierName
+            / "with"            !IdentifierName
+            / "yield"           !IdentifierName
+
+        //
+        // ─── FUTURE JAVASCRIPT KEYWORDS ──────────────────────────────────
+        //
+
+            / "enum"            !IdentifierName
+            / "implements"      !IdentifierName
+            / "package"         !IdentifierName
+            / "interface"       !IdentifierName
+            / "private"         !IdentifierName
+            / "protected"       !IdentifierName
+            / "public"          !IdentifierName
+            / "static"          !IdentifierName
+            / "async"           !IdentifierName
+            / "await"           !IdentifierName
+
+        //
+        // ─── OLDER SPECIFICATION RESERVED WORDS ──────────────────────────
+        //
+
+            / "abstract"        !IdentifierName
+            / "boolean"         !IdentifierName
+            / "byte"            !IdentifierName
+            / "char"            !IdentifierName
+            / "double"          !IdentifierName
+            / "final"           !IdentifierName
+            / "float"           !IdentifierName
+            / "goto"            !IdentifierName
+            / "int"             !IdentifierName
+            / "long"            !IdentifierName
+            / "native"          !IdentifierName
+            / "short"           !IdentifierName
+            / "synchronized"    !IdentifierName
+            / "throws"          !IdentifierName
+            / "transient"       !IdentifierName
+            / "volatile"        !IdentifierName
+
+        // ─────────────────────────────────────────────────────────────────
 
 //
 // ─── KEYWORDS ───────────────────────────────────────────────────────────────────
