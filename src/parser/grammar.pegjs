@@ -9,6 +9,40 @@
 //
 
 //
+// ─── TOOLS ──────────────────────────────────────────────────────────────────────
+//
+
+    {
+        //
+        // ─── GENERATE STRING RESULT ──────────────────────────────────────
+        //
+
+            function generateStringResult ( inputs ) {
+                function wrapPart ( ) {
+                    if ( currentToken.length > 0 )
+                        result.push({
+                            type: 'StringPart',
+                            part: currentToken.join('')
+                        })
+                }
+                let result = [ ]
+                let currentToken = [ ]
+                for ( let token of inputs ) {
+                    if ( typeof token === 'string' ) {
+                        currentToken.push( token )
+                    } else {
+                        wrapPart( )
+                        currentToken = [ ]
+                    }
+                }
+                wrapPart( )
+                return result
+            }
+
+        // ─────────────────────────────────────────────────────────────────
+    }
+
+//
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
@@ -317,14 +351,14 @@
 //
 
     StringLiteral
-        = '"' body:( StringsParts )* '"' {
+        = '"' body:( DoubleQuotesStringsParts )* '"' {
             return {
                 type:   "StringLiteral",
                 key:    '"',
                 value:  body,
             }
         }
-        / "'" body:( "\\'" / [^"'"] )* "'" {
+        / "'" body:( SingleQuotesStringsParts )* "'" {
             return {
                 type:   "StringLiteral",
                 key:    "'",
@@ -332,10 +366,17 @@
             }
         }
 
-    StringsParts
+    DoubleQuotesStringsParts
         = StringInterpolation
         / '\\"'
         / !( '"' / '#' ) char:. {
+        	return char
+        }
+
+    SingleQuotesStringsParts
+        = StringInterpolation
+        / "\\'"
+        / !( "'" / '#' ) char:. {
         	return char
         }
 
