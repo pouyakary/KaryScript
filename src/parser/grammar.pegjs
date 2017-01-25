@@ -310,11 +310,24 @@
 //
 
     NumericLiteral
-        = digits:('-'?[0-9]+(.[0-9]+)?) {
-            console.log( digits )
+        = sign:'-'? '0x' numerics:[0-9a-f]+ {
+        	let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
-                type: 'NumericLiteral',
-                value: parseInt( digits.join( '' ), 10 )
+                type:   'NumericLiteral',
+                raw:    number,
+                value:  eval( number )
+            }
+        }
+        / sign:'-'? start:[0-9]+ decimals:('.'[0-9]+)? {
+        	let number = (
+               ( sign? sign : '' ) + 
+               ( parseInt( start.join('') ) ).toString( ) +
+               ( decimals? '.' + decimals[ 1 ].join('') : '' )
+            )
+            return {
+                type:   'NumericLiteral',
+                raw:    number,
+                value:  decimals? parseFloat( number ) : parseInt( number )
             }
         }
 
