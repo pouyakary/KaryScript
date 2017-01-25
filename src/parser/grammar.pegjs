@@ -164,13 +164,31 @@
 //
 
     SExpression
-        = "(" FullSpace* command:( AddressIdentifier / Operator ) FullSpace+
+        = "(" FullSpace* command:AddressIdentifier FullSpace+
           params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
             	type:       "SExpression",
                 kind:       "FunctionCallWithArgs",
                 command:    command,
                 params:     params,
+            }
+        }
+        / "(" FullSpace* operator:BinaryOperator FullSpace+ left:Expression 
+          FullSpace+ right:Expression FullSpace* ")" {
+            return {
+                type:       "SExpression",
+                kind:       "BinaryOperator",       
+                operator:   operator,
+                left:       left,
+                right:      right 
+            }
+        }
+        / "(" FullSpace* operator:UnarayOperator FullSpace+ arg:Expression FullSpace+ ")" {
+            return {
+                type:       "SExpression",
+                kind:       "UnarayOperator",       
+                operator:   operator,
+                arg:        arg
             }
         }
         / "(" FullSpace* command:AddressIdentifier FullSpace* ")" {
@@ -323,11 +341,24 @@
 // ─── BINARY OPERATORS ───────────────────────────────────────────────────────────
 //
 
-    Operator
-        = op:( '/' / '+' / '-' / '*' / '^' / '%' / 'and' / 'or' ) {
+    BinaryOperator
+        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'rem' / 'and' / 'or' / 
+               'eq' / 'bigger' / 'lower' ) {
             return {
-                type: 'Operator',
-                operator: op
+                type:       'BinaryOperator',
+                operator:   op
+            }
+        }
+
+//
+// ─── UNARAY OPERATORS ───────────────────────────────────────────────────────────
+//
+
+    UnarayOperator
+        = operator:( "not" ) {
+            return {
+                type:       "UnarayOperator",
+                operator:   op
             }
         }
 
@@ -352,10 +383,11 @@
             / "mul"             !IdentifierName
             / "div"             !IdentifierName
             / "sum"             !IdentifierName
-            / "exp"             !IdentifierName
+            / "pow"             !IdentifierName
+            / "rem"             !IdentifierName
             / "eq"              !IdentifierName
-            / "greater"         !IdentifierName
-            / "less"            !IdentifierName
+            / "bigger"          !IdentifierName
+            / "lower"           !IdentifierName
             / "on"              !IdentifierName
             / "off"             !IdentifierName
             / "true"            !IdentifierName
