@@ -116,6 +116,7 @@
 //
 
     SExpression
+        // (function-name arg1 arg2 ...)
         = "(" FullSpace* command:( AddressIdentifier / Operator ) FullSpace+
           params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
@@ -125,7 +126,8 @@
                 params:     params,
             }
         }
-        / "(" FullSpace* left:Expression FullSpace* operator:Operator FullSpace*
+        // binary operators (arg1 + arg2)
+        / "(" FullSpace* left:Expression FullSpace+ operator:Operator FullSpace+
           right:Expression FullSpace* ")" {
             return {
                 type:       "SExpression",
@@ -135,6 +137,7 @@
                 right:      right
             }
         }
+        // only function call with no argument (function-name)
         / "(" FullSpace* command:AddressIdentifier FullSpace* ")" {
         	return {
             	type:       "SExpression",
