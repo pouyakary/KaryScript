@@ -247,7 +247,7 @@
 //
 
     Identifier
-        = !ReservedWord inetiferStart:[\-_a-zA-Z] tail:[0-9a-zA-Z\-_]* {
+        = !ReservedWord inetiferStart:[\-a-zA-Z] tail:[0-9a-zA-Z\-]* {
             var raw = inetiferStart + tail.join('')
             return {
                 type: 'Identifier',
