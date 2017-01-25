@@ -309,7 +309,12 @@
 //
 
     Identifier
-        = !ReservedWord inetiferStart:[\-a-zA-Z] tail:[0-9a-zA-Z\-]* {
+        = !ReservedWord name:IdentifierName {
+            return name
+        }
+
+    IdentifierName
+        = inetiferStart:[\-a-zA-Z] tail:[0-9a-zA-Z\-]* {
             return {
                 type: 'Identifier',
                 name: inetiferStart + tail.join('')
@@ -333,16 +338,21 @@
 //
 
     ReservedWord
-        = Keyword
-        / "end"
-        / "def" / "const"
-        / "import" / "from"
-        / "for" / "of" / "in"
-        / "while"
-        / "if"
-        / "try" / "catch"
-        / 'and' / 'or'
-        / "NaN"
+        = "end"     !IdentifierName
+        / "def"     !IdentifierName
+        / "const"   !IdentifierName
+        / "import"  !IdentifierName
+        / "from"    !IdentifierName
+        / "for"     !IdentifierName
+        / "of"      !IdentifierName
+        / "in"      !IdentifierName
+        / "while"   !IdentifierName
+        / "if"      !IdentifierName
+        / "try"     !IdentifierName
+        / "catch"   !IdentifierName
+        / 'and'     !IdentifierName
+        / 'or'      !IdentifierName
+        / "NaN"     !IdentifierName
 
 //
 // ─── KEYWORDS ───────────────────────────────────────────────────────────────────
