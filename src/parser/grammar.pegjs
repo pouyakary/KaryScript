@@ -60,11 +60,7 @@
                 children: statements
             }
         }
-        / FullSpace* {
-            return {
-                type: 'Empty'
-            }
-        }
+        / Empty
 
 //
 // ─── SPACES STATEMENTS ──────────────────────────────────────────────────────────
@@ -81,6 +77,7 @@
 
     Statement
         = FunctionDecleration
+        / ClassDecleration
         / DeclerationStatement
         / ReturnStatement
         / PipeStatement
@@ -197,6 +194,35 @@
        }
 
 //
+// ─── CLASS DECLERATION ──────────────────────────────────────────────────────────
+//
+
+    ClassDecleration
+        = "class" WhiteSpcae+ name:Identifier WhiteSpcae* ":" WhiteSpcae* EOL FullSpace*
+          body:ClassFunctionDeclerations FullSpace+ "end" {
+            return {
+                type: 'ClassDecleration',
+                name: name.name,
+                body: body
+            }
+        }
+        / "class" WhiteSpcae+ name:Identifier WhiteSpcae* ":" WhiteSpcae* Empty "end" {
+            return {
+                  type: 'ClassDecleration',
+                  name: name.name,
+                  body: null
+              }
+        }
+
+    ClassFunctionDeclerations
+        = arg:FunctionDecleration FullSpace+ more:ClassFunctionDeclerations {
+            return [ arg ].concat( more )
+        } 
+        / decleration:FunctionDecleration {
+            return [ decleration ]
+        }
+
+//
 // ─── FUNCTION DECLERATION ───────────────────────────────────────────────────────
 //
 
@@ -259,7 +285,7 @@
         = name:AddressIdentifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
             return {
                 type:       'Assignment',
-                name:       name,
+                name:       name.name,
                 value:      value
             }
         }
@@ -284,11 +310,9 @@
 
     Identifier
         = !ReservedWord inetiferStart:[\-a-zA-Z] tail:[0-9a-zA-Z\-]* {
-            var raw = inetiferStart + tail.join('')
             return {
                 type: 'Identifier',
-                raw: raw,
-                name: raw.replace( /-/g, '_' )
+                name: inetiferStart + tail.join('')
             }
         }
 
@@ -432,6 +456,13 @@
 //
 // ─── WHITESPACE ─────────────────────────────────────────────────────────────────
 //
+
+    Empty
+        = FullSpace* {
+            return {
+                type: 'Empty'
+            }
+        }
 
     WhiteSpcae
         = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
