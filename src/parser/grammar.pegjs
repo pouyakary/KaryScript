@@ -32,6 +32,7 @@
                         currentToken.push( token )
                     } else {
                         wrapPart( )
+                        result.push( token )
                         currentToken = [ ]
                     }
                 }
@@ -355,14 +356,14 @@
             return {
                 type:   "StringLiteral",
                 key:    '"',
-                value:  body,
+                value:  generateStringResult( body ),
             }
         }
         / "'" body:( SingleQuotesStringsParts )* "'" {
             return {
                 type:   "StringLiteral",
                 key:    "'",
-                value:  body,
+                value:  generateStringResult( body ),
             }
         }
 
