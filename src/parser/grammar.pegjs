@@ -25,6 +25,11 @@
                 children: statements
             }
         }
+        / FullSpace* {
+            return {
+                type: 'Empty'
+            }
+        }
 
 //
 // ─── SPACES STATEMENTS ──────────────────────────────────────────────────────────
@@ -242,12 +247,12 @@
 //
 
     Identifier
-        = !ReservedWord inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
+        = !ReservedWord inetiferStart:[\-_a-zA-Z] tail:[0-9a-zA-Z\-_]* {
             var raw = inetiferStart + tail.join('')
             return {
                 type: 'Identifier',
                 raw: raw,
-                name: raw.replace( '-', '_' )
+                name: raw.replace( /-/g, '_' )
             }
         }
 
@@ -277,6 +282,7 @@
         / "if"
         / "try" / "catch"
         / 'and' / 'or'
+        / "NaN"
 
 //
 // ─── KEYWORDS ───────────────────────────────────────────────────────────────────
@@ -310,7 +316,14 @@
 //
 
     NumericLiteral
-        = sign:'-'? '0x' numerics:[0-9a-f]+ {
+        = "Nan" {
+            return {
+                type:   'NumericLiteral',
+                raw:    "NaN",
+                value:  NaN
+            }
+        }
+        / sign:'-'? '0x' numerics:[0-9a-f]+ {
         	let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
                 type:   'NumericLiteral',
