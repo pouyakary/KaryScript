@@ -164,7 +164,7 @@
 //
 
     SExpression
-        = "(" FullSpace* command:AddressIdentifier FullSpace+
+        = "(" FullSpace* command:SExpressionCommands FullSpace+
           params:SExpressionArugmentArray? FullSpace* ")" {
         	return {
             	type:       "SExpression",
@@ -191,7 +191,7 @@
                 arg:        arg
             }
         }
-        / "(" FullSpace* command:AddressIdentifier FullSpace* ")" {
+        / "(" FullSpace* command:SExpressionCommands FullSpace* ")" {
         	return {
             	type:       "SExpression",
                 kind:       "FunctionCallOnly",
@@ -200,12 +200,21 @@
         }
     
     SExpressionArugmentArray
-       = arg:Expression FullSpace+ more:SExpressionArugmentArray {
-          return [ arg ].concat( more )
-       } 
-       / subArg:Expression {
-       	  return [ subArg ]
-       }
+        = arg:SExpressionCommands FullSpace+ more:SExpressionArugmentArray {
+            return [ arg ].concat( more )
+        } 
+        / subArg:SExpressionCommands {
+       	    return [ subArg ]
+        }
+
+    SExpressionCommands
+        = AddressIdentifier
+        / command: ( 'cat' / 'print' ) {
+            return {
+                type:    "SpecialCommand",
+                command: command
+            }
+        }
 
 //
 // ─── CLASS DECLERATION ──────────────────────────────────────────────────────────
@@ -394,6 +403,8 @@
             / "false"           !IdentifierName
             / "yes"             !IdentifierName
             / "no"              !IdentifierName
+            / "cat"             !IdentifierName
+            / "print"           !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
