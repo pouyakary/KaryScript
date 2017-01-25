@@ -108,6 +108,7 @@
     Literals
         = StringLiteral
         / NumericLiteral
+        / ReservedValueLiterals
         / BooleanLiteral
 
 //
@@ -141,11 +142,20 @@
 //
 
     PipeStatement
-        = origin:Returnables FullSpace+ ">" FullSpace+ target:( Identifier / SExpression / PipeStatement ) {
+        = origin:Returnables FullSpace+ ">" FullSpace+
+          target:( Identifier / SExpression / PipeStatement / ReturnKeyword ) {
             return {
                 type:       "PipeStatement",
                 origin:     origin,
                 target:     target,
+            }
+        }
+
+    ReturnKeyword
+        = keyword: ( "return" / "yield" / "throw" ) {
+            return {
+                type: "ReturnKeyword",
+                keyword: keyword
             }
         }
 
@@ -249,16 +259,18 @@
 //
 
     ReturnStatement
-        = "return" WhiteSpcae+ expr:Returnables {
+        = keyword:ReturnKeyword WhiteSpcae+ expr:Returnables {
             return {
                 type:       'ReturnStatement',
+                kind:       keyword.kind,
                 terminal:   false,
                 value:      expr
             }
         }
-        / "return" {
+        / keyword:ReturnKeyword {
             return {
                 type:       'ReturnStatement',
+                kind:       keyword.kind,
                 terminal:   true
             }
         }
@@ -438,6 +450,33 @@
     Keyword
         = BooleanLiteral
 
+
+//
+// ─── RESERVED VALUE KEYWORDS ────────────────────────────────────────────────────
+//
+
+    ReservedValueLiterals
+        = value:( "NaN" / "ufo" / "undefined" / "null" / "empty" ) {
+            let result
+            switch ( value ) {
+                case "NaN":
+                    result = NaN
+                    break
+                case "ufo":
+                case "undefined":
+                    result = undefined
+                    break
+                case "null":
+                case "empty":
+                    result = null
+            }
+            return {
+                type:   "ReservedValueLiterals",
+                raw:    value,
+                value:  result
+            }
+        }
+
 //
 // ─── BOOLEAN ────────────────────────────────────────────────────────────────────
 //
@@ -499,6 +538,7 @@
                 expr:   expr
             }
         }
+
 //
 // ─── NUMBER ─────────────────────────────────────────────────────────────────────
 //
