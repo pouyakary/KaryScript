@@ -74,7 +74,8 @@
 //
 
     Literals
-        = NumericLiteral
+        = StringLiteral
+        / NumericLiteral
         / BooleanLiteral
 
 //
@@ -308,6 +309,39 @@
                 type: 'BooleanLiteral',
                 key: key,
                 value: result
+            }
+        }
+
+//
+// ─── STRING ─────────────────────────────────────────────────────────────────────
+//
+
+    StringLiteral
+        = '"' body:( StringsParts )* '"' {
+            return {
+                type:   "StringLiteral",
+                key:    '"',
+                value:  body,
+            }
+        }
+        / "'" body:( "\\'" / [^"'"] )* "'" {
+            return {
+                type:   "StringLiteral",
+                key:    "'",
+                value:  body,
+            }
+        }
+
+    StringsParts
+        = StringInterpolation
+        / '\\"'
+        / !( '#' / '"' )
+
+    StringInterpolation
+        = '#{' body:Returnables '}' {
+            return {
+                type:   "StringInterpolation",
+                body:   body
             }
         }
 
