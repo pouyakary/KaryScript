@@ -335,16 +335,17 @@
     StringsParts
         = StringInterpolation
         / '\\"'
-        / !( '#' / '"' )
-
-    StringInterpolation
-        = '#{' body:Returnables '}' {
-            return {
-                type:   "StringInterpolation",
-                body:   body
-            }
+        / !( '"' / '#' ) char:. {
+        	return char
         }
 
+    StringInterpolation
+        = '#' expr:SExpression {
+        	return {
+                type:   "StringInterpolation",
+                expr:   expr
+            }
+        }
 //
 // ─── NUMBER ─────────────────────────────────────────────────────────────────────
 //
