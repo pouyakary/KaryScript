@@ -126,6 +126,7 @@
                 params:     params,
             }
         }
+        /*
         // binary operators (arg1 + arg2)
         / "(" FullSpace* left:Expression FullSpace+ operator:Operator FullSpace+
           right:Expression FullSpace* ")" {
@@ -136,7 +137,7 @@
                 left:       left,
                 right:      right
             }
-        }
+        }*/
         // only function call with no argument (function-name)
         / "(" FullSpace* command:AddressIdentifier FullSpace* ")" {
         	return {
@@ -242,9 +243,11 @@
 
     Identifier
         = !ReservedWord inetiferStart:[_a-zA-Z] tail:[0-9a-zA-Z\-]* {
+            var raw = inetiferStart + tail.join('')
             return {
                 type: 'Identifier',
-                name: inetiferStart + tail.join('')
+                raw: raw,
+                name: raw.replace( '-', '_' )
             }
         }
 
@@ -308,6 +311,7 @@
 
     NumericLiteral
         = digits:('-'?[0-9]+(.[0-9]+)?) {
+            console.log( digits )
             return {
                 type: 'NumericLiteral',
                 value: parseInt( digits.join( '' ), 10 )
