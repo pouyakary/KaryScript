@@ -200,10 +200,10 @@
         }
     
     SExpressionArugmentArray
-        = arg:SExpressionCommands FullSpace+ more:SExpressionArugmentArray {
+        = arg:Expression FullSpace+ more:SExpressionArugmentArray {
             return [ arg ].concat( more )
         } 
-        / subArg:SExpressionCommands {
+        / subArg:Expression {
        	    return [ subArg ]
         }
 
