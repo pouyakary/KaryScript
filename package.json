@@ -16,8 +16,7 @@
   "keywords": [
     "Kary",
     "KaryScript",
-    "Kary",
-    "Foundation",
+    "Kary Foundation",
     "Kary",
     "Comment"
   ],
@@ -26,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/karyfoundation/karyscript/issues"
   },
-  "homepage": "https://github.com/karyfoundation/karyscript#readme"
+  "homepage": "https://github.com/karyfoundation/karyscript#readme",
+  "dependencies": {
+    "pegjs": "^0.10.0"
+  },
+  "devDependencies": {}
 }
