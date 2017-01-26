@@ -79,8 +79,9 @@
     Statement
         = FunctionDecleration
         / ClassDecleration
-        / WhileStatement
         / DeclerationStatement
+        / IfStatement
+        / WhileStatement
         / ReturnStatement
         / PipeStatement
         / SExpression
@@ -116,6 +117,32 @@
         / BooleanLiteral
 
 //
+// ─── IF STATEMENT ───────────────────────────────────────────────────────────────
+//
+
+    IfStatement
+        = "if" WhiteSpcae* condition:( Expression / BooleanLiteral ) WhiteSpcae*
+          ":" WhiteSpcae* EOL body:Body "end" {
+              return {
+                  type: "IfStatement",
+                  kind: "if",
+                  condition: condition,
+                  trueBranch: body
+              }
+          }
+        / "if" WhiteSpcae* condition:( Expression / BooleanLiteral ) WhiteSpcae*
+          ":" WhiteSpcae* EOL trueBranch:Body "else" WhiteSpcae* EOL
+          falseBranch:Body "end" {
+              return {
+                  type: "IfStatement",
+                  kind: "ifElse",
+                  condition: condition,
+                  trueBranch: trueBranch,
+                  falseBranch: falseBranch
+              }
+          }
+
+//
 // ─── WHILE STATEMENT ────────────────────────────────────────────────────────────
 //
 
@@ -135,7 +162,7 @@
 
     LambdaExpression
         = "[" FullSpace* args:IdentifierList FullSpace* "=>"
-        FullSpace* code:Body FullSpace* "]" {
+          FullSpace* code:Body FullSpace* "]" {
             return {
                 type: "LambdaExpression",
                 args: args.map( x => x.name ),
