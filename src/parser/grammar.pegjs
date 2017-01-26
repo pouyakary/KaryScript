@@ -79,6 +79,7 @@
     Statement
         = FunctionDecleration
         / ClassDecleration
+        / WhileStatement
         / DeclerationStatement
         / ReturnStatement
         / PipeStatement
@@ -113,6 +114,20 @@
         / NumericLiteral
         / ReservedValueLiterals
         / BooleanLiteral
+
+//
+// ─── WHILE STATEMENT ────────────────────────────────────────────────────────────
+//
+
+    WhileStatement
+        = "while" WhiteSpcae+ condition:( Expression / BooleanLiteral ) WhiteSpcae*
+          ":" WhiteSpcae* EOL body:Body "end" {
+              return {
+                  type: "WhileStatement",
+                  condition: condition,
+                  body: body
+              }
+        }
 
 //
 // ─── LAMBDA EXPRESSIONS ─────────────────────────────────────────────────────────
@@ -556,7 +571,6 @@
 
     Keyword
         = BooleanLiteral
-
 
 //
 // ─── RESERVED VALUE KEYWORDS ────────────────────────────────────────────────────
