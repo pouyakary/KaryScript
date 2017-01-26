@@ -68,7 +68,7 @@
 //
 
     SpacedStatements
-        = FullSpace* statement:Statement FullSpace* {
+        = __* statement:Statement __* {
             return statement
         }
 
@@ -117,38 +117,76 @@
         / BooleanLiteral
 
 //
+// ─── CONDITIONABLE ──────────────────────────────────────────────────────────────
+//
+
+    Predicate
+        = Expression
+        / BooleanLiteral
+        / SExpressionBody
+
+//
 // ─── IF STATEMENT ───────────────────────────────────────────────────────────────
 //
 
     IfStatement
-        = "if" WhiteSpcae* condition:( Expression / BooleanLiteral ) WhiteSpcae*
-          ":" WhiteSpcae* EOL body:Body "end" {
+        = "if" _? predicate:Predicate _* ":" __+ body:Body __* "end" {
               return {
                   type: "IfStatement",
                   kind: "if",
-                  condition: condition,
+                  predicate: predicate,
                   trueBranch: body
               }
           }
-        / "if" WhiteSpcae* condition:( Expression / BooleanLiteral ) WhiteSpcae*
-          ":" WhiteSpcae* EOL trueBranch:Body "else" WhiteSpcae* EOL
-          falseBranch:Body "end" {
+
+        / "if" _+ predicate:Predicate _* ":" __+ trueBranch:Body __*
+          elseIfBranches: ElseIfStatementArray __+ "else" __+ falseBranch:Body __*
+          "end" {
               return {
                   type: "IfStatement",
-                  kind: "ifElse",
-                  condition: condition,
+                  kind: "if-else",
+                  predicate: predicate,
+                  trueBranch: trueBranch,
+                  elseIfBranches: elseIfBranches,
+                  falseBranch: falseBranch
+              }
+          }
+
+        / "if" _+ predicate:Predicate _* ":" _* trueBranch:Body "else" __+
+          falseBranch:Body __* "end" {
+              return {
+                  type: "IfStatement",
+                  kind: "if-elseif-else",
+                  predicate: predicate,
                   trueBranch: trueBranch,
                   falseBranch: falseBranch
               }
           }
 
+    ElseIfStatementArray
+        = elesIfClouse:ElseIfStatement __+ more:ElseIfStatementArray {
+            return [ elesIfClouse ].concat( more )
+        } 
+        / elesIfClouse:ElseIfStatement {
+            return [ elesIfClouse ]
+        }
+
+    ElseIfStatement
+        = "elsif" _+ predicate:Predicate _* ":" __* body:Body EOL {
+            return {
+                type:       "ElseIfStatement",
+                predicate:  predicate,
+                body:       body
+            }
+        }
+          
 //
 // ─── WHILE STATEMENT ────────────────────────────────────────────────────────────
 //
 
     WhileStatement
-        = "while" WhiteSpcae+ condition:( Expression / BooleanLiteral ) WhiteSpcae*
-          ":" WhiteSpcae* EOL body:Body "end" {
+        = "while" _+ condition:( Expression / BooleanLiteral ) _* ":" _* EOL
+          body:Body "end" {
               return {
                   type: "WhileStatement",
                   condition: condition,
@@ -161,8 +199,7 @@
 //
 
     LambdaExpression
-        = "[" FullSpace* args:IdentifierList FullSpace* "=>"
-          FullSpace* code:Body FullSpace* "]" {
+        = "[" __* args:IdentifierList __* "=>" __* code:Body __* "]" {
             return {
                 type: "LambdaExpression",
                 args: args.map( x => x.name ),
@@ -175,7 +212,7 @@
 //
 
     IdentifierList
-        = arg:Identifier FullSpace+ more:IdentifierList {
+        = arg:Identifier __+ more:IdentifierList {
             return [ arg ].concat( more )
         }
         / subArg:Expression {
@@ -187,8 +224,8 @@
 //
 
     PipeStatement
-        = origin:Returnables FullSpace+ ">" FullSpace+
-        target:( Identifier / SExpression / PipeStatement / ReturnKeyword ) {
+        = origin:Returnables __+ ">" __+ target:( Identifier / SExpression / 
+          PipeStatement / ReturnKeyword ) {
             return {
                 type:       "PipeStatement",
                 origin:     origin,
@@ -209,8 +246,12 @@
 //
 
     SExpression
-        = "(" FullSpace* command:SExpressionCommands FullSpace+
-        params:SExpressionArugmentArray? FullSpace* ")" {
+        = "(" __* body:SExpressionBody __* ")" {
+            return body
+        }
+
+    SExpressionBody
+        = command:SExpressionCommands __+ params:SExpressionArugmentArray? {
             return {
                 type:       "SExpression",
                 kind:       "FunctionCallWithArgs",
@@ -218,8 +259,7 @@
                 params:     params,
             }
         }
-        / "(" FullSpace* operator:BinaryOperator FullSpace+ left:Expression 
-        FullSpace+ right:Expression FullSpace* ")" {
+        / operator:BinaryOperator __+ left:Expression __+ right:Expression {
             return {
                 type:       "SExpression",
                 kind:       "BinaryOperator",       
@@ -228,7 +268,7 @@
                 right:      right 
             }
         }
-        / "(" FullSpace* operator:UnarayOperator FullSpace+ arg:Expression FullSpace+ ")" {
+        / operator:UnarayOperator __+ arg:Expression {
             return {
                 type:       "SExpression",
                 kind:       "UnarayOperator",       
@@ -236,7 +276,7 @@
                 arg:        arg
             }
         }
-        / "(" FullSpace* command:SExpressionCommands FullSpace* ")" {
+        / command:SExpressionCommands {
             return {
                 type:       "SExpression",
                 kind:       "FunctionCallOnly",
@@ -245,7 +285,7 @@
         }
     
     SExpressionArugmentArray
-        = arg:Expression FullSpace+ more:SExpressionArugmentArray {
+        = arg:Expression __+ more:SExpressionArugmentArray {
             return [ arg ].concat( more )
         } 
         / subArg:Expression {
@@ -266,15 +306,15 @@
 //
 
     ClassDecleration
-        = "class" WhiteSpcae+ name:Identifier WhiteSpcae* ":" WhiteSpcae* EOL FullSpace*
-        body:ClassFunctionDeclerations FullSpace+ "end" {
+        = "class" _+ name:Identifier _* ":" _* EOL __*
+        body:ClassFunctionDeclerations __+ "end" {
             return {
                 type: 'ClassDecleration',
                 name: name.name,
                 body: body
             }
         }
-        / "class" WhiteSpcae+ name:Identifier WhiteSpcae* ":" WhiteSpcae* Empty "end" {
+        / "class" _+ name:Identifier _* ":" _* Empty "end" {
             return {
                 type: 'ClassDecleration',
                 name: name.name,
@@ -283,7 +323,7 @@
         }
 
     ClassFunctionDeclerations
-        = arg:FunctionDecleration FullSpace+ more:ClassFunctionDeclerations {
+        = arg:FunctionDecleration __+ more:ClassFunctionDeclerations {
             return [ arg ].concat( more )
         } 
         / decleration:FunctionDecleration {
@@ -295,8 +335,8 @@
 //
 
     FunctionDecleration
-        = "def" WhiteSpcae+ name:Identifier WhiteSpcae* args:IdentifierList
-        WhiteSpcae* ":" FullSpace* code:Body "end" {
+        = "def" _+ name:Identifier _* args:IdentifierList
+        _* ":" __* code:Body "end" {
             return {
                 type: "FunctionDecleration",
                 name: name.name,
@@ -304,7 +344,7 @@
                 code: code
             }
         }
-        / "def" WhiteSpcae+ name:Identifier WhiteSpcae* ":" FullSpace* code:Body "end" {
+        / "def" _+ name:Identifier _* ":" __* code:Body "end" {
             return {
                 type: "FunctionDecleration",
                 name: name.name,
@@ -318,7 +358,7 @@
 //
 
     DeclerationStatement
-        = modifier:( "const" /  "def" ) WhiteSpcae+ assignment:Assignment {
+        = modifier:( "const" /  "def" ) _+ assignment:Assignment {
             return {
                 type: 'DeclerationStatement',
                 modifier: modifier,
@@ -331,7 +371,7 @@
 //
 
     ReturnStatement
-        = keyword:ReturnKeyword WhiteSpcae+ expr:Returnables {
+        = keyword:ReturnKeyword _+ expr:Returnables {
             return {
                 type:       'ReturnStatement',
                 kind:       keyword.kind,
@@ -352,7 +392,7 @@
 //
 
     Assignment
-        = name:AddressIdentifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
+        = name:AddressIdentifier _* "=" _* value:Expression {
             return {
                 type:       'Assignment',
                 name:       name.name,
@@ -421,13 +461,13 @@
 //
 
     ObjectLiteral
-        = "[" FullSpace* "=" FullSpace* "]" {
+        = "[" __* "=" __* "]" {
             return {
                 type:   "ObjectLiteral",
                 value:  [ ]
             }
         }
-        / "[" FullSpace* members:ObjectPairMember FullSpace* "]" {
+        / "[" __* members:ObjectPairMember __* "]" {
             return {
                 type:   "ArrayLiteral",
                 value:  members
@@ -435,7 +475,7 @@
         }
 
     ObjectPairMember
-        = member:ObjectAssignment WhiteSpcae* ( EOL / "," ) WhiteSpcae*
+        = member:ObjectAssignment _* ( EOL / "," ) _*
           more:ObjectPairMember {
             return [ member ].concat( more )
         } 
@@ -444,7 +484,7 @@
         }
 
     ObjectAssignment
-        = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
+        = name:Identifier _* "=" _* value:Expression {
             return {
                 key:        name.name,
                 value:      value
@@ -456,13 +496,13 @@
 //
 
     ArrayLiteral
-        = "[" FullSpace* "]" {
+        = "[" __* "]" {
             return {
                 type:   "ArrayLiteral",
                 value:  [ ]
             }
         }
-        / "[" FullSpace* members:ArrayMember FullSpace* "]" {
+        / "[" __* members:ArrayMember __* "]" {
             return {
                 type:   "ArrayLiteral",
                 value:  members
@@ -470,7 +510,7 @@
         }
 
     ArrayMember
-        = member:Expression FullSpace+ more:ArrayMember {
+        = member:Expression __+ more:ArrayMember {
             return [ member ].concat( more )
         } 
         / member:Expression {
@@ -724,31 +764,31 @@
 // ─── FULL SPACE ─────────────────────────────────────────────────────────────────
 //
 
-    FullSpace
+    __
         = EOL
-        / WhiteSpcae
+        / _
 
 //
 // ─── WHITESPACE ─────────────────────────────────────────────────────────────────
 //
 
     Empty
-        = FullSpace* {
+        = __* {
             return {
                 type: 'Empty'
             }
         }
 
-    WhiteSpcae
+    _
         = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
             return {
-                type: 'WhiteSpcae',
+                type: '_',
                 value: spaces
             }
         }
 
     EOL
-        = WhiteSpcae* LineTerminator {
+        = _* LineTerminator {
             return {
                 type: 'LineTerminator',
                 value: '\n',
