@@ -107,7 +107,8 @@
 //
 
     Literals
-        = ArrayLiteral
+        = ObjectLiteral
+        / ArrayLiteral
         / StringLiteral
         / NumericLiteral
         / ReservedValueLiterals
@@ -370,6 +371,41 @@
             return {
                 type:       "UnarayOperator",
                 operator:   op
+            }
+        }
+
+//
+// ─── OBJECT LITERALS ────────────────────────────────────────────────────────────
+//
+
+    ObjectLiteral
+        = "[" FullSpace* "=" FullSpace* "]" {
+            return {
+                type:   "ObjectLiteral",
+                value:  [ ]
+            }
+        }
+        / "[" FullSpace* members:ObjectPairMember FullSpace* "]" {
+            return {
+                type:   "ArrayLiteral",
+                value:  members
+            }
+        }
+
+    ObjectPairMember
+        = member:ObjectAssignment WhiteSpcae* ( EOL / "," ) WhiteSpcae*
+          more:ObjectPairMember {
+            return [ member ].concat( more )
+        } 
+        / member:ObjectAssignment {
+            return [ member ]
+        }
+
+    ObjectAssignment
+        = name:Identifier WhiteSpcae* "=" WhiteSpcae* value:Expression {
+            return {
+                key:        name.name,
+                value:      value
             }
         }
 
