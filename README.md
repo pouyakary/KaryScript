@@ -91,3 +91,9 @@ space x:
 end
 def bar = 5 (* compiles to var bar *)
 ```
+
+### String Interpolation
+```
+(* x will be: "foo 10" *)
+def x = "foo #(+ 2 3 5)"
+```
