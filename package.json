@@ -9,7 +9,7 @@
   "scripts": {
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/grammar/grammar.pegjs",
     "compile": "tsc; npm run compile-parser",
-    "test-parser": "node ./src/grammar/test.js"
+    "test-parser": "node ./tests/test-parser.js"
   },
   "repository": {
     "type": "git",
