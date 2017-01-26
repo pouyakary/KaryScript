@@ -14,7 +14,7 @@
     const pegjs = require('pegjs')
     const fs    = require('fs')
     const path  = require('path')
-    const wrap  = require('../../devlibs/wordwrap')
+    const wrap  = require('../devlibs/wordwrap')
 
 //
 // ─── MAIN DEFS ──────────────────────────────────────────────────────────────────
@@ -26,23 +26,40 @@
 // ─── TEST CASES ─────────────────────────────────────────────────────────────────
 //
 
-    testCases.push('def x = 2')
+        //
+        // ─── DEFINITIONS ─────────────────────────────────────────────────
+        //
 
-    testCases.push('def x = [ ]')
+            
+            testCases.push('def x = 2')
 
-    testCases.push('def x = [=]')
+            testCases.push('def x = [ ]')
 
-    testCases.push('while eq a b: end')
+            testCases.push('def x = [=]')
 
-    testCases.push()
+            testCases.push('def x = [ x y => (sum x y) ]')
+
+        //
+        // ─── S EXPRESSION ────────────────────────────────────────────────
+        //
+
+            testCases.push('(not x)')
+        
+        //
+        // ─── WHILE STATEMENTS ────────────────────────────────────────────
+        //
+
+            testCases.push('while eq a b: end')
+
+            testCases.push()
 
 //
 // ─── LOAD PARSER ────────────────────────────────────────────────────────────────
 //
 
     function loadParser ( ) {
-        console.log( __dirname )
-        const fileContent = fs.readFileSync( path.join( __dirname, '/grammar.pegjs' ), 'utf8')
+        const p = path.resolve( path.join( __dirname, '../src/grammar/grammar.pegjs' ) )
+        const fileContent = fs.readFileSync( p )
         return pegjs.generate( fileContent )
     }
 
@@ -67,7 +84,8 @@
             console.log( code )
             writeLine('-')
             console.log( wrapper( e.message ) )
-            console.log( )
+            writeLine('─')
+            console.log('\n')
         }
     }
     for ( let t of testCases ) {
