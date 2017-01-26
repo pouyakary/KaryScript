@@ -32,18 +32,18 @@ async function something( ){
 #### S-Expression
 S-Expressions are nice ways to write functions and they are so much cleaner:
 ```
-(add 4 5)
+(sum 4 5)
 ```
 
 #### Lambda Expressions
 ```
 -- inline ones
-def sum = [ x y => (+ x y) ]
-( arr/map [ x => (* x 2) ] ) 
+def add = [ x y => (sum x y) ]
+( arr/map [ x => (mul x 2) ] ) 
 
 -- multi lines (anonymous functions)
 def x = func x:
-    return (^ x 2)
+    return (pow x 2)
 end
 ```
 
@@ -55,7 +55,39 @@ end
 
 #### Better loops:
 ```
-for i from 1 to 5
+for i from 1 to 5:
     (do/something)
 end
+```
+
+### Many literals
+Inspired by CoffeeScript you can have many kinds of `true` / `false` keywords:
+```
+def foo:
+    def bar = on
+        bar = off
+        bar = right
+        bar = wrong
+        bar = true
+        bar = false
+        bar = yes
+        bar = no
+end
+```
+
+### Assignments
+Both functions and variables are defined within `def` keyword, yo do:
+```
+def foo = [ x y => (bar x y) ]
+def foo = 5
+def foo x y:
+    return (bar x y)
+end
+```
+And it detects the global and local scopes:
+```
+space x:
+    def foo = 5 (* compiles to let foo *)
+end
+def bar = 5 (* compiles to var bar *)
 ```
