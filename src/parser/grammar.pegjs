@@ -19,11 +19,12 @@
 
             function generateStringResult ( inputs ) {
                 function wrapPart ( ) {
-                    if ( currentToken.length > 0 )
+                    if ( currentToken.length > 0 ) {
                         result.push({
                             type: 'StringPart',
                             part: currentToken.join('')
                         })
+                    }
                 }
                 let result = [ ]
                 let currentToken = [ ]
@@ -55,8 +56,8 @@
 
     Body
         = statements:SpacedStatements+ {
-        	return {
-            	type: 'Body',
+            return {
+                type: 'Body',
                 children: statements
             }
         }
@@ -106,7 +107,8 @@
 //
 
     Literals
-        = StringLiteral
+        = ArrayLiteral
+        / StringLiteral
         / NumericLiteral
         / ReservedValueLiterals
         / BooleanLiteral
@@ -117,7 +119,7 @@
 
     LambdaExpression
         = "[" FullSpace* args:IdentifierList FullSpace* "=>"
-          FullSpace* code:Body FullSpace* "]" {
+        FullSpace* code:Body FullSpace* "]" {
             return {
                 type: "LambdaExpression",
                 args: args.map( x => x.name ),
@@ -130,12 +132,12 @@
 //
 
     IdentifierList
-       = arg:Identifier FullSpace+ more:IdentifierList {
-          return [ arg ].concat( more )
-       }
-       / subArg:Expression {
-       	  return [ subArg ]
-       }
+        = arg:Identifier FullSpace+ more:IdentifierList {
+            return [ arg ].concat( more )
+        }
+        / subArg:Expression {
+            return [ subArg ]
+        }
 
 //
 // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
@@ -143,7 +145,7 @@
 
     PipeStatement
         = origin:Returnables FullSpace+ ">" FullSpace+
-          target:( Identifier / SExpression / PipeStatement / ReturnKeyword ) {
+        target:( Identifier / SExpression / PipeStatement / ReturnKeyword ) {
             return {
                 type:       "PipeStatement",
                 origin:     origin,
@@ -165,16 +167,16 @@
 
     SExpression
         = "(" FullSpace* command:SExpressionCommands FullSpace+
-          params:SExpressionArugmentArray? FullSpace* ")" {
-        	return {
-            	type:       "SExpression",
+        params:SExpressionArugmentArray? FullSpace* ")" {
+            return {
+                type:       "SExpression",
                 kind:       "FunctionCallWithArgs",
                 command:    command,
                 params:     params,
             }
         }
         / "(" FullSpace* operator:BinaryOperator FullSpace+ left:Expression 
-          FullSpace+ right:Expression FullSpace* ")" {
+        FullSpace+ right:Expression FullSpace* ")" {
             return {
                 type:       "SExpression",
                 kind:       "BinaryOperator",       
@@ -192,8 +194,8 @@
             }
         }
         / "(" FullSpace* command:SExpressionCommands FullSpace* ")" {
-        	return {
-            	type:       "SExpression",
+            return {
+                type:       "SExpression",
                 kind:       "FunctionCallOnly",
                 command:    command
             }
@@ -204,7 +206,7 @@
             return [ arg ].concat( more )
         } 
         / subArg:Expression {
-       	    return [ subArg ]
+            return [ subArg ]
         }
 
     SExpressionCommands
@@ -222,7 +224,7 @@
 
     ClassDecleration
         = "class" WhiteSpcae+ name:Identifier WhiteSpcae* ":" WhiteSpcae* EOL FullSpace*
-          body:ClassFunctionDeclerations FullSpace+ "end" {
+        body:ClassFunctionDeclerations FullSpace+ "end" {
             return {
                 type: 'ClassDecleration',
                 name: name.name,
@@ -231,10 +233,10 @@
         }
         / "class" WhiteSpcae+ name:Identifier WhiteSpcae* ":" WhiteSpcae* Empty "end" {
             return {
-                  type: 'ClassDecleration',
-                  name: name.name,
-                  body: null
-              }
+                type: 'ClassDecleration',
+                name: name.name,
+                body: null
+            }
         }
 
     ClassFunctionDeclerations
@@ -251,7 +253,7 @@
 
     FunctionDecleration
         = "def" WhiteSpcae+ name:Identifier WhiteSpcae* args:IdentifierList
-          WhiteSpcae* ":" FullSpace* code:Body "end" {
+        WhiteSpcae* ":" FullSpace* code:Body "end" {
             return {
                 type: "FunctionDecleration",
                 name: name.name,
@@ -352,7 +354,7 @@
 
     BinaryOperator
         = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'rem' / 'and' / 'or' / 
-               'eq' / 'bigger' / 'lower' ) {
+            'eq' / 'bigger' / 'lower' ) {
             return {
                 type:       'BinaryOperator',
                 operator:   op
@@ -369,6 +371,32 @@
                 type:       "UnarayOperator",
                 operator:   op
             }
+        }
+
+//
+// ─── ARRAY LITERALS ─────────────────────────────────────────────────────────────
+//
+
+    ArrayLiteral
+        = "[" FullSpace* "]" {
+            return {
+                type:   "ArrayLiteral",
+                value:  [ ]
+            }
+        }
+        / "[" FullSpace* members:ArrayMember FullSpace* "]" {
+            return {
+                type:   "ArrayLiteral",
+                value:  members
+            }
+        }
+
+    ArrayMember
+        = member:Expression FullSpace+ more:ArrayMember {
+            return [ member ].concat( more )
+        } 
+        / member:Expression {
+            return [ member ]
         }
 
 //
@@ -564,19 +592,19 @@
         = StringInterpolation
         / '\\"'
         / !( '"' / '#' ) char:. {
-        	return char
+            return char
         }
 
     SingleQuotesStringsParts
         = StringInterpolation
         / "\\'"
         / !( "'" / '#' ) char:. {
-        	return char
+            return char
         }
 
     StringInterpolation
         = '#' expr:SExpression {
-        	return {
+            return {
                 type:   "StringInterpolation",
                 expr:   expr
             }
@@ -595,7 +623,7 @@
             }
         }
         / sign:'-'? '0x' numerics:[0-9a-f]+ {
-        	let number = ( sign? sign : '' ) + '0x' + numerics.join('')
+            let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
                 type:   'NumericLiteral',
                 raw:    number,
@@ -603,10 +631,10 @@
             }
         }
         / sign:'-'? start:[0-9]+ decimals:('.'[0-9]+)? {
-        	let number = (
-               ( sign? sign : '' ) + 
-               ( parseInt( start.join('') ) ).toString( ) +
-               ( decimals? '.' + decimals[ 1 ].join('') : '' )
+            let number = (
+            ( sign? sign : '' ) + 
+            ( parseInt( start.join('') ) ).toString( ) +
+            ( decimals? '.' + decimals[ 1 ].join('') : '' )
             )
             return {
                 type:   'NumericLiteral',
