@@ -452,7 +452,7 @@
         = operator:( "not" ) {
             return {
                 type:       "UnaryOperator",
-                operator:   op
+                operator:   operator
             }
         }
 
