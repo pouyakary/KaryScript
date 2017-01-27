@@ -58,6 +58,7 @@
         function test ( code ) {
             try {
                 parser.parse( code )
+                return true
             } catch ( e ) {
                 writeLine('─')
                 console.log( code )
@@ -67,11 +68,23 @@
                 console.log( wrapper( e.message ) )
                 writeLine('─')
                 console.log('\n')
+                return false
             }
         }
 
+        let failed = false
         for ( let t of testCases ) {
-            test( t )
+            if ( !test( t ) ) {
+                failed = true
+            }
+        }
+
+        if ( !failed ) {
+            console.log()
+            writeLine('─')
+            console.log(' A L L   G R A M M A R   T E S T S   C O M P L E T E D   S U C C E S S F U L L Y')
+            writeLine('─')
+            console.log()
         }
     }
 
