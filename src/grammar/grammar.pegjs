@@ -185,11 +185,11 @@
 //
 
     WhileStatement
-        = "while" _+ condition:( Expression / BooleanLiteral ) _* ":" _* EOL
-          body:Body "end" {
+        = "while" _+ predicate:Predicate _* ":" __*
+          body:Body __* "end" {
               return {
                   type: "WhileStatement",
-                  condition: condition,
+                  predicate: predicate,
                   body: body
               }
         }
