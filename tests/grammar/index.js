@@ -62,6 +62,8 @@
                 writeLine('─')
                 console.log( code )
                 writeLine('-')
+                console.log( e.location )
+                writeLine('-')
                 console.log( wrapper( e.message ) )
                 writeLine('─')
                 console.log('\n')
