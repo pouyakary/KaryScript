@@ -80,11 +80,9 @@
         }
 
         if ( !failed ) {
-            console.log()
             writeLine('─')
             console.log(' A L L   G R A M M A R   T E S T S   C O M P L E T E D   S U C C E S S F U L L Y')
             writeLine('─')
-            console.log()
         }
     }
 
