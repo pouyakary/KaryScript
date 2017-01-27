@@ -41,7 +41,9 @@
 // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
 //
 
-    export type SExpressionType = "FunctionCallWithArgs" | "BinaryOperator" | "UnaryOperator" | "FunctionCallOnly"
+    export type SExpressionType = (
+        "FunctionCallWithArgs" | "BinaryOperator" | "UnaryOperator" |
+        "FunctionCallOnly" )
 
     export interface SExpression extends Base {
         kind:       SExpressionType
