@@ -48,7 +48,7 @@
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
-    Root = Body
+    Root = Body EOF*
 
 //
 // ─── BODY ───────────────────────────────────────────────────────────────────────
@@ -224,27 +224,28 @@
 //
 
     PipeStatement
-        = origin:Returnables __* '>' __* terminal:( Identifier / SExpression / ReturnKeyword ) {
+        = origin:Returnables PipeControl parts:PipeStatementParts {
             return {
                 type:  "PipeStatement",
-                parts: [ origin , terminal ]
-            }
-        }
-        / origin:Returnables __* '>'__* parts:PipeStatementParts {
-            return {
-                type:  "PipeStatement",
-                parts: [ origin ].concat[ parts ]
+                levels: [ origin ].concat( parts )
             }
         }
 
     PipeStatementParts
-        = origin:Returnables __* '>' __* more:PipeStatementParts {
+        = origin:Returnables PipeControl more:PipeStatementParts {
             return [ origin ].concat( more )
         }
         / terminal:( Identifier / SExpression / ReturnKeyword ) {
             return [ terminal ]
         }
 
+    PipeControl
+        = __* '>' __*
+        / __+ 'then' __+
+
+//
+// ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
+//
 
     ReturnKeyword
         = keyword: ( "return" / "yield" / "throw" ) {
