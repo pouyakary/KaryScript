@@ -40,10 +40,40 @@
             testCases.push('def x = [ x y => (sum x y) ]')
 
         //
+        // ─── FUNCTION DECELERATIONS ──────────────────────────────────────
+        //
+
+            testCases.push('def foo: end')
+
+            testCases.push('def foo x: end')
+
+            testCases.push('def foo x y: end')
+
+            testCases.push('def foo x y z: end')
+
+            testCases.push('def foo: (x) end')
+
+        //
         // ─── S EXPRESSION ────────────────────────────────────────────────
         //
 
+            testCases.push('(hello-world 2 3)')
+
+            testCases.push('(hello-world)')
+
+            testCases.push('(eq a b)')
+
             testCases.push('(not x)')
+
+        //
+        // ─── PIPES ───────────────────────────────────────────────────────
+        //
+
+            testCases.push('(a) > (b)')
+
+            testCases.push('(a) > (b) > (c)')
+
+            testCases.push('(a) > return')
         
         //
         // ─── WHILE STATEMENTS ────────────────────────────────────────────
@@ -51,7 +81,9 @@
 
             testCases.push('while eq a b: end')
 
-            testCases.push()
+            testCases.push('while eq a b: (hello) end')
+
+        // ─────────────────────────────────────────────────────────────────
 
 //
 // ─── LOAD PARSER ────────────────────────────────────────────────────────────────
@@ -69,6 +101,7 @@
 
     const parser = loadParser( )
     const wrapper = wrap( 80 )
+
     function writeLine ( char ) {
         let line = [ ]
         for ( let i = 0; i < 80; i++ ) {
@@ -76,6 +109,7 @@
         }
         console.log( line.join('') )
     }
+
     function test ( code ) {
         try {
             parser.parse( code )
@@ -88,6 +122,7 @@
             console.log('\n')
         }
     }
+
     for ( let t of testCases ) {
         test( t )
     }
