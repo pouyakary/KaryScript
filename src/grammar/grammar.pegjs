@@ -456,7 +456,7 @@
 //
 
     UnaryOperator
-        = operator:( "not" ) {
+        = operator:( "not" / "async" / "await" ) {
             return {
                 type:       "UnaryOperator",
                 operator:   operator
