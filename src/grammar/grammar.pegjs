@@ -224,15 +224,21 @@
 //
 
     PipeStatement
-        = parts:PipeStatementParts {
+        = origin:Returnables __* '>' __* terminal:( Identifier / SExpression / ReturnKeyword ) {
             return {
                 type:  "PipeStatement",
-                parts: parts,
+                parts: [ origin , terminal ]
+            }
+        }
+        / origin:Returnables __* '>'__* parts:PipeStatementParts {
+            return {
+                type:  "PipeStatement",
+                parts: [ origin ].concat[ parts ]
             }
         }
 
     PipeStatementParts
-        = origin:Returnables __* ">" __* more:PipeStatementParts {
+        = origin:Returnables __* '>' __* more:PipeStatementParts {
             return [ origin ].concat( more )
         }
         / terminal:( Identifier / SExpression / ReturnKeyword ) {
