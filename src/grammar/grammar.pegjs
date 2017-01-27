@@ -335,22 +335,29 @@
 //
 
     FunctionDeceleration
-        = "def" _+ name:Identifier _* args:IdentifierList
+        = key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
         _* ":" __* code:Body "end" {
             return {
                 type: "FunctionDeceleration",
                 name: name.name,
+                key:  key,
                 args: args.map( x => x.name ),
                 code: code
             }
         }
-        / "def" _+ name:Identifier _* ":" __* code:Body "end" {
+        / key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body "end" {
             return {
                 type: "FunctionDeceleration",
                 name: name.name,
+                key:  key,
                 args: null,
                 code: code
             }
+        }
+
+    FunctionDefKind
+        = type:( 'def' / 'async' ) {
+            return type
         }
 
 //
