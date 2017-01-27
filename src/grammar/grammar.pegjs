@@ -77,9 +77,9 @@
 //
 
     Statement
-        = FunctionDecleration
-        / ClassDecleration
-        / DeclerationStatement
+        = FunctionDeceleration
+        / ClassDeceleration
+        / DecelerationStatement
         / IfStatement
         / WhileStatement
         / ReturnStatement
@@ -268,10 +268,10 @@
                 right:      right 
             }
         }
-        / operator:UnarayOperator __+ arg:Expression {
+        / operator:UnaryOperator __+ arg:Expression {
             return {
                 type:       "SExpression",
-                kind:       "UnarayOperator",       
+                kind:       "UnaryOperator",       
                 operator:   operator,
                 arg:        arg
             }
@@ -305,28 +305,28 @@
 // ─── CLASS DECLERATION ──────────────────────────────────────────────────────────
 //
 
-    ClassDecleration
+    ClassDeceleration
         = "class" _+ name:Identifier _* ":" _* EOL __*
-        body:ClassFunctionDeclerations __+ "end" {
+        body:ClassFunctionDecelerations __+ "end" {
             return {
-                type: 'ClassDecleration',
+                type: 'ClassDeceleration',
                 name: name.name,
                 body: body
             }
         }
         / "class" _+ name:Identifier _* ":" _* Empty "end" {
             return {
-                type: 'ClassDecleration',
+                type: 'ClassDeceleration',
                 name: name.name,
                 body: null
             }
         }
 
-    ClassFunctionDeclerations
-        = arg:FunctionDecleration __+ more:ClassFunctionDeclerations {
+    ClassFunctionDecelerations
+        = arg:FunctionDeceleration __+ more:ClassFunctionDecelerations {
             return [ arg ].concat( more )
         } 
-        / decleration:FunctionDecleration {
+        / decleration:FunctionDeceleration {
             return [ decleration ]
         }
 
@@ -334,11 +334,11 @@
 // ─── FUNCTION DECLERATION ───────────────────────────────────────────────────────
 //
 
-    FunctionDecleration
+    FunctionDeceleration
         = "def" _+ name:Identifier _* args:IdentifierList
         _* ":" __* code:Body "end" {
             return {
-                type: "FunctionDecleration",
+                type: "FunctionDeceleration",
                 name: name.name,
                 args: args.map( x => x.name ),
                 code: code
@@ -346,7 +346,7 @@
         }
         / "def" _+ name:Identifier _* ":" __* code:Body "end" {
             return {
-                type: "FunctionDecleration",
+                type: "FunctionDeceleration",
                 name: name.name,
                 args: null,
                 code: code
@@ -357,10 +357,10 @@
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
 //
 
-    DeclerationStatement
+    DecelerationStatement
         = modifier:( "const" /  "def" ) _+ assignment:Assignment {
             return {
-                type: 'DeclerationStatement',
+                type: 'DecelerationStatement',
                 modifier: modifier,
                 assignment: assignment
             }
@@ -448,10 +448,10 @@
 // ─── UNARAY OPERATORS ───────────────────────────────────────────────────────────
 //
 
-    UnarayOperator
+    UnaryOperator
         = operator:( "not" ) {
             return {
-                type:       "UnarayOperator",
+                type:       "UnaryOperator",
                 operator:   op
             }
         }
