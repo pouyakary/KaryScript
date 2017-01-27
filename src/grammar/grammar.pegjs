@@ -224,14 +224,21 @@
 //
 
     PipeStatement
-        = origin:Returnables __+ ">" __+ target:( Identifier / SExpression / 
-          PipeStatement / ReturnKeyword ) {
+        = parts:PipeStatementParts {
             return {
-                type:       "PipeStatement",
-                origin:     origin,
-                target:     target,
+                type:  "PipeStatement",
+                parts: parts,
             }
         }
+
+    PipeStatementParts
+        = origin:Returnables __* ">" __* more:PipeStatementParts {
+            return [ origin ].concat( more )
+        }
+        / terminal:( Identifier / SExpression / ReturnKeyword ) {
+            return [ terminal ]
+        }
+
 
     ReturnKeyword
         = keyword: ( "return" / "yield" / "throw" ) {
