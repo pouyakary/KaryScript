@@ -91,7 +91,7 @@
 //
 
     Returnables
-        = Assignment
+        = DecelerationAssignment
         / Expression
 
 //
@@ -365,12 +365,28 @@
 //
 
     DecelerationStatement
-        = modifier:( "const" /  "def" ) _+ assignment:Assignment {
+        = modifier:( "const" /  "def" ) _+ assignment:DecelerationAssignment {
             return {
                 type: 'DecelerationStatement',
+                kind: 'SingleAllocInit',
                 modifier: modifier,
                 assignment: assignment
             }
+        }
+        / "def" _+ names:NameOnlyDecelerationsArray _* ( EOL / EOF ) {
+            return {
+                type: 'DecelerationStatement',
+                kind: 'MultiAlloc',
+                names: names.map( x => x.name )
+            }
+        }
+
+    NameOnlyDecelerationsArray
+        = name:Identifier _+ more:NameOnlyDecelerationsArray {
+            return [ name ].concat( more )
+        } 
+        / name:Identifier {
+            return [ name ]
         }
 
 //
@@ -398,10 +414,10 @@
 // ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
 //
 
-    Assignment
+    DecelerationAssignment
         = name:AddressIdentifier _* "=" _* value:Expression {
             return {
-                type:       'Assignment',
+                type:       'DecelerationAssignment',
                 name:       name.name,
                 value:      value
             }
@@ -801,6 +817,9 @@
                 value: '\n',
             }
         }
+
+    EOF
+        = !.
 
     LineTerminator
         = [\n\r\u2028\u2029] {
