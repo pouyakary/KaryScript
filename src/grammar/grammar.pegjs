@@ -120,15 +120,15 @@
 // ─── CONDITIONABLE ──────────────────────────────────────────────────────────────
 //
 
-    Predicate
-        = Expression
-        / BooleanLiteral
-        / SExpressionBody
-
     ConditionalsPredicate
-        = _+ predicate:Predicate _* ":" __ {
+        = __+ predicate:Predicate __* ":" __* {
             return predicate
         }
+
+    Predicate
+        = SExpressionBody
+        / BooleanLiteral
+        / Expression
 
 //
 // ─── IF STATEMENT ───────────────────────────────────────────────────────────────
@@ -143,7 +143,6 @@
                   trueBranch: body
               }
           }
-
         / "if" predicate:ConditionalsPredicate trueBranch:Body __
           elseIfBranches: ElseIfStatementArray __ "else" __ falseBranch:Body END {
               return {
@@ -155,7 +154,6 @@
                   falseBranch: falseBranch
               }
           }
-
         / "if" predicate:ConditionalsPredicate trueBranch:Body "else" __
           falseBranch:Body END {
               return {
@@ -176,7 +174,7 @@
         }
 
     ElseIfStatement
-        = "elsif" _+ predicate:Predicate _* ":" __* body:Body EOL {
+        = "elsif" _+ predicate:ConditionalsPredicate body:Body EOL {
             return {
                 type:       "ElseIfStatement",
                 predicate:  predicate,
@@ -189,7 +187,7 @@
 //
 
     WhileStatement
-        = "while" _+ predicate:Predicate _* ":" __*
+        = "while" predicate:ConditionalsPredicate
           body:Body END {
               return {
                   type: "WhileStatement",
