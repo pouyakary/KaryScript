@@ -135,18 +135,20 @@
 //
 
     IfStatement
-        = "if" predicate:ConditionalsPredicate body:Body END {
+        = key:IfSwitchKey predicate:ConditionalsPredicate body:Body END {
               return {
                   type: "IfStatement",
+                  key: key,
                   kind: "if",
                   predicate: predicate,
                   trueBranch: body
               }
           }
-        / "if" predicate:ConditionalsPredicate trueBranch:Body __
+        / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body __
           elseIfBranches: ElseIfStatementArray __ "else" __ falseBranch:Body END {
               return {
                   type: "IfStatement",
+                  key: key,
                   kind: "if-else",
                   predicate: predicate,
                   trueBranch: trueBranch,
@@ -154,16 +156,22 @@
                   falseBranch: falseBranch
               }
           }
-        / "if" predicate:ConditionalsPredicate trueBranch:Body "else" __
+        / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body "else" __
           falseBranch:Body END {
               return {
                   type: "IfStatement",
+                  key: key,
                   kind: "if-elseif-else",
                   predicate: predicate,
                   trueBranch: trueBranch,
                   falseBranch: falseBranch
               }
           }
+
+    IfSwitchKey
+        = key:( "if" / "unless" ) {
+            return key
+        }
 
     ElseIfStatementArray
         = elesIfClouse:ElseIfStatement __ more:ElseIfStatementArray {
