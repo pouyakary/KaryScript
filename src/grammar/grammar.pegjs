@@ -538,12 +538,7 @@
 //
 
     UnaryOperator
-        = operator:( "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" ) {
-            return {
-                type:       "UnaryOperator",
-                operator:   operator
-            }
-        }
+        = "not" / "async" / "await" / "new" / "delete" / "typeof" / "void"
 
 //
 // ─── INDEX LOADER ───────────────────────────────────────────────────────────────
