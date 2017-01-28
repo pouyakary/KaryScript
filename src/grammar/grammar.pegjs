@@ -48,7 +48,7 @@
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
-    Root = Body
+    Root = Body / Empty
 
 //
 // ─── BODY ───────────────────────────────────────────────────────────────────────
@@ -359,15 +359,14 @@
 //
 
     ClassDeceleration
-        = "class" _+ name:Identifier _* ":" _* EOL __*
-        body:ClassFunctionDecelerations END {
+        = "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDecelerations __* END {
             return {
                 type: 'ClassDeceleration',
                 name: name.name,
                 body: body
             }
         }
-        / "class" _+ name:Identifier _* ":" _* Empty END {
+        / "class" _+ name:Identifier _* ":" Empty END {
             return {
                 type: 'ClassDeceleration',
                 name: name.name,
