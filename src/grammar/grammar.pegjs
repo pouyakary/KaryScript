@@ -508,7 +508,7 @@
 //
 
     ObjectLiteral
-        = "[" __* "=" __* "]" {
+        = "[" __* ":" __* "]" {
             return {
                 type:   "ObjectLiteral",
                 value:  [ ]
@@ -531,7 +531,7 @@
         }
 
     ObjectAssignment
-        = name:Identifier _* "=" _* value:Expression {
+        = name:Identifier _* ":" _* value:Expression {
             return {
                 key:        name.name,
                 value:      value
