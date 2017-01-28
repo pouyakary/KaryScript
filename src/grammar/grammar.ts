@@ -20,8 +20,17 @@
             "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
             "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
             "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-            "IfStatement"
+            "IfStatement" | "PipePlaceholder"
         )
+    }
+
+//
+// ─── RESERVED VALUE LITERALS ────────────────────────────────────────────────────
+//
+
+    export interface ReservedValueLiterals extends Base {
+        raw: string,
+        value: null | true | false | undefined
     }
 
 //
