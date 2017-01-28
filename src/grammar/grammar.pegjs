@@ -107,6 +107,7 @@
     Expression
         = Literals
         / Identifier
+        / ArrayObjectIndexLoader
         / LambdaExpression
         / SExpression
 
@@ -487,7 +488,7 @@
 //
 
     AddressIdentifier
-        = space:Identifier "/" member:( AddressIdentifier / Identifier ) {
+        = space:Identifier "." member:( AddressIdentifier / Identifier ) {
             return {
                 type: "AddressIdentifier",
                 address: ( member.type === "Identifier" )?
@@ -535,6 +536,19 @@
             return {
                 type:       "UnaryOperator",
                 operator:   operator
+            }
+        }
+
+//
+// ─── INDEX LOADER ───────────────────────────────────────────────────────────────
+//
+
+    ArrayObjectIndexLoader
+        = "[" __* name:AddressIdentifier __* "|" __* index:Returnables __* "]" {
+            return {
+                type:   "ArrayObjectIndexLoader",
+                name:   name,
+                index:  index
             }
         }
 
