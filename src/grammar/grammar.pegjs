@@ -109,6 +109,7 @@
         / Identifier
         / ArrayObjectIndexLoader
         / LambdaExpression
+        / ShorthandIfExpression
         / SExpression
 
 //
@@ -194,6 +195,20 @@
                 type:       "ElseIfStatement",
                 predicate:  predicate,
                 body:       body
+            }
+        }
+
+//
+// ─── SHORTHAND RETURN IF ────────────────────────────────────────────────────────
+//
+
+    ShorthandIfExpression
+        = expr:SExpression _* "?" _* trueBranch:Returnables _* "/" _* falseBranch:Returnables {
+            return {
+                type: "ShorthandIfExpression",
+                predicate: expr,
+                trueBranch: trueBranch,
+                falseBranch: falseBranch
             }
         }
           
