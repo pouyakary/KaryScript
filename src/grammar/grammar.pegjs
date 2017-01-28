@@ -68,7 +68,7 @@
 //
 
     SpacedStatements
-        = __* statement:Statement __* {
+        = __* statement:Statement ( __+ / _* EOL / EOF ) {
             return statement
         }
 
@@ -125,12 +125,17 @@
         / BooleanLiteral
         / SExpressionBody
 
+    ConditionalsPredicate
+        = _+ predicate:Predicate _* ":" __ {
+            return predicate
+        }
+
 //
 // ─── IF STATEMENT ───────────────────────────────────────────────────────────────
 //
 
     IfStatement
-        = "if" _? predicate:Predicate _* ":" __+ body:Body __* "end" {
+        = "if" predicate:ConditionalsPredicate body:Body END {
               return {
                   type: "IfStatement",
                   kind: "if",
@@ -139,9 +144,8 @@
               }
           }
 
-        / "if" _+ predicate:Predicate _* ":" __+ trueBranch:Body __*
-          elseIfBranches: ElseIfStatementArray __+ "else" __+ falseBranch:Body __*
-          "end" {
+        / "if" predicate:ConditionalsPredicate trueBranch:Body __
+          elseIfBranches: ElseIfStatementArray __ "else" __ falseBranch:Body END {
               return {
                   type: "IfStatement",
                   kind: "if-else",
@@ -152,8 +156,8 @@
               }
           }
 
-        / "if" _+ predicate:Predicate _* ":" _* trueBranch:Body "else" __+
-          falseBranch:Body __* "end" {
+        / "if" predicate:ConditionalsPredicate trueBranch:Body "else" __
+          falseBranch:Body END {
               return {
                   type: "IfStatement",
                   kind: "if-elseif-else",
@@ -164,7 +168,7 @@
           }
 
     ElseIfStatementArray
-        = elesIfClouse:ElseIfStatement __+ more:ElseIfStatementArray {
+        = elesIfClouse:ElseIfStatement __ more:ElseIfStatementArray {
             return [ elesIfClouse ].concat( more )
         } 
         / elesIfClouse:ElseIfStatement {
@@ -186,7 +190,7 @@
 
     WhileStatement
         = "while" _+ predicate:Predicate _* ":" __*
-          body:Body __* "end" {
+          body:Body END {
               return {
                   type: "WhileStatement",
                   predicate: predicate,
@@ -321,14 +325,14 @@
 
     ClassDeceleration
         = "class" _+ name:Identifier _* ":" _* EOL __*
-        body:ClassFunctionDecelerations __+ "end" {
+        body:ClassFunctionDecelerations END {
             return {
                 type: 'ClassDeceleration',
                 name: name.name,
                 body: body
             }
         }
-        / "class" _+ name:Identifier _* ":" _* Empty "end" {
+        / "class" _+ name:Identifier _* ":" _* Empty END {
             return {
                 type: 'ClassDeceleration',
                 name: name.name,
@@ -350,7 +354,7 @@
 
     FunctionDeceleration
         = key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
-        _* ":" __* code:Body "end" {
+        _* ":" __* code:Body END {
             return {
                 type: "FunctionDeceleration",
                 name: name.name,
@@ -359,7 +363,7 @@
                 code: code
             }
         }
-        / key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body "end" {
+        / key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body END {
             return {
                 type: "FunctionDeceleration",
                 name: name.name,
@@ -786,9 +790,8 @@
         }
         / sign:'-'? start:[0-9]+ decimals:('.'[0-9]+)? {
             let number = (
-            ( sign? sign : '' ) + 
-            ( parseInt( start.join('') ) ).toString( ) +
-            ( decimals? '.' + decimals[ 1 ].join('') : '' )
+                ( sign? sign : '' ) + start.join('') +
+                ( decimals? '.' + decimals[ 1 ].join('') : '' )
             )
             return {
                 type:   'NumericLiteral',
@@ -796,6 +799,12 @@
                 value:  decimals? parseFloat( number ) : parseInt( number )
             }
         }
+
+//
+// ─── END KEYWORD ────────────────────────────────────────────────────────────────
+//
+
+    END = "end"
 
 //
 // ─── FULL SPACE ─────────────────────────────────────────────────────────────────
