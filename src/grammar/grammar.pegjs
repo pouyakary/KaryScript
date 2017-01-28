@@ -87,6 +87,7 @@
         / ReturnStatement
         / PipeStatement
         / SExpression
+        / AwaitStatement
 
 //
 // ─── RETURNABLES ────────────────────────────────────────────────────────────────
@@ -94,6 +95,8 @@
 
     Returnables
         = DecelerationAssignment
+        / SExpressionBody
+        / AwaitStatement
         / Expression
 
 //
@@ -268,6 +271,18 @@
         }
 
 //
+// ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
+//
+
+    AwaitStatement
+        = "await" _+ expr:( SExpression / SExpressionBody ) {
+            return {
+                type: "AwaitStatement",
+                expr: expr
+            }
+        }    
+
+//
 // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
 //
 
@@ -395,7 +410,7 @@
 //
 
     DecelerationStatement
-        = modifier:( "const" /  "def" ) _+ assignment:DecelerationAssignment {
+        = modifier:( "const" / "def" ) _+ assignment:DecelerationAssignment {
             return {
                 type: 'DecelerationStatement',
                 kind: 'SingleAllocInit',
@@ -445,7 +460,7 @@
 //
 
     DecelerationAssignment
-        = name:AddressIdentifier _* "=" _* value:Expression {
+        = name:AddressIdentifier _* "=" _* value:Returnables {
             return {
                 type:       'DecelerationAssignment',
                 name:       name.name,
@@ -546,7 +561,7 @@
         }
 
     ObjectAssignment
-        = name:Identifier _* ":" _* value:Expression {
+        = name:Identifier _* ":" _* value:Returnables {
             return {
                 key:        name.name,
                 value:      value
