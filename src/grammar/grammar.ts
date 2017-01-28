@@ -20,7 +20,7 @@
             "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
             "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
             "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-            "IfStatement" | "PipePlaceholder" | "ArrayDeceleration"
+            "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement"
         )
     }
 
@@ -38,6 +38,7 @@
     export type Expression
         = SExpression
         | ReservedValueLiterals
+        | Literals
 
 //
 // ─── LITERALS ───────────────────────────────────────────────────────────────────
@@ -65,6 +66,15 @@
     export type Returnables
         = Expression
         | SExpression
+
+//
+// ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
+//
+
+    export interface AwaitStatement extends Base {
+        type: "AwaitStatement"
+        expr: SExpression
+    }
 
 //
 // ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
@@ -121,7 +131,6 @@
         | "BinaryOperator"
         | "UnaryOperator"
         | "FunctionCallOnly"
-
 
     export interface FunctionCallWithArgsSExpression extends SExpression {
         kind:       "FunctionCallWithArgs"
