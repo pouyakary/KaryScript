@@ -598,6 +598,7 @@
             / "no"              !IdentifierName
             / "cat"             !IdentifierName
             / "print"           !IdentifierName
+            / "nan"             !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
@@ -691,10 +692,11 @@
 //
 
     ReservedValueLiterals
-        = value:( "NaN" / "ufo" / "undefined" / "null" / "empty" ) {
+        = value:( "nan" / "NaN" / "ufo" / "undefined" / "null" / "empty" ) {
             let result
             switch ( value ) {
                 case "NaN":
+                case "nan":
                     result = NaN
                     break
                 case "ufo":
@@ -779,14 +781,7 @@
 //
 
     NumericLiteral
-        = "Nan" {
-            return {
-                type:   'NumericLiteral',
-                raw:    "NaN",
-                value:  NaN
-            }
-        }
-        / sign:'-'? '0x' numerics:[0-9a-f]+ {
+        = sign:'-'? '0x' numerics:[0-9a-f]+ {
             let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
                 type:   'NumericLiteral',
