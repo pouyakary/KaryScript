@@ -80,6 +80,8 @@
         = FunctionDeceleration
         / ClassDeceleration
         / DecelerationStatement
+        / ObjectDeceleration
+        / ArrayDeceleration
         / IfStatement
         / WhileStatement
         / ReturnStatement
@@ -516,7 +518,16 @@
         }
         / "[" __* members:ObjectPairMember __* "]" {
             return {
-                type:   "ArrayLiteral",
+                type:   "ObjectLiteral",
+                value:  members
+            }
+        }
+      
+    ObjectDeceleration
+        = "object" __* name:Identifier __* ":" __* members:ObjectPairMember __+ END {
+            return {
+                type:   "ObjectDeceleration",
+                name:   name.name,
                 value:  members
             }
         }
@@ -552,6 +563,15 @@
         / "[" __* members:ArrayMember __* "]" {
             return {
                 type:   "ArrayLiteral",
+                value:  members
+            }
+        }
+
+    ArrayDeceleration
+        = "array" _+ name:Identifier __* ":"  __* members:ArrayMember __+ END {
+            return {
+                type:   "ArrayDeceleration",
+                name:   name.name,
                 value:  members
             }
         }
