@@ -65,7 +65,13 @@
                 writeLine('-')
                 console.log( e.location )
                 writeLine('-')
-                console.log( wrapper( e.message ) )
+                console.log( `Found:    ${ e.found }` )
+                console.log(
+                    "Expected: " + ( wrap( 70 ) ) ( Array.from( new Set(
+                                e.expected.map( x => `'${ x.text }'` ) ) )
+                                          .filter( x => !/\s+/.test( x ) ).join( ' / ' ) )
+                                          .split( '\n' ).map( x => `          ${x}`).join( '\n' )
+                                          .replace( /^\s+/, '' ) )
                 writeLine('─')
                 console.log('\n')
                 return false
