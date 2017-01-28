@@ -929,8 +929,7 @@
     EOL
         = _* LineTerminator {
             return {
-                type: 'LineTerminator',
-                value: '\n',
+                type: 'LineTerminator'
             }
         }
 
@@ -940,16 +939,14 @@
     LineTerminator
         = [\n\r\u2028\u2029] {
             return {
-                type: 'LineTerminator',
-                value: '\n',
+                type: 'LineTerminator'
             }
         }
 
     LineTerminatorSequence
         = ( "\n"  / "\r\n" / "\r" / "\u2028" / "\u2029" ) {
             return {
-                type: 'LineTerminatorSequence',
-                raw: '\n',
+                type: 'LineTerminatorSequence'
             }
         }
 
