@@ -311,12 +311,16 @@
         }
     
     SExpressionArugmentArray
-        = arg:Expression __+ more:SExpressionArugmentArray {
+        = arg:SExpressionArugment __+ more:SExpressionArugmentArray {
             return [ arg ].concat( more )
         } 
-        / subArg:Expression {
+        / subArg:SExpressionArugment {
             return [ subArg ]
         }
+
+    SExpressionArugment
+        = PipePlaceholder
+        / Expression
 
     SExpressionCommands
         = AddressIdentifier
@@ -820,6 +824,16 @@
                 value:  decimals? parseFloat( number ) : parseInt( number )
             }
         }
+
+//
+// ─── PIPE HOLDER ────────────────────────────────────────────────────────────────
+//
+
+    PipePlaceholder = "@" {
+        return {
+            type: "PipePlaceholder"
+        }
+    }
 
 //
 // ─── END KEYWORD ────────────────────────────────────────────────────────────────
