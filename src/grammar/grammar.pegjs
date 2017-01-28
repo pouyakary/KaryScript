@@ -81,6 +81,7 @@
         / ClassDeceleration
         / DecelerationStatement
         / ObjectDeceleration
+        / SingleAssignmentStatement
         / ArrayDeceleration
         / IfStatement
         / WhileStatement
@@ -460,11 +461,24 @@
 //
 
     DecelerationAssignment
+        = name:Identifier _* "=" _* value:Returnables {
+            return {
+                type:  'DecelerationAssignment',
+                name:  name.name,
+                value: value
+            }
+        }
+
+//
+// ─── SINGLE ASSIGNMENT ──────────────────────────────────────────────────────────
+//
+
+    SingleAssignmentStatement
         = name:AddressIdentifier _* "=" _* value:Returnables {
             return {
-                type:       'DecelerationAssignment',
-                name:       name.name,
-                value:      value
+                type:  'DecelerationAssignment',
+                name:  name,
+                value: value
             }
         }
 
