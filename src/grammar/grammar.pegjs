@@ -309,7 +309,7 @@
         }
 
     SExpressionBody
-        = command:SExpressionCommands __+ params:SExpressionArugmentArray? {
+        = command:AddressIdentifier __+ params:SExpressionArugmentArray? {
             return {
                 type:       "SExpression",
                 kind:       "FunctionCallWithArgs",
@@ -317,7 +317,7 @@
                 params:     params,
             }
         }
-        / operator:BinaryOperator __+ left:Expression __+ right:Expression {
+        / operator:BinaryOperator __+ left:Returnables __+ right:Returnables {
             return {
                 type:       "SExpression",
                 kind:       "BinaryOperator",       
@@ -334,7 +334,7 @@
                 arg:        arg
             }
         }
-        / command:SExpressionCommands {
+        / command:AddressIdentifier {
             return {
                 type:       "SExpression",
                 kind:       "FunctionCallOnly",
@@ -353,15 +353,6 @@
     SExpressionArugment
         = PipePlaceholder
         / Expression
-
-    SExpressionCommands
-        = AddressIdentifier
-        / command: ( 'cat' / 'print' ) {
-            return {
-                type:    "SpecialCommand",
-                command: command
-            }
-        }
 
 //
 // ─── CLASS DECLERATION ──────────────────────────────────────────────────────────

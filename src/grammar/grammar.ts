@@ -20,8 +20,69 @@
             "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
             "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
             "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-            "IfStatement" | "PipePlaceholder"
+            "IfStatement" | "PipePlaceholder" | "ArrayDeceleration"
         )
+    }
+
+//
+// ─── STATEMENTS ─────────────────────────────────────────────────────────────────
+//
+
+    export type Statements
+        = ArrayDeceleration
+
+//
+// ─── EXPRESSION ─────────────────────────────────────────────────────────────────
+//
+
+    export type Expression
+        = SExpression
+        | ReservedValueLiterals
+
+//
+// ─── LITERALS ───────────────────────────────────────────────────────────────────
+//
+
+    export type Literals
+        = NumericLiteral
+        | StringLiteral
+        | BooleanLiteral
+
+//
+// ─── RESERVED VALUES ────────────────────────────────────────────────────────────
+//
+
+    export type ReservedValues
+        = boolean
+        | number
+        | undefined
+        | null
+
+//
+// ─── RETURNABLES ────────────────────────────────────────────────────────────────
+//
+
+    export type Returnables
+        = Expression
+        | SExpression
+
+//
+// ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
+//
+
+    export interface ArrayLiteral extends Base {
+        type: "ArrayLiteral",
+        value: Returnables[ ]
+    }
+
+//
+// ─── ARRAY DECELERATION ─────────────────────────────────────────────────────────
+//
+
+    export interface ArrayDeceleration extends Base {
+        type:   "ArrayDeceleration"
+        name:   string
+        value:  Returnables[ ]
     }
 
 //
@@ -30,7 +91,7 @@
 
     export interface ReservedValueLiterals extends Base {
         raw: string,
-        value: null | true | false | undefined
+        value: ReservedValues
     }
 
 //
@@ -50,39 +111,56 @@
 // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
 //
 
-    export type SExpressionType = (
-        "FunctionCallWithArgs" | "BinaryOperator" | "UnaryOperator" |
-        "FunctionCallOnly" )
-
     export interface SExpression extends Base {
+        type:       "SExpression"
         kind:       SExpressionType
-        command:    AddressOrIdentifier
     }
 
+    export type SExpressionType
+        = "FunctionCallWithArgs"
+        | "BinaryOperator"
+        | "UnaryOperator"
+        | "FunctionCallOnly"
+
+
     export interface FunctionCallWithArgsSExpression extends SExpression {
-        params: Base[ ]
+        kind:       "FunctionCallWithArgs"
+        command:    AddressOrIdentifier
+        params:     Returnables[ ]
+    }
+
+    export interface BinaryOperatorSExpression extends SExpression {
+        kind:       "BinaryOperator"
+        operator:   string
+        left:       Expression
+        right:      Expression
+    }
+
+    export interface UnaryOperatorSExpression extends SExpression {
+        kind:       "UnaryOperator"
+        operator:   string
+        arg:        Expression
+    }
+
+    export interface FunctionCallOnlySExpression extends SExpression {
+        kind:       "FunctionCallOnly"
+        command:    AddressOrIdentifier
     }
 
 //
 // ─── IDENTIFIER AND ADDRESS ─────────────────────────────────────────────────────
 //
 
-    export type AddressOrIdentifier = Address | Identifier
+    export type AddressOrIdentifier = AddressIdentifier | Identifier
 
-    export interface Address extends Base {
+    export interface AddressIdentifier extends Base {
+        type:   "AddressIdentifier"
         address: string[ ]
     }
 
     export interface Identifier extends Base {
+        type: "Identifier"
         name: string
-    }
-
-//
-// ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
-//
-
-    export interface ArrayLiteral extends Base {
-        value: Base[ ]
     }
 
 //
@@ -90,8 +168,9 @@
 //
 
     export interface BooleanLiteral extends Base {
-        key: string
-        value: boolean
+        type:   "BooleanLiteral"
+        key:    string
+        value:  boolean
     }
 
 //
@@ -99,6 +178,7 @@
 //
 
     export interface NumericLiteral extends Base {
+        type:   "NumericLiteral"
         raw:    string,
         value:  number
     }
