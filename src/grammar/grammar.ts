@@ -68,6 +68,15 @@
         | SExpression
 
 //
+// ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
+//
+
+    export interface ReturnKeyword extends Base {
+        type: "ReturnKeyword"
+        keyword: string
+    }
+
+//
 // ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
 //
 
