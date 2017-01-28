@@ -68,6 +68,15 @@
         | SExpression
 
 //
+// ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
+//
+
+    export interface PipeStatement extends Base {
+        type:   "PipeStatement"
+        levels: Identifier | SExpression | ReturnKeyword | Returnables
+    }
+
+//
 // ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
 //
 
