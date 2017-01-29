@@ -65,10 +65,10 @@
                 writeLine('-')
                 console.log( e.location )
                 writeLine('-')
-                console.log( `Found:    ${ e.found }` )
+                console.log( `Found:    ${ e.found? `"${ e.found }"` : "NULL" }` )
                 console.log(
                     "Expected: " + ( wrap( 70 ) ) ( Array.from( new Set(
-                                e.expected.map( x => `'${ x.text }'` ) ) )
+                                e.expected.map( x => x.text ) ) )
                                           .filter( x => !/\s+/.test( x ) ).join( ' / ' ) )
                                           .split( '\n' ).map( x => `          ${x}`).join( '\n' )
                                           .replace( /^\s+/, '' ) )
