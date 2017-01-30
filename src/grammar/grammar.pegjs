@@ -493,7 +493,7 @@
 //
 
     AddressIdentifier
-        = space:Identifier "." member:( AddressIdentifier / Identifier ) {
+        = space:Identifier "/" member:( AddressIdentifier / Identifier ) {
             return {
                 type: "AddressIdentifier",
                 address: ( member.type === "Identifier" )?
