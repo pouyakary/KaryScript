@@ -79,10 +79,10 @@
     Statement
         = FunctionDeceleration
         / ClassDeceleration
+        / ArrayDeceleration
         / DecelerationStatement
         / ObjectDeceleration
         / SingleAssignmentStatement
-        / ArrayDeceleration
         / IfStatement
         / WhileStatement
         / ReturnStatement
@@ -562,7 +562,7 @@
 //
 
     ObjectLiteral
-        = "[" __* ":" __* "]" {
+        = "[" __* ObjectAssignmentKeyValueCharacter __* "]" {
             return {
                 type:   "ObjectLiteral",
                 value:  [ ]
@@ -576,7 +576,8 @@
         }
       
     ObjectDeceleration
-        = "object" __* name:Identifier __* ":" __* members:ObjectPairMember __+ END {
+        = "object" __* name:Identifier __* ObjectAssignmentKeyValueCharacter
+          __* members:ObjectPairMember __+ END {
             return {
                 type:   "ObjectDeceleration",
                 name:   name.name,
@@ -594,12 +595,14 @@
         }
 
     ObjectAssignment
-        = name:Identifier _* ":" _* value:Returnables {
+        = name:Identifier _* ObjectAssignmentKeyValueCharacter _* value:ArgumentReturnables {
             return {
                 key:        name.name,
                 value:      value
             }
         }
+
+    ObjectAssignmentKeyValueCharacter = ":"
 
 //
 // ─── ARRAY LITERALS ─────────────────────────────────────────────────────────────
