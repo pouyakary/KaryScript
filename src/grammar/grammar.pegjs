@@ -208,7 +208,7 @@
 //
 
     ShorthandIfExpression
-        = expr:SExpression _* "?" _* trueBranch:Returnables _* "/" _* falseBranch:Returnables {
+        = expr:SExpression _* "?" _* trueBranch:ArgumentReturnables _* "/" _* falseBranch:ArgumentReturnables {
             return {
                 type: "ShorthandIfExpression",
                 predicate: expr,
@@ -261,7 +261,7 @@
 //
 
     PipeStatement
-        = origin:Returnables PipeControl parts:PipeStatementParts {
+        = origin:ArgumentReturnables PipeControl parts:PipeStatementParts {
             return {
                 type:  "PipeStatement",
                 levels: [ origin ].concat( parts )
@@ -269,7 +269,7 @@
         }
 
     PipeStatementParts
-        = origin:Returnables PipeControl more:PipeStatementParts {
+        = origin:ArgumentReturnables PipeControl more:PipeStatementParts {
             return [ origin ].concat( more )
         }
         / terminal:( Identifier / SExpression / ReturnKeyword ) {
@@ -322,7 +322,7 @@
                 params:     params,
             }
         }
-        / operator:BinaryOperator __+ left:Returnables __+ right:Returnables {
+        / operator:BinaryOperator __+ left:ArgumentReturnables __+ right:ArgumentReturnables {
             return {
                 type:       "SExpression",
                 kind:       "BinaryOperator",       
