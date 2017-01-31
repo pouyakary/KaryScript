@@ -9,7 +9,7 @@
         "outFile": "bin/compiler.js"
     },
     "include": [
-        "src/typescript/**/*"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules"
