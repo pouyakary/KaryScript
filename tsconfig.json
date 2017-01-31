@@ -5,6 +5,13 @@
         "noImplicitAny": false,
         "sourceMap": false,
         "strictNullChecks": true,
-        "outDir": "bin"
-    }
+        "removeComments": true,
+        "outFile": "bin/compiler.js"
+    },
+    "include": [
+        "src/typescript/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
