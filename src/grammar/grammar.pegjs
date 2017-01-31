@@ -58,7 +58,7 @@
         = statements:SpacedStatements+ {
             return {
                 type: 'Body',
-                children: statements
+                branch: statements
             }
         }
         / Empty
@@ -195,7 +195,7 @@
         }
 
     ElseIfStatement
-        = "elsif" _+ predicate:ConditionalsPredicate body:Body EOL {
+        = "also" _+ "if" _+ predicate:ConditionalsPredicate body:Body EOL {
             return {
                 type:       "ElseIfStatement",
                 predicate:  predicate,

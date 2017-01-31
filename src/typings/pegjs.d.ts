@@ -4,7 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 declare namespace PEG {
-	function parse(input:string):any;
+	function parse( input: string ): any;
 
 	interface Location {
 		line: number;

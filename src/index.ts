@@ -11,12 +11,32 @@
 namespace KaryScriptCompiler {
 
     //
+    // ─── COMPILE ────────────────────────────────────────────────────────────────────
+    //
+
+        /**
+         * This is the main function of KaryScript Compiler. It takes a _String_ of
+         * __KaryScript Source Code__ containing the __"Content of a single source file"__
+         * and compiles it to a JavaScript String or throws CompilerErrors
+         */
+        export function Compile( src: string ) {
+            try {
+                // parsing
+                const parser = require( './parser.js' )
+                const ast = parser.parse( src ) as Parser.IBody
+                // generating the code
+                const compiledCode = CompileAST( ast )
+            } catch ( error ) {
+                
+            }
+        }
+
+    //
     // ─── COMPILE FUNCTION ───────────────────────────────────────────────────────────
     //
 
         /** Gets the parsed AST and compiles it into JavaScript String */
-        export function CompileAST ( src: KaryScriptCompiler.Parser.Body ) {
-
+        export function CompileAST ( src: Parser.IBody ) {
 
         }
 
@@ -28,22 +48,15 @@ namespace KaryScriptCompiler {
          * The information object that is passed to the __child branches__ for a Body
          * node to have information about it's _parent object_ as well as _environment_
          */
-        interface IScopeInformation {
+        export interface IEnvInfo {
             /** Shows the level of scope depth */
             ScopeLevel: number
-
-            /**
-             * Says how much spacing (tabulation) is needed before lines of the
-             * code
-             */
-            IndentationLevel: number
 
             /**
              * A __Stack of Parent Nodes__ so that you can have a clear view
              * on compilation should happen
              */
-            parentNode: Parser.Base[ ]
-            
+            ParentNode: Parser.IBase[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

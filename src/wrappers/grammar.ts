@@ -14,8 +14,8 @@ namespace KaryScriptCompiler.Parser {
     // ─── BASE NODE ──────────────────────────────────────────────────────────────────
     //
 
-        export interface Base {
-            type: "Empty" | "NumericLiteral" | "StringInterpolation" | "StringLiteral" |
+        export interface IBase {
+            type: "Body" | "Empty" | "NumericLiteral" | "StringInterpolation" | "StringLiteral" |
                 "BooleanLiteral" | "LineTerminator" | "ReservedValueLiterals" | "ArrayLiteral" |
                 "ObjectLiteral" | "Identifier" | "UnaryOperator" | "AddressIdentifier" | 
                 "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
@@ -28,9 +28,12 @@ namespace KaryScriptCompiler.Parser {
     // ─── BODY ───────────────────────────────────────────────────────────────────────
     //
 
-        export type Body = Statements[ ] | Empty
+        export interface IBody extends IBase {
+            type: "Body"
+            branch: TStatements[ ] | IEmpty
+        }
 
-        export interface Empty extends Base {
+        export interface IEmpty extends IBase {
             type: "Empty"
         }
 
@@ -38,32 +41,32 @@ namespace KaryScriptCompiler.Parser {
     // ─── STATEMENTS ─────────────────────────────────────────────────────────────────
     //
 
-        export type Statements
-            = ArrayDeceleration
+        export type TStatements
+            = IArrayDeceleration
 
     //
     // ─── EXPRESSION ─────────────────────────────────────────────────────────────────
     //
 
-        export type Expression
-            = SExpression
-            | ReservedValueLiterals
-            | Literals
+        export type TExpression
+            = ISExpression
+            | IReservedValueLiterals
+            | TLiterals
 
     //
     // ─── LITERALS ───────────────────────────────────────────────────────────────────
     //
 
-        export type Literals
-            = NumericLiteral
-            | StringLiteral
-            | BooleanLiteral
+        export type TLiterals
+            = INumericLiteral
+            | IStringLiteral
+            | IBooleanLiteral
 
     //
     // ─── RESERVED VALUES ────────────────────────────────────────────────────────────
     //
 
-        export type ReservedValues
+        export type TReservedValues
             = boolean
             | number
             | undefined
@@ -73,34 +76,34 @@ namespace KaryScriptCompiler.Parser {
     // ─── RETURNABLES ────────────────────────────────────────────────────────────────
     //
 
-        export type Returnables
-            = Expression
-            | SExpression
+        export type TReturnables
+            = TExpression
+            | ISExpression
 
     //
     // ─── LAMBDA EXPRESSION ──────────────────────────────────────────────────────────
     //
 
-        export interface LambdaExpression extends Base {
+        export interface ILambdaExpression extends IBase {
             type: "LambdaExpression"
             args: string[ ]
-            code: Body
+            code: IBody
         }
 
     //
     // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
     //
 
-        export interface PipeStatement extends Base {
+        export interface IPipeStatement extends IBase {
             type:   "PipeStatement"
-            levels: Identifier | SExpression | ReturnKeyword | Returnables
+            levels: IIdentifier | ISExpression | IReturnKeyword | TReturnables
         }
 
     //
     // ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
     //
 
-        export interface ReturnKeyword extends Base {
+        export interface IReturnKeyword extends IBase {
             type: "ReturnKeyword"
             keyword: string
         }
@@ -109,73 +112,73 @@ namespace KaryScriptCompiler.Parser {
     // ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
     //
 
-        export interface AwaitStatement extends Base {
+        export interface IAwaitStatement extends IBase {
             type: "AwaitStatement"
-            expr: SExpression
+            expr: ISExpression
         }
 
     //
     // ─── OBJECT DECELERATION ────────────────────────────────────────────────────────
     //
 
-        export interface ObjectDeceleration extends Base {
+        export interface IObjectDeceleration extends IBase {
             type:   "ObjectDeceleration"
             name:   string
-            value:  ObjectMemberPair[ ]
+            value:  IObjectMemberPair[ ]
         }
 
     //
     // ─── OBJECT LITERAL ─────────────────────────────────────────────────────────────
     //
 
-        export interface ObjectLiteral {
+        export interface IObjectLiteral {
             type: "ObjectLiteral"
-            value: ObjectMemberPair[ ]
+            value: IObjectMemberPair[ ]
         }
 
-        export interface ObjectMemberPair {
+        export interface IObjectMemberPair {
             key: string
-            value: Returnables
+            value: TReturnables
         }
 
     //
     // ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
     //
 
-        export interface ArrayLiteral extends Base {
+        export interface IArrayLiteral extends IBase {
             type: "ArrayLiteral",
-            value: Returnables[ ]
+            value: TReturnables[ ]
         }
 
     //
     // ─── ARRAY DECELERATION ─────────────────────────────────────────────────────────
     //
 
-        export interface ArrayDeceleration extends Base {
+        export interface IArrayDeceleration extends IBase {
             type:   "ArrayDeceleration"
             name:   string
-            value:  Returnables[ ]
+            value:  TReturnables[ ]
         }
 
     //
     // ─── RESERVED VALUE LITERALS ────────────────────────────────────────────────────
     //
 
-        export interface ReservedValueLiterals extends Base {
+        export interface IReservedValueLiterals extends IBase {
             raw: string,
-            value: ReservedValues
+            value: TReservedValues
         }
 
     //
     // ─── STRING LITERAL ─────────────────────────────────────────────────────────────
     //
 
-        export interface StringLiteral extends Base {
+        export interface IStringLiteral extends IBase {
             key:    "'" | '"'
-            value:  Array< StringPart | SExpression >
+            value:  Array< IStringPart | ISExpression >
         }
 
-        export interface StringPart extends Base {
+        export interface IStringPart extends IBase {
             part:   string
         }
 
@@ -183,53 +186,53 @@ namespace KaryScriptCompiler.Parser {
     // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
     //
 
-        export interface SExpression extends Base {
-            type:       "SExpression"
-            kind:       SExpressionType
+        export interface ISExpression extends IBase {
+            type: "SExpression"
+            kind: TSExpressionType
         }
 
-        export type SExpressionType
+        export type TSExpressionType
             = "FunctionCallWithArgs"
             | "BinaryOperator"
             | "UnaryOperator"
             | "FunctionCallOnly"
 
-        export interface FunctionCallWithArgsSExpression extends SExpression {
+        export interface IFunctionCallWithArgsSExpression extends ISExpression {
             kind:       "FunctionCallWithArgs"
-            command:    AddressOrIdentifier
-            params:     Returnables[ ]
+            command:    TAddressOrIdentifier
+            params:     TReturnables[ ]
         }
 
-        export interface BinaryOperatorSExpression extends SExpression {
+        export interface IBinaryOperatorSExpression extends ISExpression {
             kind:       "BinaryOperator"
             operator:   string
-            left:       Expression
-            right:      Expression
+            left:       TExpression
+            right:      TExpression
         }
 
-        export interface UnaryOperatorSExpression extends SExpression {
+        export interface IUnaryOperatorSExpression extends ISExpression {
             kind:       "UnaryOperator"
             operator:   string
-            arg:        Expression
+            arg:        TExpression
         }
 
-        export interface FunctionCallOnlySExpression extends SExpression {
+        export interface IFunctionCallOnlySExpression extends ISExpression {
             kind:       "FunctionCallOnly"
-            command:    AddressOrIdentifier
+            command:    TAddressOrIdentifier
         }
 
     //
     // ─── IDENTIFIER AND ADDRESS ─────────────────────────────────────────────────────
     //
 
-        export type AddressOrIdentifier = AddressIdentifier | Identifier
+        export type TAddressOrIdentifier = IAddressIdentifier | IIdentifier
 
-        export interface AddressIdentifier extends Base {
+        export interface IAddressIdentifier extends IBase {
             type:   "AddressIdentifier"
             address: string[ ]
         }
 
-        export interface Identifier extends Base {
+        export interface IIdentifier extends IBase {
             type: "Identifier"
             name: string
         }
@@ -238,7 +241,7 @@ namespace KaryScriptCompiler.Parser {
     // ─── BOOLEAN LITERAL ────────────────────────────────────────────────────────────
     //
 
-        export interface BooleanLiteral extends Base {
+        export interface IBooleanLiteral extends IBase {
             type:   "BooleanLiteral"
             key:    string
             value:  boolean
@@ -248,7 +251,7 @@ namespace KaryScriptCompiler.Parser {
     // ─── NUMERIC LITERALS ───────────────────────────────────────────────────────────
     //
 
-        export interface NumericLiteral extends Base {
+        export interface INumericLiteral extends IBase {
             type:   "NumericLiteral"
             raw:    string,
             value:  number
