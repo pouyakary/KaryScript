@@ -8,7 +8,7 @@
   },
   "scripts": {
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/grammar/grammar.pegjs",
-    "compile": "tsc; npm run compile-parser",
+    "build": "tsc && npm run compile-parser",
     "test": "node ./tests/test.js"
   },
   "repository": {
