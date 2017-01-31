@@ -8,206 +8,252 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-//
-// ─── BASE NODE ──────────────────────────────────────────────────────────────────
-//
+namespace KaryScriptCompiler.Parser {
 
-    export interface Base {
-        type: (
-            "Empty" | "NumericLiteral" | "StringInterpolation" | "StringLiteral" |
-            "BooleanLiteral" | "LineTerminator" | "ReservedValueLiterals" | "ArrayLiteral" |
-            "ObjectLiteral" | "Identifier" | "UnaryOperator" | "AddressIdentifier" | 
-            "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
-            "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
-            "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-            "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement"
-        )
-    }
+    //
+    // ─── BASE NODE ──────────────────────────────────────────────────────────────────
+    //
 
-//
-// ─── STATEMENTS ─────────────────────────────────────────────────────────────────
-//
+        export interface Base {
+            type: "Empty" | "NumericLiteral" | "StringInterpolation" | "StringLiteral" |
+                "BooleanLiteral" | "LineTerminator" | "ReservedValueLiterals" | "ArrayLiteral" |
+                "ObjectLiteral" | "Identifier" | "UnaryOperator" | "AddressIdentifier" | 
+                "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
+                "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
+                "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
+                "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement" | "ObjectDeceleration"
+        }
 
-    export type Statements
-        = ArrayDeceleration
+    //
+    // ─── BODY ───────────────────────────────────────────────────────────────────────
+    //
 
-//
-// ─── EXPRESSION ─────────────────────────────────────────────────────────────────
-//
+        export type Body = Statements[ ] | Empty
 
-    export type Expression
-        = SExpression
-        | ReservedValueLiterals
-        | Literals
+        export interface Empty extends Base {
+            type: "Empty"
+        }
 
-//
-// ─── LITERALS ───────────────────────────────────────────────────────────────────
-//
+    //
+    // ─── STATEMENTS ─────────────────────────────────────────────────────────────────
+    //
 
-    export type Literals
-        = NumericLiteral
-        | StringLiteral
-        | BooleanLiteral
+        export type Statements
+            = ArrayDeceleration
 
-//
-// ─── RESERVED VALUES ────────────────────────────────────────────────────────────
-//
+    //
+    // ─── EXPRESSION ─────────────────────────────────────────────────────────────────
+    //
 
-    export type ReservedValues
-        = boolean
-        | number
-        | undefined
-        | null
+        export type Expression
+            = SExpression
+            | ReservedValueLiterals
+            | Literals
 
-//
-// ─── RETURNABLES ────────────────────────────────────────────────────────────────
-//
+    //
+    // ─── LITERALS ───────────────────────────────────────────────────────────────────
+    //
 
-    export type Returnables
-        = Expression
-        | SExpression
+        export type Literals
+            = NumericLiteral
+            | StringLiteral
+            | BooleanLiteral
 
-//
-// ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
-//
+    //
+    // ─── RESERVED VALUES ────────────────────────────────────────────────────────────
+    //
 
-    export interface PipeStatement extends Base {
-        type:   "PipeStatement"
-        levels: Identifier | SExpression | ReturnKeyword | Returnables
-    }
+        export type ReservedValues
+            = boolean
+            | number
+            | undefined
+            | null
 
-//
-// ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
-//
+    //
+    // ─── RETURNABLES ────────────────────────────────────────────────────────────────
+    //
 
-    export interface ReturnKeyword extends Base {
-        type: "ReturnKeyword"
-        keyword: string
-    }
+        export type Returnables
+            = Expression
+            | SExpression
 
-//
-// ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
-//
+    //
+    // ─── LAMBDA EXPRESSION ──────────────────────────────────────────────────────────
+    //
 
-    export interface AwaitStatement extends Base {
-        type: "AwaitStatement"
-        expr: SExpression
-    }
+        export interface LambdaExpression extends Base {
+            type: "LambdaExpression"
+            args: string[ ]
+            code: Body
+        }
 
-//
-// ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
-//
+    //
+    // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
+    //
 
-    export interface ArrayLiteral extends Base {
-        type: "ArrayLiteral",
-        value: Returnables[ ]
-    }
+        export interface PipeStatement extends Base {
+            type:   "PipeStatement"
+            levels: Identifier | SExpression | ReturnKeyword | Returnables
+        }
 
-//
-// ─── ARRAY DECELERATION ─────────────────────────────────────────────────────────
-//
+    //
+    // ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
+    //
 
-    export interface ArrayDeceleration extends Base {
-        type:   "ArrayDeceleration"
-        name:   string
-        value:  Returnables[ ]
-    }
+        export interface ReturnKeyword extends Base {
+            type: "ReturnKeyword"
+            keyword: string
+        }
 
-//
-// ─── RESERVED VALUE LITERALS ────────────────────────────────────────────────────
-//
+    //
+    // ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
+    //
 
-    export interface ReservedValueLiterals extends Base {
-        raw: string,
-        value: ReservedValues
-    }
+        export interface AwaitStatement extends Base {
+            type: "AwaitStatement"
+            expr: SExpression
+        }
 
-//
-// ─── STRING LITERAL ─────────────────────────────────────────────────────────────
-//
+    //
+    // ─── OBJECT DECELERATION ────────────────────────────────────────────────────────
+    //
 
-    export interface StringLiteral extends Base {
-        key:    "'" | '"'
-        value:  Array< StringPart | SExpression >
-    }
+        export interface ObjectDeceleration extends Base {
+            type:   "ObjectDeceleration"
+            name:   string
+            value:  ObjectMemberPair[ ]
+        }
 
-    export interface StringPart extends Base {
-        part:   string
-    }
+    //
+    // ─── OBJECT LITERAL ─────────────────────────────────────────────────────────────
+    //
 
-//
-// ─── S EXPRESSION ───────────────────────────────────────────────────────────────
-//
+        export interface ObjectLiteral {
+            type: "ObjectLiteral"
+            value: ObjectMemberPair[ ]
+        }
 
-    export interface SExpression extends Base {
-        type:       "SExpression"
-        kind:       SExpressionType
-    }
+        export interface ObjectMemberPair {
+            key: string
+            value: Returnables
+        }
 
-    export type SExpressionType
-        = "FunctionCallWithArgs"
-        | "BinaryOperator"
-        | "UnaryOperator"
-        | "FunctionCallOnly"
+    //
+    // ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
+    //
 
-    export interface FunctionCallWithArgsSExpression extends SExpression {
-        kind:       "FunctionCallWithArgs"
-        command:    AddressOrIdentifier
-        params:     Returnables[ ]
-    }
+        export interface ArrayLiteral extends Base {
+            type: "ArrayLiteral",
+            value: Returnables[ ]
+        }
 
-    export interface BinaryOperatorSExpression extends SExpression {
-        kind:       "BinaryOperator"
-        operator:   string
-        left:       Expression
-        right:      Expression
-    }
+    //
+    // ─── ARRAY DECELERATION ─────────────────────────────────────────────────────────
+    //
 
-    export interface UnaryOperatorSExpression extends SExpression {
-        kind:       "UnaryOperator"
-        operator:   string
-        arg:        Expression
-    }
+        export interface ArrayDeceleration extends Base {
+            type:   "ArrayDeceleration"
+            name:   string
+            value:  Returnables[ ]
+        }
 
-    export interface FunctionCallOnlySExpression extends SExpression {
-        kind:       "FunctionCallOnly"
-        command:    AddressOrIdentifier
-    }
+    //
+    // ─── RESERVED VALUE LITERALS ────────────────────────────────────────────────────
+    //
 
-//
-// ─── IDENTIFIER AND ADDRESS ─────────────────────────────────────────────────────
-//
+        export interface ReservedValueLiterals extends Base {
+            raw: string,
+            value: ReservedValues
+        }
 
-    export type AddressOrIdentifier = AddressIdentifier | Identifier
+    //
+    // ─── STRING LITERAL ─────────────────────────────────────────────────────────────
+    //
 
-    export interface AddressIdentifier extends Base {
-        type:   "AddressIdentifier"
-        address: string[ ]
-    }
+        export interface StringLiteral extends Base {
+            key:    "'" | '"'
+            value:  Array< StringPart | SExpression >
+        }
 
-    export interface Identifier extends Base {
-        type: "Identifier"
-        name: string
-    }
+        export interface StringPart extends Base {
+            part:   string
+        }
 
-//
-// ─── BOOLEAN LITERAL ────────────────────────────────────────────────────────────
-//
+    //
+    // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
+    //
 
-    export interface BooleanLiteral extends Base {
-        type:   "BooleanLiteral"
-        key:    string
-        value:  boolean
-    }
+        export interface SExpression extends Base {
+            type:       "SExpression"
+            kind:       SExpressionType
+        }
 
-//
-// ─── NUMERIC LITERALS ───────────────────────────────────────────────────────────
-//
+        export type SExpressionType
+            = "FunctionCallWithArgs"
+            | "BinaryOperator"
+            | "UnaryOperator"
+            | "FunctionCallOnly"
 
-    export interface NumericLiteral extends Base {
-        type:   "NumericLiteral"
-        raw:    string,
-        value:  number
-    }
+        export interface FunctionCallWithArgsSExpression extends SExpression {
+            kind:       "FunctionCallWithArgs"
+            command:    AddressOrIdentifier
+            params:     Returnables[ ]
+        }
 
-// ────────────────────────────────────────────────────────────────────────────────
+        export interface BinaryOperatorSExpression extends SExpression {
+            kind:       "BinaryOperator"
+            operator:   string
+            left:       Expression
+            right:      Expression
+        }
+
+        export interface UnaryOperatorSExpression extends SExpression {
+            kind:       "UnaryOperator"
+            operator:   string
+            arg:        Expression
+        }
+
+        export interface FunctionCallOnlySExpression extends SExpression {
+            kind:       "FunctionCallOnly"
+            command:    AddressOrIdentifier
+        }
+
+    //
+    // ─── IDENTIFIER AND ADDRESS ─────────────────────────────────────────────────────
+    //
+
+        export type AddressOrIdentifier = AddressIdentifier | Identifier
+
+        export interface AddressIdentifier extends Base {
+            type:   "AddressIdentifier"
+            address: string[ ]
+        }
+
+        export interface Identifier extends Base {
+            type: "Identifier"
+            name: string
+        }
+
+    //
+    // ─── BOOLEAN LITERAL ────────────────────────────────────────────────────────────
+    //
+
+        export interface BooleanLiteral extends Base {
+            type:   "BooleanLiteral"
+            key:    string
+            value:  boolean
+        }
+
+    //
+    // ─── NUMERIC LITERALS ───────────────────────────────────────────────────────────
+    //
+
+        export interface NumericLiteral extends Base {
+            type:   "NumericLiteral"
+            raw:    string,
+            value:  number
+        }
+
+    // ────────────────────────────────────────────────────────────────────────────────
+
+}
