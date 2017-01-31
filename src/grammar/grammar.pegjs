@@ -100,6 +100,11 @@
         / AwaitStatement
         / Expression
 
+    ArgumentReturnables
+        = DecelerationAssignment
+        / AwaitStatement
+        / Expression 
+
 //
 // ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
 //
