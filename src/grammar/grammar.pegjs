@@ -451,7 +451,7 @@
 //
 
     ReturnStatement
-        = keyword:ReturnKeyword _+ expr:Returnables {
+        = keyword:ReturnKeyword _+ expr:ArgumentReturnables {
             return {
                 type:       'ReturnStatement',
                 kind:       keyword.kind,

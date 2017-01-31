@@ -278,7 +278,7 @@ class x:
         (do-something)
     end
     async z:
-        return new (Promise [ res => (res) ])
+        return (new (Promise [ res => (res) ]))
     end
 end
 ── ────────────────────────────────────────────────────────────────────────────────
