@@ -42,6 +42,11 @@ namespace KaryScriptCompiler {
              * Defined Identifiers. Keeps a stack of defined identifiers within scopes
              */
             DeclaredIdentifiers: Set<String>
+
+            /**
+             * Errors
+             */
+            Errors: Reporter.ErrorTypes[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
