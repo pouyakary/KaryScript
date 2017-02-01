@@ -57,6 +57,11 @@ namespace KaryScriptCompiler {
              * on compilation should happen
              */
             ParentNode: AST.IBase[ ]
+
+            /**
+             * Defined Identifiers. Keeps a stack of defined identifiers within scopes
+             */
+            DeclaredIdentifiers: string[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
