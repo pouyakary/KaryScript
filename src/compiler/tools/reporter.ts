@@ -8,13 +8,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScriptCompiler.Reporter {
+namespace KaryScript.Compiler.Reporter {
 
     //
     // ─── ERROR INTERFACE ────────────────────────────────────────────────────────────
     //
 
-        interface CompilerError {
+        export interface CompilerError {
             message: string
             kind: ErrorTypes
             node: AST.IBase | null
@@ -38,8 +38,9 @@ namespace KaryScriptCompiler.Reporter {
     // ─── REPORTER ───────────────────────────────────────────────────────────────────
     //
 
-        export function Report ( message: string, kind: ErrorTypes, node?: AST.IBase ) {
-            reports.push({
+        export function Report ( env: IEnvInfo, message: string, kind: ErrorTypes,
+                                node?: AST.IBase ) {
+            env.Errors.push({
                 message: message,
                 kind: kind,
                 node: ( node )? node : null

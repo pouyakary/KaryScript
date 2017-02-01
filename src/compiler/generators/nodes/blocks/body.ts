@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScriptCompiler.Nodes.Blocks.Body {
+namespace KaryScript.Compiler.Nodes.Blocks.Body {
 
     //
     // ─── GENERATE FOR BODY ──────────────────────────────────────────────────────────
@@ -26,7 +26,10 @@ namespace KaryScriptCompiler.Nodes.Blocks.Body {
             // if not. we have to compile each statement and add them together
             let compiledStatements = new Array<string>( )
             for ( let statement of ( node.branch as AST.TStatements[ ] ) )
-                compiledStatements.push( KaryScriptCompiler.Nodes.CompileSingleNode( statement, env ) )
+                compiledStatements.push( KaryScript.Compiler.Nodes.CompileSingleNode( statement, env ) )
+
+            // updating the env info
+            env.Errors = env.Errors.concat( bodyENV.Errors )
 
             // applying tabulation and we're done
             let result = ( env.ScopeLevel === 0 )
@@ -35,6 +38,7 @@ namespace KaryScriptCompiler.Nodes.Blocks.Body {
                                     // tabs are 4 spaces
                                     .map( x => '    ' + x )
                                     .join( '\n' )
+
             // done
             return result
         }

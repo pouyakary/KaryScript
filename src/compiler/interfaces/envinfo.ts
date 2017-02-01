@@ -18,7 +18,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScriptCompiler {
+namespace KaryScript.Compiler {
 
     //
     // ─── BASE COMPILATION SCOPE INFORMATION OBJECT ──────────────────────────────────
@@ -46,7 +46,7 @@ namespace KaryScriptCompiler {
             /**
              * Errors
              */
-            Errors: Reporter.ErrorTypes[ ]
+            Errors: Reporter.CompilerError[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

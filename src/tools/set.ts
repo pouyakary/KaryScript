@@ -8,14 +8,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScript.Compiler.Nodes.Literals.Numeric {
+namespace KaryScript.Compiler.Tools {
 
     //
-    // ─── NUMERIC LITERALS ───────────────────────────────────────────────────────────
+    // ─── CONCAT SET ─────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.INumericLiteral ) {
-            return node.value.toString( )
+        export function AppendSet<T> ( firstSet: Set<T>, secondSet: Set<T> ): Set<T> {
+            secondSet.forEach( x => firstSet.add( x ) )
+            return firstSet
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

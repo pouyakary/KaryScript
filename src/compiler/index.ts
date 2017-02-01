@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScriptCompiler {
+namespace KaryScript.Compiler {
 
     //
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
@@ -29,7 +29,7 @@ namespace KaryScriptCompiler {
 
                 return compiledCode
             } catch ( error ) {
-                return ''
+                throw "Err"
             }
         }
 
@@ -48,7 +48,13 @@ namespace KaryScriptCompiler {
             }
 
             // compiling stuff
-            return Nodes.CompileSingleNode( src, baseEnvInfo )
+            const code =  Nodes.CompileSingleNode( src, baseEnvInfo )
+
+            // checking to see if there is any problem
+            if ( baseEnvInfo.Errors.length > 0 )
+                throw "Couldn't compile"
+
+            return code
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
