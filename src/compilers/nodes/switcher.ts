@@ -14,34 +14,16 @@ namespace KaryScriptCompiler.Nodes {
     // ─── NODE SWITCHER ──────────────────────────────────────────────────────────────
     //
 
-        export function CompileNode ( node: Parser.IBase, env: IEnvInfo ) {
-            // first we compile the node
-            const compiledNodeString = CompilerSwitcher( node, env )
-            
-            // then we apply the indentation
-
-        }
-
-    //
-    // ─── COMPILER SWITCHER ──────────────────────────────────────────────────────────
-    //
-
-        function CompilerSwitcher ( node: Parser.IBase, env: IEnvInfo ) {
+        /** Compiles a simple given node */
+        export function CompileSingleNode ( node: Parser.IBase, env: IEnvInfo ): string {
             switch ( node.type ) {
-                case 'Empty':
-                    return ''
                 case 'Body':
                     return Nodes.Body.Compile( node as Parser.IBody, env )
+
+                case 'Empty':
+                default:
+                    return ''
             }
-        }
-
-    //
-    // ─── APPLY INDENTATION ──────────────────────────────────────────────────────────
-    //
-
-        /** Adds indentation to a compiled string */
-        export function ApplyIndentation( code: string ) {
-            return code.split( '\n' ).map( x => '   ' + x ).join( '\n' )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
