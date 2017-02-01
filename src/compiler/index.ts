@@ -37,31 +37,11 @@ namespace KaryScriptCompiler {
 
         /** Gets the parsed AST and compiles it into JavaScript String */
         export function CompileAST ( src: AST.IBody ) {
-
-        }
-
-    //
-    // ─── BASE COMPILATION SCOPE INFORMATION OBJECT ──────────────────────────────────
-    //
-
-        /**
-         * The information object that is passed to the __child branches__ for a Body
-         * node to have information about it's _parent object_ as well as _environment_
-         */
-        export interface IEnvInfo {
-            /** Shows the level of scope depth */
-            ScopeLevel: number
-
-            /**
-             * A __Stack of Parent Nodes__ so that you can have a clear view
-             * on compilation should happen
-             */
-            ParentNode: AST.IBase[ ]
-
-            /**
-             * Defined Identifiers. Keeps a stack of defined identifiers within scopes
-             */
-            DeclaredIdentifiers: Set<String>
+            let baseEnvInfo: IEnvInfo = {
+                ParentNode: { type: 'Root' },
+                ScopeLevel: 0,
+                DeclaredIdentifiers: new Set<string>( )
+            }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
