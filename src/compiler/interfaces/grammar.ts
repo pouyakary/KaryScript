@@ -15,13 +15,39 @@ namespace KaryScriptCompiler.AST {
     //
 
         export interface IBase {
-            type: "Body" | "Empty" | "NumericLiteral" | "StringInterpolation" | "StringLiteral" |
-                "BooleanLiteral" | "LineTerminator" | "ReservedValueLiterals" | "ArrayLiteral" |
-                "ObjectLiteral" | "Identifier" | "UnaryOperator" | "AddressIdentifier" | 
-                "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
-                "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
-                "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-                "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement" | "ObjectDeceleration" | "Predicate" | "DecelerationAssignment"
+            type: "Root"
+                | "Body"
+                | "Empty"
+                | "NumericLiteral"
+                | "StringInterpolation"
+                | "StringLiteral"
+                | "BooleanLiteral"
+                | "LineTerminator"
+                | "ReservedValueLiterals"
+                | "ArrayLiteral"
+                | "ObjectLiteral"
+                | "Identifier"
+                | "UnaryOperator"
+                | "AddressIdentifier"
+                | "Assignment"
+                | "ReturnStatement"
+                | "ClassDeceleration"
+                | "FunctionDeceleration"
+                | "DecelerationStatement"
+                | "SpecialCommand"
+                | "SExpression"
+                | "ReturnKeyword"
+                | "PipeStatement"
+                | "LambdaExpression"
+                | "WhileStatement"
+                | "ElseIfStatement"
+                | "IfStatement"
+                | "PipePlaceholder"
+                | "ArrayDeceleration"
+                | "AwaitStatement"
+                | "ObjectDeceleration"
+                | "Predicate"
+                | "DecelerationAssignment"
         }
 
     //
