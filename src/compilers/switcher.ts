@@ -15,10 +15,16 @@ namespace KaryScriptCompiler.Nodes {
     //
 
         /** Compiles a simple given node */
-        export function CompileSingleNode ( node: Parser.IBase, env: IEnvInfo ): string {
+        export function CompileSingleNode ( node: AST.IBase, env: IEnvInfo ): string {
             switch ( node.type ) {
                 case 'Body':
-                    return Nodes.Body.Compile( node as Parser.IBody, env )
+                    return Nodes.Body.Compile( node as AST.IBody, env )
+
+                case 'NumericLiteral':
+                    return Nodes.Literals.Numeric.Compile( node as AST.INumericLiteral )
+                
+                case 'BooleanLiteral':
+                    return Nodes.Literals.Boolean.Compile( node as AST.IBooleanLiteral )
 
                 case 'Empty':
                 default:
