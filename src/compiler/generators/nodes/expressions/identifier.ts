@@ -14,21 +14,21 @@ namespace KaryScriptCompiler.Nodes.Expressions.Identifier {
     // ─── IDENTIFIER ─────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IIdentifier, env: IEnvInfo, dec = false ) {
+        export function Compile ( name: string, env: IEnvInfo, dec = false ) {
             // changing the shapes and stuff
-            const name = node.name.replace( /-/g , '_' )
+            const jsName = name.replace( /-/g , '_' )
 
             // in case we are declaring an identifier which is all ready defined
             if ( dec )
                 if ( DoesTheNameExists( name, env ) )
-                    Reporter.Report(`Identifer "${ node.name }" is already defined.`,
-                                    Reporter.ErrorTypes.Identifier, node )
+                    Reporter.Report(`Identifer "${ name }" is already defined.`,
+                                    Reporter.ErrorTypes.Identifier )
 
             // adding the name
-            env.DeclaredIdentifiers.add( name )
+            env.DeclaredIdentifiers.add( jsName )
 
             // done
-            return name
+            return jsName
         }
 
     //
