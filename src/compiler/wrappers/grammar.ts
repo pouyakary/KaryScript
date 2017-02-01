@@ -21,7 +21,7 @@ namespace KaryScriptCompiler.AST {
                 "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
                 "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
                 "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-                "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement" | "ObjectDeceleration" | "Predicate"
+                "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement" | "ObjectDeceleration" | "Predicate" | "DecelerationAssignment"
         }
 
     //
@@ -81,6 +81,36 @@ namespace KaryScriptCompiler.AST {
         export type TReturnables
             = TExpression
             | ISExpression
+
+    //
+    // ─── DECELERATION STATEMENT ─────────────────────────────────────────────────────
+    //
+
+        export interface DecelerationStatementBase extends IBase {
+            type: "DecelerationStatement"
+            kind: "SingleAllocInit" | "MultiAlloc"
+        }
+        
+        export interface DecelerationStatementSingleAllocInit extends DecelerationStatementBase {
+            kind: "SingleAllocInit"
+            modifier: "const" | "def"
+            assignment: DecelerationAssignment
+        }
+
+        export interface DecelerationStatementMultiAlloc extends DecelerationStatementBase {
+            kind: "MultiAlloc"
+            names: string[ ]
+        }
+
+    //
+    // ─── DECELERATION ASSIGNMENT ────────────────────────────────────────────────────
+    //
+
+        export interface DecelerationAssignment extends IBase {
+            type:   "DecelerationAssignment"
+            name:   string
+            value:  TReturnables
+        }
 
     //
     // ─── PREDICATE ──────────────────────────────────────────────────────────────────
