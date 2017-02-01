@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScriptCompiler.Nodes.Statements.Boolean {
+namespace KaryScriptCompiler.Nodes.Literals.Boolean {
 
     //
     // ─── BOOLEAN NODE ───────────────────────────────────────────────────────────────
