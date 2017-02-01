@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScriptCompiler.Nodes.Body {
+namespace KaryScriptCompiler.Nodes.Blocks.Body {
 
     //
     // ─── GENERATE FOR BODY ──────────────────────────────────────────────────────────
