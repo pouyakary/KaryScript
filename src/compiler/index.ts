@@ -19,15 +19,17 @@ namespace KaryScriptCompiler {
          * __KaryScript Source Code__ containing the __"Content of a single source file"__
          * and compiles it to a JavaScript String or throws CompilerErrors
          */
-        export function Compile( src: string ) {
+        export function Compile( src: string ): string {
             try {
                 // parsing
                 const parser = require( './parser.js' )
                 const ast = parser.parse( src ) as AST.IBody
                 // generating the code
                 const compiledCode = CompileAST( ast )
+
+                return compiledCode
             } catch ( error ) {
-                
+                return ''
             }
         }
 
@@ -37,11 +39,16 @@ namespace KaryScriptCompiler {
 
         /** Gets the parsed AST and compiles it into JavaScript String */
         export function CompileAST ( src: AST.IBody ) {
+            // base env info
             let baseEnvInfo: IEnvInfo = {
-                ParentNode: { type: 'Root' },
+                ParentNode: [ { type: 'Root' } ],
                 ScopeLevel: 0,
-                DeclaredIdentifiers: new Set<string>( )
+                DeclaredIdentifiers: new Set<string>( ),
+                Errors: [ ]
             }
+
+            // compiling stuff
+            return Nodes.CompileSingleNode( src, baseEnvInfo )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
