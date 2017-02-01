@@ -61,7 +61,7 @@ namespace KaryScriptCompiler {
             /**
              * Defined Identifiers. Keeps a stack of defined identifiers within scopes
              */
-            DeclaredIdentifiers: string[ ]
+            DeclaredIdentifiers: Set<string>
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
