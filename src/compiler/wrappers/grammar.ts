@@ -91,13 +91,13 @@ namespace KaryScriptCompiler.AST {
             kind: "SingleAllocInit" | "MultiAlloc"
         }
         
-        export interface DecelerationStatementSingleAllocInit extends DecelerationStatementBase {
+        export interface SingleAllocInitDeceleration extends DecelerationStatementBase {
             kind: "SingleAllocInit"
             modifier: "const" | "def"
             assignment: DecelerationAssignment
         }
 
-        export interface DecelerationStatementMultiAlloc extends DecelerationStatementBase {
+        export interface MultiAllocDeceleration extends DecelerationStatementBase {
             kind: "MultiAlloc"
             names: string[ ]
         }
