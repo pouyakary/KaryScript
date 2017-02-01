@@ -15,7 +15,7 @@ namespace KaryScriptCompiler.Nodes {
     //
 
         export interface INodeCompilerProtocol {
-            ( node: Parser.IBase, env: IEnvInfo ): string
+            ( node: AST.IBase, env: IEnvInfo ): string
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -23,7 +23,7 @@ namespace KaryScriptCompiler {
             try {
                 // parsing
                 const parser = require( './parser.js' )
-                const ast = parser.parse( src ) as Parser.IBody
+                const ast = parser.parse( src ) as AST.IBody
                 // generating the code
                 const compiledCode = CompileAST( ast )
             } catch ( error ) {
@@ -36,7 +36,7 @@ namespace KaryScriptCompiler {
     //
 
         /** Gets the parsed AST and compiles it into JavaScript String */
-        export function CompileAST ( src: Parser.IBody ) {
+        export function CompileAST ( src: AST.IBody ) {
 
         }
 
@@ -56,7 +56,7 @@ namespace KaryScriptCompiler {
              * A __Stack of Parent Nodes__ so that you can have a clear view
              * on compilation should happen
              */
-            ParentNode: Parser.IBase[ ]
+            ParentNode: AST.IBase[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

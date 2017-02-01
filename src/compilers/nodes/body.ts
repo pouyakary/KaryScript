@@ -14,9 +14,9 @@ namespace KaryScriptCompiler.Nodes.Body {
     // ─── GENERATE FOR BODY ──────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: Parser.IBody, env: IEnvInfo ) {
+        export function Compile ( node: AST.IBody, env: IEnvInfo ) {
             // if the body is empty we should return nothing
-            if ( ( node.branch as Parser.IEmpty ).type === "Empty" ) return ''
+            if ( ( node.branch as AST.IEmpty ).type === "Empty" ) return ''
 
             // making the env info
             let bodyENV: IEnvInfo = Object.assign({ }, env );
@@ -25,7 +25,7 @@ namespace KaryScriptCompiler.Nodes.Body {
 
             // if not. we have to compile each statement and add them together
             let compiledStatements = new Array<string>( );
-            for ( let statement of ( node.branch as Parser.TStatements[ ] ) ) {
+            for ( let statement of ( node.branch as AST.TStatements[ ] ) ) {
                 compiledStatements.push(
                     KaryScriptCompiler.Nodes.CompileSingleNode( statement, env )
                 )
@@ -36,6 +36,7 @@ namespace KaryScriptCompiler.Nodes.Body {
                 ? compiledStatements.join( '\n' )
                 : compiledStatements.join( '\n' )
                                     .split( '\n' )
+                                    // tabs are 4 spaces
                                     .map( x => '    ' + x )
                                     .join( '\n' )
             // done
