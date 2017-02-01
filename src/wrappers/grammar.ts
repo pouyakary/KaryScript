@@ -21,7 +21,7 @@ namespace KaryScriptCompiler.AST {
                 "Assignment" | "ReturnStatement" | "ClassDeceleration" | "FunctionDeceleration" |
                 "DecelerationStatement" | "SpecialCommand" | "SExpression" | "ReturnKeyword" | 
                 "PipeStatement" | "LambdaExpression" | "WhileStatement" | "ElseIfStatement" |
-                "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement" | "ObjectDeceleration"
+                "IfStatement" | "PipePlaceholder" | "ArrayDeceleration" | "AwaitStatement" | "ObjectDeceleration" | "Predicate"
         }
 
     //
@@ -81,6 +81,15 @@ namespace KaryScriptCompiler.AST {
         export type TReturnables
             = TExpression
             | ISExpression
+
+    //
+    // ─── PREDICATE ──────────────────────────────────────────────────────────────────
+    //
+
+        export interface Predicate extends IBase {
+            type: "Predicate",
+            condition: IBase
+        }
 
     //
     // ─── LAMBDA EXPRESSION ──────────────────────────────────────────────────────────
