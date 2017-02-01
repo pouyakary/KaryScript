@@ -18,13 +18,17 @@ namespace KaryScriptCompiler.Nodes {
         export function CompileSingleNode ( node: AST.IBase, env: IEnvInfo ): string {
             switch ( node.type ) {
                 case 'Body':
-                    return Nodes.Body.Compile( node as AST.IBody, env )
+                    return Nodes.Blocks.Body.Compile( node as AST.IBody, env )
 
                 case 'NumericLiteral':
                     return Nodes.Literals.Numeric.Compile( node as AST.INumericLiteral )
                 
                 case 'BooleanLiteral':
                     return Nodes.Literals.Boolean.Compile( node as AST.IBooleanLiteral )
+
+                case 'DecelerationStatement':
+                    return Nodes.Statements.Deceleration.Compile(
+                        node as AST.DecelerationStatementBase, env)
 
                 case 'Empty':
                 default:
