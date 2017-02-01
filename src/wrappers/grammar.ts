@@ -43,6 +43,8 @@ namespace KaryScriptCompiler.Parser {
 
         export type TStatements
             = IArrayDeceleration
+            | IObjectDeceleration
+            | ISExpression
 
     //
     // ─── EXPRESSION ─────────────────────────────────────────────────────────────────
