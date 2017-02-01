@@ -19,23 +19,19 @@ namespace KaryScriptCompiler.Nodes.Body {
             if ( ( node.branch as AST.IEmpty ).type === "Empty" ) return ''
 
             // making the env info
-            let bodyENV: IEnvInfo = Object.assign({ }, env );
+            let bodyENV: IEnvInfo = Object.assign({ }, env )
             bodyENV.ScopeLevel++
             bodyENV.ParentNode.push( node )
 
             // if not. we have to compile each statement and add them together
-            let compiledStatements = new Array<string>( );
-            for ( let statement of ( node.branch as AST.TStatements[ ] ) ) {
-                compiledStatements.push(
-                    KaryScriptCompiler.Nodes.CompileSingleNode( statement, env )
-                )
-            }
+            let compiledStatements = new Array<string>( )
+            for ( let statement of ( node.branch as AST.TStatements[ ] ) )
+                compiledStatements.push( KaryScriptCompiler.Nodes.CompileSingleNode( statement, env ) )
 
             // applying tabulation and we're done
             let result = ( env.ScopeLevel === 0 )
                 ? compiledStatements.join( '\n' )
-                : compiledStatements.join( '\n' )
-                                    .split( '\n' )
+                : compiledStatements.join( '\n' ).split( '\n' )
                                     // tabs are 4 spaces
                                     .map( x => '    ' + x )
                                     .join( '\n' )
