@@ -135,7 +135,10 @@
 
     ConditionalsPredicate
         = __+ predicate:Predicate __* ":" __* {
-            return predicate
+            return {
+                type: 'Predicate',
+                condition: predicate
+            }
         }
 
     Predicate
