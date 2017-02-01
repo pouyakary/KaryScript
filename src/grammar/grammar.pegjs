@@ -80,8 +80,8 @@
         = FunctionDeceleration
         / ClassDeceleration
         / ArrayDeceleration
-        / DecelerationStatement
         / ObjectDeceleration
+        / DecelerationStatement
         / SingleAssignmentStatement
         / IfStatement
         / WhileStatement
