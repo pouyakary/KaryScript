@@ -19,7 +19,7 @@ namespace KaryScript.Compiler {
          * __KaryScript Source Code__ containing the __"Content of a single source file"__
          * and compiles it to a JavaScript String or throws CompilerErrors
          */
-        export function Compile( src: string ): string {
+        export function Compile( src: string ): string | null {
             try {
                 // parsing
                 const parser = require( './parser.js' )
@@ -29,7 +29,9 @@ namespace KaryScript.Compiler {
 
                 return compiledCode
             } catch ( error ) {
-                throw "Err"
+                console.log("KaryScript's Compiler Crashed because of this error:")
+                console.log( error )
+                return null
             }
         }
 
