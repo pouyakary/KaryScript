@@ -21,7 +21,7 @@ namespace KaryScript.Compiler.Nodes.Expressions.Identifier {
             // in case we are declaring an identifier which is all ready defined
             if ( dec )
                 if ( DoesTheNameExists( name, env ) )
-                    Reporter.Report(`Identifer "${ name }" is already defined.`,
+                    Reporter.Report(env, `Identifer "${ name }" is already defined.`,
                                     Reporter.ErrorTypes.Identifier )
 
             // adding the name
