@@ -58,6 +58,7 @@
         = statements:SpacedStatements+ {
             return {
                 type: 'Body',
+                location: location( ),
                 branch: statements
             }
         }
@@ -137,6 +138,7 @@
         = __+ predicate:Predicate __* ":" __* {
             return {
                 type: 'Predicate',
+                location: location( ),
                 condition: predicate
             }
         }
@@ -154,6 +156,7 @@
         = key:IfSwitchKey predicate:ConditionalsPredicate body:Body END {
               return {
                   type: "IfStatement",
+                  location: location( ),
                   key: key,
                   kind: "if",
                   predicate: predicate,
@@ -164,6 +167,7 @@
           elseIfBranches: ElseIfStatementArray __ "else" __ falseBranch:Body END {
               return {
                   type: "IfStatement",
+                  location: location( ),
                   key: key,
                   kind: "if-else",
                   predicate: predicate,
@@ -176,6 +180,7 @@
           falseBranch:Body END {
               return {
                   type: "IfStatement",
+                  location: location( ),
                   key: key,
                   kind: "if-elseif-else",
                   predicate: predicate,
@@ -201,6 +206,7 @@
         = "also" _+ "if" _+ predicate:ConditionalsPredicate body:Body EOL {
             return {
                 type:       "ElseIfStatement",
+                location: location( ),
                 predicate:  predicate,
                 body:       body
             }
@@ -214,6 +220,7 @@
         = expr:SExpression _* "?" _* trueBranch:ArgumentReturnables _* "/" _* falseBranch:ArgumentReturnables {
             return {
                 type: "ShorthandIfExpression",
+                location: location( ),
                 predicate: expr,
                 trueBranch: trueBranch,
                 falseBranch: falseBranch
@@ -229,6 +236,7 @@
           body:Body END {
               return {
                   type: "WhileStatement",
+                  location: location( ),
                   predicate: predicate,
                   body: body
               }
@@ -242,6 +250,7 @@
         = "[" __* args:IdentifierList __* "=>" __* code:Body __* "]" {
             return {
                 type: "LambdaExpression",
+                location: location( ),
                 args: args.map( x => x.name ),
                 code: code
             }
@@ -267,6 +276,7 @@
         = origin:ArgumentReturnables PipeControl parts:PipeStatementParts {
             return {
                 type:  "PipeStatement",
+                location: location( ),
                 levels: [ origin ].concat( parts )
             }
         }
@@ -291,6 +301,7 @@
         = keyword: ( "return" / "yield" / "throw" ) {
             return {
                 type: "ReturnKeyword",
+                location: location( ),
                 keyword: keyword
             }
         }
@@ -303,6 +314,7 @@
         = "await" _+ expr:( SExpression / SExpressionBody ) {
             return {
                 type: "AwaitStatement",
+                location: location( ),
                 expr: expr
             }
         }    
@@ -320,6 +332,7 @@
         = command:AddressIdentifier __+ params:SExpressionArugmentArray? {
             return {
                 type:       "SExpression",
+                location: location( ),
                 kind:       "FunctionCallWithArgs",
                 command:    command,
                 params:     params,
@@ -328,6 +341,7 @@
         / operator:BinaryOperator __+ left:ArgumentReturnables __+ right:ArgumentReturnables {
             return {
                 type:       "SExpression",
+                location:   location( ),
                 kind:       "BinaryOperator",       
                 operator:   operator,
                 left:       left,
@@ -337,6 +351,7 @@
         / operator:UnaryOperator __+ arg:Expression {
             return {
                 type:       "SExpression",
+                location:   location( ),
                 kind:       "UnaryOperator",       
                 operator:   operator,
                 arg:        arg
@@ -345,6 +360,7 @@
         / command:AddressIdentifier {
             return {
                 type:       "SExpression",
+                location:   location( ),
                 kind:       "FunctionCallOnly",
                 command:    command
             }
@@ -370,6 +386,7 @@
         = "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDecelerations __* END {
             return {
                 type: 'ClassDeceleration',
+                location: location( ),
                 name: name.name,
                 body: body
             }
@@ -377,6 +394,7 @@
         / "class" _+ name:Identifier _* ":" Empty END {
             return {
                 type: 'ClassDeceleration',
+                location: location( ),
                 name: name.name,
                 body: null
             }
@@ -399,6 +417,7 @@
         _* ":" __* code:Body END {
             return {
                 type: "FunctionDeceleration",
+                location: location( ),
                 name: name.name,
                 key:  key,
                 args: args.map( x => x.name ),
@@ -408,6 +427,7 @@
         / key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body END {
             return {
                 type: "FunctionDeceleration",
+                location: location( ),
                 name: name.name,
                 key:  key,
                 args: null,
@@ -428,6 +448,7 @@
         = modifier:( "const" / "def" ) _+ assignment:DecelerationAssignment {
             return {
                 type: 'DecelerationStatement',
+                location: location( ),
                 kind: 'SingleAllocInit',
                 modifier: modifier,
                 assignment: assignment
@@ -436,6 +457,7 @@
         / "def" _+ names:NameOnlyDecelerationsArray _* ( EOL / EOF ) {
             return {
                 type: 'DecelerationStatement',
+                location: location( ),
                 kind: 'MultiAlloc',
                 names: names.map( x => x.name )
             }
@@ -457,6 +479,7 @@
         = keyword:ReturnKeyword _+ expr:ArgumentReturnables {
             return {
                 type:       'ReturnStatement',
+                location: location( ),
                 kind:       keyword.kind,
                 terminal:   false,
                 value:      expr
@@ -465,6 +488,7 @@
         / keyword:ReturnKeyword {
             return {
                 type:       'ReturnStatement',
+                location: location( ),
                 kind:       keyword.kind,
                 terminal:   true
             }
@@ -478,6 +502,7 @@
         = name:Identifier _* "=" _* value:Returnables {
             return {
                 type:  'DecelerationAssignment',
+                location: location( ),
                 name:  name.name,
                 value: value
             }
@@ -491,6 +516,7 @@
         = name:AddressIdentifier _* "=" _* value:Returnables {
             return {
                 type:  'DecelerationAssignment',
+                location: location( ),
                 name:  name,
                 value: value
             }
@@ -504,6 +530,7 @@
         = space:Identifier "/" member:( AddressIdentifier / Identifier ) {
             return {
                 type: "AddressIdentifier",
+                location: location( ),
                 address: ( member.type === "Identifier" )?
                     [ space.name, member.name ] : [ space.name ].concat( member.address )
             }
@@ -523,6 +550,7 @@
         = inetiferStart:[\-a-zA-Z] tail:[0-9a-zA-Z\-]* {
             return {
                 type: 'Identifier',
+                location: location( ),
                 name: inetiferStart + tail.join('')
             }
         }
@@ -536,6 +564,7 @@
             'eq' / 'bigger' / 'lower' ) {
             return {
                 type:       'BinaryOperator',
+                location: location( ),
                 operator:   op
             }
         }
@@ -555,6 +584,7 @@
         = "[" __* name:AddressIdentifier __* "|" __* index:Returnables __* "]" {
             return {
                 type:   "ArrayObjectIndexLoader",
+                location: location( ),
                 name:   name,
                 index:  index
             }
@@ -568,12 +598,14 @@
         = "[" __* ObjectAssignmentKeyValueCharacter __* "]" {
             return {
                 type:   "ObjectLiteral",
+                location: location( ),
                 value:  [ ]
             }
         }
         / "[" __* members:ObjectPairMember __* "]" {
             return {
                 type:   "ObjectLiteral",
+                location: location( ),
                 value:  members
             }
         }
@@ -583,6 +615,7 @@
           __* members:ObjectPairMember __+ END {
             return {
                 type:   "ObjectDeceleration",
+                location: location( ),
                 name:   name.name,
                 value:  members
             }
@@ -615,12 +648,14 @@
         = "[" __* "]" {
             return {
                 type:   "ArrayLiteral",
+                location: location( ),
                 value:  [ ]
             }
         }
         / "[" __* members:ArrayMember __* "]" {
             return {
                 type:   "ArrayLiteral",
+                location: location( ),
                 value:  members
             }
         }
@@ -629,6 +664,7 @@
         = "array" _+ name:Identifier __* ":"  __* members:ArrayMember __+ END {
             return {
                 type:   "ArrayDeceleration",
+                location: location( ),
                 name:   name.name,
                 value:  members
             }
@@ -787,6 +823,7 @@
             }
             return {
                 type:   "ReservedValueLiterals",
+                location: location( ),
                 raw:    value,
                 value:  result
             }
@@ -807,6 +844,7 @@
             }
             return {
                 type: 'BooleanLiteral',
+                location: location( ),
                 key: key,
                 value: result
             }
@@ -820,6 +858,7 @@
         = '"' body:( DoubleQuotesStringsParts )* '"' {
             return {
                 type:   "StringLiteral",
+                location: location( ),
                 key:    '"',
                 value:  generateStringResult( body ),
             }
@@ -827,6 +866,7 @@
         / "'" body:( SingleQuotesStringsParts )* "'" {
             return {
                 type:   "StringLiteral",
+                location: location( ),
                 key:    "'",
                 value:  generateStringResult( body ),
             }
@@ -850,6 +890,7 @@
         = '#' expr:SExpression {
             return {
                 type:   "StringInterpolation",
+                location: location( ),
                 expr:   expr
             }
         }
@@ -863,6 +904,7 @@
             let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
                 type:   'NumericLiteral',
+                location: location( ),
                 raw:    number,
                 value:  eval( number )
             }
@@ -874,6 +916,7 @@
             )
             return {
                 type:   'NumericLiteral',
+                location: location( ),
                 raw:    number,
                 value:  decimals? parseFloat( number ) : parseInt( number )
             }
@@ -885,7 +928,8 @@
 
     PipePlaceholder = "@" {
         return {
-            type: "PipePlaceholder"
+            type: "PipePlaceholder",
+            location: location( ),
         }
     }
 
@@ -910,7 +954,8 @@
     Empty
         = __* {
             return {
-                type: 'Empty'
+                type: 'Empty',
+                location: location( ),
             }
         }
 
@@ -918,6 +963,7 @@
         = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
             return {
                 type: '_',
+                location: location( ),
                 value: spaces
             }
         }
@@ -925,7 +971,8 @@
     EOL
         = _* LineTerminator {
             return {
-                type: 'LineTerminator'
+                type: 'LineTerminator',
+                location: location( ),
             }
         }
 
@@ -935,14 +982,16 @@
     LineTerminator
         = [\n\r\u2028\u2029] {
             return {
-                type: 'LineTerminator'
+                type: 'LineTerminator',
+                location: location( ),
             }
         }
 
     LineTerminatorSequence
         = ( "\n"  / "\r\n" / "\r" / "\u2028" / "\u2029" ) {
             return {
-                type: 'LineTerminatorSequence'
+                type: 'LineTerminatorSequence',
+                location: location( ),
             }
         }
 

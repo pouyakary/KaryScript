@@ -11,6 +11,21 @@
 namespace KaryScript.Compiler.AST {
 
     //
+    // ─── LOCATION ───────────────────────────────────────────────────────────────────
+    //
+
+        export interface ILocation {
+            start:  IPosition
+            end:    IPosition
+        }
+
+        export interface IPosition {
+            offset: number
+            line:   number
+            column: number
+        }
+
+    //
     // ─── BASE NODE ──────────────────────────────────────────────────────────────────
     //
 
@@ -48,6 +63,8 @@ namespace KaryScript.Compiler.AST {
                 | "ObjectDeceleration"
                 | "Predicate"
                 | "DecelerationAssignment"
+
+            location: ILocation
         }
 
     //
