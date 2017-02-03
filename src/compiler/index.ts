@@ -8,6 +8,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+/// <reference path="version.ts" />
+/// <reference path="generators/switcher.ts" />
+/// <reference path="tools/reporter.ts" />
+
+
 namespace KaryScript.Compiler {
 
     //
@@ -24,14 +29,26 @@ namespace KaryScript.Compiler {
                 // parsing
                 const parser = require( './parser.js' )
                 const ast = parser.parse( src ) as AST.IBody
+                
                 // generating the code
-                const compiledCode = CompileAST( ast )
+                try {
+                    return CompileAST( ast )
 
-                return compiledCode
+                } catch ( codeErrors ) {
+                    throw {
+                        from: 'user',
+                        errors: codeErrors
+                    }
+                }
+
             } catch ( error ) {
-                console.log("KaryScript's Compiler Crashed because of this error:")
-                console.log( error )
-                return null
+                if ( error.from === 'user' )
+                    throw error
+                else
+                    throw {
+                        from: 'compiler',
+                        errors: [ error ]
+                    }
             }
         }
 
@@ -40,7 +57,7 @@ namespace KaryScript.Compiler {
     //
 
         /** Gets the parsed AST and compiles it into JavaScript String */
-        export function CompileAST ( src: AST.IBody ) {
+        export function CompileAST ( src: AST.IBody ): string {
             // base env info
             let baseEnvInfo: IEnvInfo = {
                 ParentNode: [ { type: 'Root' } ],
@@ -54,9 +71,18 @@ namespace KaryScript.Compiler {
 
             // checking to see if there is any problem
             if ( baseEnvInfo.Errors.length > 0 )
-                throw "Couldn't compile"
+                throw baseEnvInfo.Errors
 
             return code
+        }
+
+    //
+    // ─── RETURN ERRORS ──────────────────────────────────────────────────────────────
+    //
+
+        export interface IFinalError {
+            from: 'user' | 'compiler',
+            errors: any[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

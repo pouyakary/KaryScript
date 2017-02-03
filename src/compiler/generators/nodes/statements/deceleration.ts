@@ -8,7 +8,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScript.Compiler.Nodes.Statements.Deceleration {
+/// <reference path="../../switcher.ts" />
+
+namespace KaryScript.Compiler.Nodes.Deceleration {
 
     //
     // ─── DECELERATION ───────────────────────────────────────────────────────────────
@@ -29,7 +31,7 @@ namespace KaryScript.Compiler.Nodes.Statements.Deceleration {
                                            env: IEnvInfo ) {
 
             const key   = GetDecelerationKey( env )
-            const name  = Expressions.Identifier.Compile( node.assignment.name, env, true )
+            const name  = Identifier.Compile( node.assignment.name, env, true )
             const expr  = CompileSingleNode( node.assignment.value, env )
 
             return `${ key } ${ name } = ${ expr };`
@@ -41,7 +43,7 @@ namespace KaryScript.Compiler.Nodes.Statements.Deceleration {
 
         function CompileMultiAlloc ( node: AST.MultiAllocDeceleration, env: IEnvInfo ) {
             const key   = GetDecelerationKey( env )
-            const names = node.names.map( x => Expressions.Identifier.Compile( x, env, true ) )
+            const names = node.names.map( x => Identifier.Compile( x, env, true ) )
             return `${ key } ${ names.join(', ') };`
         }
 

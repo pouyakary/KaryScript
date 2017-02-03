@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScript.Compiler.Nodes.Literals.Numeric {
+namespace KaryScript.Compiler.Nodes.Numeric {
 
     //
     // ─── NUMERIC LITERALS ───────────────────────────────────────────────────────────

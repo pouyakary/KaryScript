@@ -32,7 +32,11 @@ namespace KaryScript.CLI {
             let content = fs.readFileSync(
                 path.resolve( path.join( __dirname, '../tests/test.kary' ) ), 'utf8' )
 
-            console.log( KaryScript.Compiler.Compile( content ) ) 
+            try {
+                console.log( KaryScript.Compiler.Compile( content ) )
+            } catch ( e ) {
+                console.log( e )
+            }
         }
     
     // ────────────────────────────────────────────────────────────────────────────────

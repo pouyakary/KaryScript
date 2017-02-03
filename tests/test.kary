@@ -1,1 +1,2 @@
-def x = 34
+def x = on
+def x y z

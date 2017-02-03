@@ -8,7 +8,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScript.Compiler.Nodes.Expressions.Identifier {
+/// <reference path="../../../tools/reporter.ts" />
+
+
+namespace KaryScript.Compiler.Nodes.Identifier {
 
     //
     // ─── IDENTIFIER ─────────────────────────────────────────────────────────────────

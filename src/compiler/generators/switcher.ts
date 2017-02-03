@@ -8,6 +8,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+/// <reference path="nodes/blocks/body.ts" />
+/// <reference path="nodes/blocks/nonbranch.ts" />
+/// <reference path="nodes/expressions/identifier.ts" />
+/// <reference path="nodes/literals/boolean.ts" />
+/// <reference path="nodes/literals/numeric.ts" />
+/// <reference path="nodes/statements/deceleration.ts" />
+
 namespace KaryScript.Compiler.Nodes {
 
     //
@@ -18,16 +25,16 @@ namespace KaryScript.Compiler.Nodes {
         export function CompileSingleNode ( node: AST.IBase, env: IEnvInfo ): string {
             switch ( node.type ) {
                 case 'Body':
-                    return Nodes.Blocks.Body.Compile( node as AST.IBody, env )
+                    return Nodes.Body.Compile( node as AST.IBody, env )
 
                 case 'NumericLiteral':
-                    return Nodes.Literals.Numeric.Compile( node as AST.INumericLiteral )
+                    return Nodes.Numeric.Compile( node as AST.INumericLiteral )
                 
                 case 'BooleanLiteral':
-                    return Nodes.Literals.Boolean.Compile( node as AST.IBooleanLiteral )
+                    return Nodes.Boolean.Compile( node as AST.IBooleanLiteral )
 
                 case 'DecelerationStatement':
-                    return Nodes.Statements.Deceleration.Compile(
+                    return Nodes.Deceleration.Compile(
                         node as AST.DecelerationStatementBase, env)
 
                 case 'Empty':

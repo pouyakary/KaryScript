@@ -8,7 +8,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScript.Compiler.Nodes.Blocks.Body {
+/// <reference path="../../switcher.ts" />
+
+
+namespace KaryScript.Compiler.Nodes.Body {
 
     //
     // ─── GENERATE FOR BODY ──────────────────────────────────────────────────────────
