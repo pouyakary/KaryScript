@@ -8,9 +8,6 @@
         "removeComments": true,
         "outFile": "bin/compiler.js"
     },
-    "include": [
-        "src/**/*"
-    ],
     "exclude": [
         "node_modules"
     ]
