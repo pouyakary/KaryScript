@@ -17,15 +17,14 @@ namespace KaryScript.Compiler.Nodes.Identifier {
     // ─── IDENTIFIER ─────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( name: string, env: IEnvInfo, dec = false ) {
+        export function Compile ( name: string, env: IEnvInfo, node: AST.IBase, dec = false ) {
             // changing the shapes and stuff
             const jsName = name.replace( /-/g , '_' )
 
             // in case we are declaring an identifier which is all ready defined
             if ( dec )
                 if ( DoesTheNameExists( name, env ) )
-                    Reporter.Report(env, `Identifer "${ name }" is already defined.`,
-                                    Reporter.ErrorTypes.Identifier )
+                    Reporter.Report(env, `Identifer "${ name }" is already defined.`, node)
 
             // adding the name
             env.DeclaredIdentifiers.add( jsName )

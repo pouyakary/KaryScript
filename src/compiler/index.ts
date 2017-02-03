@@ -35,20 +35,11 @@ namespace KaryScript.Compiler {
                     return CompileAST( ast )
 
                 } catch ( codeErrors ) {
-                    throw {
-                        from: 'user',
-                        errors: codeErrors
-                    }
+                    throw Reporter.HandleCodeErrorsAtCompileEnd( codeErrors )
                 }
 
-            } catch ( error ) {
-                if ( error.from === 'user' )
-                    throw error
-                else
-                    throw {
-                        from: 'compiler',
-                        errors: [ error ]
-                    }
+            } catch ( crashError ) {
+                throw Reporter.WrapReturnErrorsAtTheEnd( crashError )
             }
         }
 
@@ -60,7 +51,13 @@ namespace KaryScript.Compiler {
         export function CompileAST ( src: AST.IBody ): string {
             // base env info
             let baseEnvInfo: IEnvInfo = {
-                ParentNode: [ { type: 'Root' } ],
+                ParentNode: [{
+                    type: 'Root',
+                    location: {
+                        start: { offset: 0, column: 0, line: 0 },
+                        end: { offset: 0, column: 0, line: 0 }
+                    }
+                }],
                 ScopeLevel: 0,
                 DeclaredIdentifiers: new Set<string>( ),
                 Errors: [ ]

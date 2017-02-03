@@ -15,36 +15,54 @@ namespace KaryScript.Compiler.Reporter {
     //
 
         export interface CompilerError {
-            message: string
-            kind: ErrorTypes
-            node: AST.IBase | null
-        }
-
-    //
-    // ─── REPORTER STORAGE ───────────────────────────────────────────────────────────
-    //
-
-        let reports = new Array<CompilerError>( )
-
-    //
-    // ─── REPORT TYPES ───────────────────────────────────────────────────────────────
-    //
-
-        export enum ErrorTypes {
-            Grammar, Report, Identifier
+            message:    string
+            location:   AST.ILocation
         }
         
     //
     // ─── REPORTER ───────────────────────────────────────────────────────────────────
     //
 
-        export function Report ( env: IEnvInfo, message: string, kind: ErrorTypes,
-                                node?: AST.IBase ) {
+        export function Report ( env: IEnvInfo,
+                             message: string,
+                                node: AST.IBase ) {
             env.Errors.push({
                 message: message,
-                kind: kind,
-                node: ( node )? node : null
+                location: node.location
             })
+        }
+
+    //
+    // ─── HANDLE COMPILER ERRORS AT THE END OF COMPILE ───────────────────────────────
+    //
+
+        export function HandleCodeErrorsAtCompileEnd ( errors: any[ ] ) {
+            return {
+                from: 'user',
+                errors: errors
+            }
+        }
+
+    //
+    // ─── WRAP ERRORS ────────────────────────────────────────────────────────────────
+    //
+
+        function WrapErrors ( errors: CompilerError[ ] ) {
+            return Array.from( new Set( errors ) )
+        }
+
+    //
+    // ─── RETURN ERRORS AT FINALE ────────────────────────────────────────────────────
+    //
+
+        export function WrapReturnErrorsAtTheEnd ( error: any ) {
+            if ( error.from === 'user' )
+                return WrapErrors( error )
+            else
+                return {
+                    from: 'compiler',
+                    errors: [ error ]
+                }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

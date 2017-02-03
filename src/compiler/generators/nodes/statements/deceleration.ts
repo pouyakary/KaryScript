@@ -9,6 +9,8 @@
 //
 
 /// <reference path="../../switcher.ts" />
+/// <reference path="../expressions/identifier.ts" />
+
 
 namespace KaryScript.Compiler.Nodes.Deceleration {
 
@@ -31,7 +33,7 @@ namespace KaryScript.Compiler.Nodes.Deceleration {
                                            env: IEnvInfo ) {
 
             const key   = GetDecelerationKey( env )
-            const name  = Identifier.Compile( node.assignment.name, env, true )
+            const name  = Identifier.Compile( node.assignment.name, env, node, true )
             const expr  = CompileSingleNode( node.assignment.value, env )
 
             return `${ key } ${ name } = ${ expr };`
@@ -43,7 +45,7 @@ namespace KaryScript.Compiler.Nodes.Deceleration {
 
         function CompileMultiAlloc ( node: AST.MultiAllocDeceleration, env: IEnvInfo ) {
             const key   = GetDecelerationKey( env )
-            const names = node.names.map( x => Identifier.Compile( x, env, true ) )
+            const names = node.names.map( x => Identifier.Compile( x, env, node, true ) )
             return `${ key } ${ names.join(', ') };`
         }
 
