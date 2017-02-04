@@ -494,18 +494,17 @@
         = keyword:ReturnKeyword _+ expr:ArgumentReturnables {
             return {
                 type:       'ReturnStatement',
-                location: location( ),
-                kind:       keyword.kind,
-                terminal:   false,
+                location:   location( ),
+                kind:       keyword.keyword,
                 value:      expr
             }
         }
         / keyword:ReturnKeyword {
             return {
                 type:       'ReturnStatement',
-                location: location( ),
-                kind:       keyword.kind,
-                terminal:   true
+                location:   location( ),
+                kind:       keyword.keyword,
+                value:      null
             }
         }
 

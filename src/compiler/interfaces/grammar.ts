@@ -145,6 +145,15 @@ namespace KaryScript.Compiler.AST {
             | ISExpression
 
     //
+    // ─── RETURN STATEMENT ───────────────────────────────────────────────────────────
+    //
+
+        export interface IReturnStatement extends IBase {
+            kind:  'return' | 'throw' | 'yield'
+            value: IBase | null
+        }
+
+    //
     // ─── DECLARATION STATEMENT ─────────────────────────────────────────────────────
     //
 

@@ -10,12 +10,14 @@ con number255 = 0xff
 export def man-man:
     def second-level:
         def last = (sum 4 5)
+        throw 0
     end
     def something = 5
 end
 
 async fun a b c:
     def result = (sum a (mul b c))
+    return 1
 end
 
 (await (fun 3 4 5))

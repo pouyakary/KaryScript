@@ -15,6 +15,7 @@
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
+/// <reference path="nodes/statements/return.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
@@ -57,6 +58,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'SExpression':
                     return Nodes.SExpression.Compile( node as AST.ISExpression, env )
+
+                case 'ReturnStatement':
+                    return Nodes.Return.Compile( node as AST.IReturnStatement, env )
 
                 case 'Identifier':
                 case 'AddressIdentifier':
