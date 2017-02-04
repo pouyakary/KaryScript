@@ -14,6 +14,7 @@
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
+/// <reference path="nodes/statements/declaration/function.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
@@ -47,6 +48,11 @@ namespace KaryScript.Compiler.Nodes {
                 case 'DeclarationStatement':
                     return Nodes.Declaration.Compile(
                         node as AST.DeclarationStatementBase, env
+                    )
+
+                case 'FunctionDeclaration':
+                    return Nodes.FunctionDeclaration.Compile(
+                        node as AST.IFunctionDeclaration, env
                     )
 
                 case 'SExpression':

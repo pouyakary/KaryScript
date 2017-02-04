@@ -79,7 +79,7 @@ namespace KaryScript.Compiler.AST {
     // ─── FUNCTION DECLARATION ───────────────────────────────────────────────────────
     //
 
-        export interface FunctionDeclaration extends IExportable {
+        export interface IFunctionDeclaration extends IExportable {
             name:   string
             key:    "def" | "async"
             args:   string[ ] | null

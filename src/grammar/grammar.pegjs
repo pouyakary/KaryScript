@@ -433,7 +433,7 @@
                 location: location( ),
                 name: name.name,
                 key:  key,
-                exported: exportKey,
+                exported: exported,
                 args: null,
                 code: code
             }
@@ -450,7 +450,6 @@
 
     ExportKey
         = key:("export" _)? _* {
-        	console.log( key )
             return key? true : false
         }
 

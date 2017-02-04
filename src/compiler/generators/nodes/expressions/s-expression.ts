@@ -92,8 +92,8 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
                                          env: IEnvInfo ) {
-            return node.operator + " (" + Nodes.CompileSingleNode( node.arg, env ) + 
-                    ")" + Env.Semicolon( env )
+            return node.operator + " " + Nodes.CompileSingleNode( node.arg, env ) +
+                    Env.Semicolon( env )
         }
 
     //

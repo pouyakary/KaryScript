@@ -33,7 +33,7 @@ namespace KaryScript.Compiler.Nodes.Body {
             env.Errors = env.Errors.concat( bodyENV.Errors )
 
             // applying tabulation and we're done
-            let result = ( env.ScopeLevel === 0 )
+            let result = ( env.ParentNode.length === 2 )
                 ? compiledStatements.join( '\n' )
                 : compiledStatements.join( '\n' ).split( '\n' )
                                     .map( x => '    ' + x )
