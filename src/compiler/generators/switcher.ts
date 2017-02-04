@@ -9,12 +9,11 @@
 //
 
 /// <reference path="nodes/blocks/body.ts" />
-/// <reference path="nodes/blocks/nonbranch.ts" />
 /// <reference path="nodes/expressions/identifier.ts" />
 /// <reference path="nodes/expressions/s-expression.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
-/// <reference path="nodes/statements/deceleration.ts" />
+/// <reference path="nodes/statements/declaration.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
@@ -45,9 +44,9 @@ namespace KaryScript.Compiler.Nodes {
                 case 'BooleanLiteral':
                     return Nodes.Boolean.Compile( node as AST.IBooleanLiteral )
 
-                case 'DecelerationStatement':
-                    return Nodes.Deceleration.Compile(
-                        node as AST.DecelerationStatementBase, env
+                case 'DeclarationStatement':
+                    return Nodes.Declarationn.Compile(
+                        node as AST.DeclarationStatementBase, env
                     )
 
                 case 'SExpression':

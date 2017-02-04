@@ -46,9 +46,9 @@ namespace KaryScript.Compiler.AST {
                 | "AddressIdentifier"
                 | "Assignment"
                 | "ReturnStatement"
-                | "ClassDeceleration"
-                | "FunctionDeceleration"
-                | "DecelerationStatement"
+                | "ClassDeclaration"
+                | "FunctionDeclaration"
+                | "DeclarationStatement"
                 | "SpecialCommand"
                 | "SExpression"
                 | "ReturnKeyword"
@@ -58,11 +58,11 @@ namespace KaryScript.Compiler.AST {
                 | "ElseIfStatement"
                 | "IfStatement"
                 | "PipePlaceholder"
-                | "ArrayDeceleration"
+                | "ArrayDeclaration"
                 | "AwaitStatement"
-                | "ObjectDeceleration"
+                | "ObjectDeclaration"
                 | "Predicate"
-                | "DecelerationAssignment"
+                | "DeclarationAssignment"
 
             location: ILocation
         }
@@ -85,8 +85,8 @@ namespace KaryScript.Compiler.AST {
     //
 
         export type TStatements
-            = IArrayDeceleration
-            | IObjectDeceleration
+            = IArrayDeclaration
+            | IObjectDeclaration
             | ISExpression
 
     //
@@ -126,31 +126,31 @@ namespace KaryScript.Compiler.AST {
             | ISExpression
 
     //
-    // ─── DECELERATION STATEMENT ─────────────────────────────────────────────────────
+    // ─── DECLARATION STATEMENT ─────────────────────────────────────────────────────
     //
 
-        export interface DecelerationStatementBase extends IBase {
-            type: "DecelerationStatement"
+        export interface DeclarationStatementBase extends IBase {
+            type: "DeclarationStatement"
             kind: "SingleAllocInit" | "MultiAlloc"
         }
         
-        export interface SingleAllocInitDeceleration extends DecelerationStatementBase {
+        export interface SingleAllocInitDeclaration extends DeclarationStatementBase {
             kind: "SingleAllocInit"
             modifier: "const" | "def"
-            assignment: DecelerationAssignment
+            assignment: DeclarationAssignment
         }
 
-        export interface MultiAllocDeceleration extends DecelerationStatementBase {
+        export interface MultiAllocDeclaration extends DeclarationStatementBase {
             kind: "MultiAlloc"
             names: string[ ]
         }
 
     //
-    // ─── DECELERATION ASSIGNMENT ────────────────────────────────────────────────────
+    // ─── DECLARATION ASSIGNMENT ────────────────────────────────────────────────────
     //
 
-        export interface DecelerationAssignment extends IBase {
-            type:   "DecelerationAssignment"
+        export interface DeclarationAssignment extends IBase {
+            type:   "DeclarationAssignment"
             name:   string
             value:  TReturnables
         }
@@ -202,11 +202,11 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
-    // ─── OBJECT DECELERATION ────────────────────────────────────────────────────────
+    // ─── OBJECT DECLARATION ────────────────────────────────────────────────────────
     //
 
-        export interface IObjectDeceleration extends IBase {
-            type:   "ObjectDeceleration"
+        export interface IObjectDeclaration extends IBase {
+            type:   "ObjectDeclaration"
             name:   string
             value:  IObjectMemberPair[ ]
         }
@@ -235,11 +235,11 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
-    // ─── ARRAY DECELERATION ─────────────────────────────────────────────────────────
+    // ─── ARRAY DECLARATION ─────────────────────────────────────────────────────────
     //
 
-        export interface IArrayDeceleration extends IBase {
-            type:   "ArrayDeceleration"
+        export interface IArrayDeclaration extends IBase {
+            type:   "ArrayDeclaration"
             name:   string
             value:  TReturnables[ ]
         }

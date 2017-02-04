@@ -78,11 +78,11 @@
 //
 
     Statement
-        = FunctionDeceleration
-        / ClassDeceleration
-        / ArrayDeceleration
-        / ObjectDeceleration
-        / DecelerationStatement
+        = FunctionDeclaration
+        / ClassDeclaration
+        / ArrayDeclaration
+        / ObjectDeclaration
+        / DeclarationStatement
         / SingleAssignmentStatement
         / IfStatement
         / WhileStatement
@@ -96,13 +96,13 @@
 //
 
     Returnables
-        = DecelerationAssignment
+        = DeclarationAssignment
         / SExpressionBody
         / AwaitStatement
         / Expression
 
     ArgumentReturnables
-        = DecelerationAssignment
+        = DeclarationAssignment
         / AwaitStatement
         / Expression 
 
@@ -382,10 +382,10 @@
 // ─── CLASS DECLERATION ──────────────────────────────────────────────────────────
 //
 
-    ClassDeceleration
-        = "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDecelerations __* END {
+    ClassDeclaration
+        = "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDeclarations __* END {
             return {
-                type: 'ClassDeceleration',
+                type: 'ClassDeclaration',
                 location: location( ),
                 name: name.name,
                 body: body
@@ -393,18 +393,18 @@
         }
         / "class" _+ name:Identifier _* ":" Empty END {
             return {
-                type: 'ClassDeceleration',
+                type: 'ClassDeclaration',
                 location: location( ),
                 name: name.name,
                 body: null
             }
         }
 
-    ClassFunctionDecelerations
-        = arg:FunctionDeceleration __+ more:ClassFunctionDecelerations {
+    ClassFunctionDeclarations
+        = arg:FunctionDeclaration __+ more:ClassFunctionDeclarations {
             return [ arg ].concat( more )
         } 
-        / decleration:FunctionDeceleration {
+        / decleration:FunctionDeclaration {
             return [ decleration ]
         }
 
@@ -412,11 +412,11 @@
 // ─── FUNCTION DECLERATION ───────────────────────────────────────────────────────
 //
 
-    FunctionDeceleration
+    FunctionDeclaration
         = key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
         _* ":" __* code:Body END {
             return {
-                type: "FunctionDeceleration",
+                type: "FunctionDeclaration",
                 location: location( ),
                 name: name.name,
                 key:  key,
@@ -426,7 +426,7 @@
         }
         / key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body END {
             return {
-                type: "FunctionDeceleration",
+                type: "FunctionDeclaration",
                 location: location( ),
                 name: name.name,
                 key:  key,
@@ -444,27 +444,27 @@
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
 //
 
-    DecelerationStatement
-        = modifier:( "const" / "def" ) _+ assignment:DecelerationAssignment {
+    DeclarationStatement
+        = modifier:( "const" / "def" ) _+ assignment:DeclarationAssignment {
             return {
-                type: 'DecelerationStatement',
+                type: 'DeclarationStatement',
                 location: location( ),
                 kind: 'SingleAllocInit',
                 modifier: modifier,
                 assignment: assignment
             }
         }
-        / "def" _+ names:NameOnlyDecelerationsArray  {
+        / "def" _+ names:NameOnlyDeclarationsArray  {
             return {
-                type: 'DecelerationStatement',
+                type: 'DeclarationStatement',
                 location: location( ),
                 kind: 'MultiAlloc',
                 names: names.map( x => x.name )
             }
         }
 
-    NameOnlyDecelerationsArray
-        = name:Identifier _+ more:NameOnlyDecelerationsArray {
+    NameOnlyDeclarationsArray
+        = name:Identifier _+ more:NameOnlyDeclarationsArray {
             return [ name ].concat( more )
         } 
         / name:Identifier {
@@ -498,10 +498,10 @@
 // ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
 //
 
-    DecelerationAssignment
+    DeclarationAssignment
         = name:Identifier _* "=" _* value:Returnables {
             return {
-                type:  'DecelerationAssignment',
+                type:  'DeclarationAssignment',
                 location: location( ),
                 name:  name.name,
                 value: value
@@ -515,7 +515,7 @@
     SingleAssignmentStatement
         = name:AddressIdentifier _* "=" _* value:Returnables {
             return {
-                type:  'DecelerationAssignment',
+                type:  'DeclarationAssignment',
                 location: location( ),
                 name:  name,
                 value: value
@@ -610,11 +610,11 @@
             }
         }
       
-    ObjectDeceleration
+    ObjectDeclaration
         = "object" __* name:Identifier __* ObjectAssignmentKeyValueCharacter
           __* members:ObjectPairMember __+ END {
             return {
-                type:   "ObjectDeceleration",
+                type:   "ObjectDeclaration",
                 location: location( ),
                 name:   name.name,
                 value:  members
@@ -660,10 +660,10 @@
             }
         }
 
-    ArrayDeceleration
+    ArrayDeclaration
         = "array" _+ name:Identifier __* ":"  __* members:ArrayMember __+ END {
             return {
-                type:   "ArrayDeceleration",
+                type:   "ArrayDeclaration",
                 location: location( ),
                 name:   name.name,
                 value:  members
