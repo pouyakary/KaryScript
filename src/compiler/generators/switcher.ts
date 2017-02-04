@@ -11,6 +11,7 @@
 /// <reference path="nodes/blocks/body.ts" />
 /// <reference path="nodes/blocks/nonbranch.ts" />
 /// <reference path="nodes/expressions/identifier.ts" />
+/// <reference path="nodes/expressions/s-expression.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/statements/deceleration.ts" />
@@ -35,7 +36,15 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'DecelerationStatement':
                     return Nodes.Deceleration.Compile(
-                        node as AST.DecelerationStatementBase, env)
+                        node as AST.DecelerationStatementBase, env
+                    )
+
+                case 'SExpression':
+                    return Nodes.SExpression.Compile( node as AST.ISExpression, env )
+
+                case 'Identifier':
+                case 'AddressIdentifier':
+                    return Nodes.Address.Compile( node, env )
 
                 case 'Empty':
                 default:
