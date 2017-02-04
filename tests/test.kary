@@ -6,3 +6,16 @@ con number255 = 0xff
 
 (console/log (div x m))
 (foo-bar)
+
+export def man-man:
+    def second-level:
+        def last = (sum 4 5)
+    end
+    def something = 5
+end
+
+async fun a b c:
+    def result = (sum a (mul b c))
+end
+
+(await (fun 3 4 5))
