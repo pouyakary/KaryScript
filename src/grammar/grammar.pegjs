@@ -454,7 +454,7 @@
                 assignment: assignment
             }
         }
-        / "def" _+ names:NameOnlyDecelerationsArray _* ( EOL / EOF ) {
+        / "def" _+ names:NameOnlyDecelerationsArray  {
             return {
                 type: 'DecelerationStatement',
                 location: location( ),
