@@ -3,7 +3,4 @@ def y = (mul 34 (sum 5 (foo-bar 4 5)))
 def m n k
 
 (console/log (div x m))
-
-def foo x y z:
-    return (sum x (sum y z))
-end
+(foo-bar)

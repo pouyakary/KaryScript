@@ -25,19 +25,19 @@ namespace KaryScript.Compiler.Nodes.SExpression {
             switch ( node.kind ) {
                 case 'FunctionCallWithArgs':
                     return CompileFunctionCallWithArgs(
-                        <AST.IFunctionCallWithArgsSExpression> node, env, placeholder
+                        node as AST.IFunctionCallWithArgsSExpression, env, placeholder
                     )
 
                 case 'BinaryOperator':
                     return CompileBinaryOperator(
-                        <AST.IBinaryOperatorSExpression> node, env, placeholder
+                        node as AST.IBinaryOperatorSExpression, env, placeholder
                     )
 
                 case 'UnaryOperator':
-                    return ''
+                    return CompileUnaryOperator( node as AST.IUnaryOperatorSExpression, env )
 
                 case 'FunctionCallOnly':
-                    return ''
+                    return CompileFunctionCallOnly( node as AST.IFunctionCallOnlySExpression, env )
             }
         }
 
@@ -87,7 +87,20 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── UNARY OPERATOR ─────────────────────────────────────────────────────────────
     //
 
-        
+        function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
+                                         env: IEnvInfo ) {
+            return node.operator + " (" + Nodes.CompileSingleNode( node.arg, env ) + 
+                    ")" + Env.Semicolon( env )
+        }
+
+    //
+    // ─── SIMPLE FUNCTION CALL ───────────────────────────────────────────────────────
+    //
+
+        function CompileFunctionCallOnly ( node: AST.IFunctionCallOnlySExpression,
+                                            env: IEnvInfo ) {
+            return Address.Compile( node.command, env ) + "()" + Env.Semicolon( env )
+        }
         
     //
     // ─── GET OPERATOR ───────────────────────────────────────────────────────────────
