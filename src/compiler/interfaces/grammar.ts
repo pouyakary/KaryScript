@@ -68,6 +68,25 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── EXPORTABLE ─────────────────────────────────────────────────────────────────
+    //
+
+        export interface IExportable extends IBase {
+            exported: boolean
+        }
+
+    //
+    // ─── FUNCTION DECLARATION ───────────────────────────────────────────────────────
+    //
+
+        export interface FunctionDeclaration extends IExportable {
+            name:   string
+            key:    "def" | "async"
+            args:   string[ ] | null
+            code:   IBody
+        }
+
+    //
     // ─── BODY ───────────────────────────────────────────────────────────────────────
     //
 
@@ -129,7 +148,7 @@ namespace KaryScript.Compiler.AST {
     // ─── DECLARATION STATEMENT ─────────────────────────────────────────────────────
     //
 
-        export interface DeclarationStatementBase extends IBase {
+        export interface DeclarationStatementBase extends IExportable {
             type: "DeclarationStatement"
             kind: "SingleAllocInit" | "MultiAlloc"
         }
@@ -149,7 +168,7 @@ namespace KaryScript.Compiler.AST {
     // ─── DECLARATION ASSIGNMENT ────────────────────────────────────────────────────
     //
 
-        export interface DeclarationAssignment extends IBase {
+        export interface DeclarationAssignment extends IExportable {
             type:   "DeclarationAssignment"
             name:   string
             value:  TReturnables
@@ -205,7 +224,7 @@ namespace KaryScript.Compiler.AST {
     // ─── OBJECT DECLARATION ────────────────────────────────────────────────────────
     //
 
-        export interface IObjectDeclaration extends IBase {
+        export interface IObjectDeclaration extends IExportable {
             type:   "ObjectDeclaration"
             name:   string
             value:  IObjectMemberPair[ ]
@@ -238,7 +257,7 @@ namespace KaryScript.Compiler.AST {
     // ─── ARRAY DECLARATION ─────────────────────────────────────────────────────────
     //
 
-        export interface IArrayDeclaration extends IBase {
+        export interface IArrayDeclaration extends IExportable {
             type:   "ArrayDeclaration"
             name:   string
             value:  TReturnables[ ]

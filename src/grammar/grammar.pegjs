@@ -383,19 +383,21 @@
 //
 
     ClassDeclaration
-        = "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDeclarations __* END {
+        = exported:ExportKey "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDeclarations __* END {
             return {
                 type: 'ClassDeclaration',
                 location: location( ),
                 name: name.name,
+                exported: exported,
                 body: body
             }
         }
-        / "class" _+ name:Identifier _* ":" Empty END {
+        / exported:ExportKey "class" _+ name:Identifier _* ":" Empty END {
             return {
                 type: 'ClassDeclaration',
                 location: location( ),
                 name: name.name,
+                exported: exported,
                 body: null
             }
         }
@@ -413,23 +415,25 @@
 //
 
     FunctionDeclaration
-        = key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
+        = exported:ExportKey key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
         _* ":" __* code:Body END {
             return {
                 type: "FunctionDeclaration",
                 location: location( ),
                 name: name.name,
                 key:  key,
+                exported: exported,
                 args: args.map( x => x.name ),
                 code: code
             }
         }
-        / key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body END {
+        / exported:ExportKey key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body END {
             return {
                 type: "FunctionDeclaration",
                 location: location( ),
                 name: name.name,
                 key:  key,
+                exported: exportKey,
                 args: null,
                 code: code
             }
@@ -441,24 +445,36 @@
         }
 
 //
+// ─── EXPORT KEY ─────────────────────────────────────────────────────────────────
+//
+
+    ExportKey
+        = key:("export" _)? _* {
+        	console.log( key )
+            return key? true : false
+        }
+
+//
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
 //
 
     DeclarationStatement
-        = modifier:( "con" / "def" ) _+ assignment:DeclarationAssignment {
+        = exported:ExportKey modifier:( "con" / "def" ) _+ assignment:DeclarationAssignment {
             return {
                 type: 'DeclarationStatement',
                 location: location( ),
                 kind: 'SingleAllocInit',
+                exported: exported,
                 modifier: modifier,
                 assignment: assignment
             }
         }
-        / "def" _+ names:NameOnlyDeclarationsArray  {
+        / exported:ExportKey "def" _+ names:NameOnlyDeclarationsArray  {
             return {
                 type: 'DeclarationStatement',
                 location: location( ),
                 kind: 'MultiAlloc',
+                exported: exported,
                 names: names.map( x => x.name )
             }
         }
@@ -611,13 +627,14 @@
         }
       
     ObjectDeclaration
-        = "object" __* name:Identifier __* ObjectAssignmentKeyValueCharacter
+        = exported:ExportKey "object" __* name:Identifier __* ObjectAssignmentKeyValueCharacter
           __* members:ObjectPairMember __+ END {
             return {
                 type:   "ObjectDeclaration",
                 location: location( ),
                 name:   name.name,
-                value:  members
+                value:  members,
+                exported: exported
             }
         }
 
@@ -661,11 +678,12 @@
         }
 
     ArrayDeclaration
-        = "array" _+ name:Identifier __* ":"  __* members:ArrayMember __+ END {
+        = exported:ExportKey "array" _+ name:Identifier __* ":"  __* members:ArrayMember __+ END {
             return {
                 type:   "ArrayDeclaration",
                 location: location( ),
                 name:   name.name,
+                exported: exported,
                 value:  members
             }
         }
@@ -996,3 +1014,4 @@
     SeperatorSpaces = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
 // ────────────────────────────────────────────────────────────────────────────────
+
