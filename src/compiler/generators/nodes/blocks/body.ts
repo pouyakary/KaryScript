@@ -24,12 +24,11 @@ namespace KaryScript.Compiler.Nodes.Body {
             // making the env info
             let bodyENV: IEnvInfo = Object.assign({ }, env )
             bodyENV.ScopeLevel++
-            bodyENV.ParentNode.push( node )
 
             // if not. we have to compile each statement and add them together
             let compiledStatements = new Array<string>( )
             for ( let statement of ( node.branch as AST.TStatements[ ] ) )
-                compiledStatements.push( KaryScript.Compiler.Nodes.CompileSingleNode( statement, env ) )
+                compiledStatements.push( Nodes.CompileSingleNode( statement, env ) )
 
             // updating the env info
             env.Errors = env.Errors.concat( bodyENV.Errors )
@@ -38,10 +37,8 @@ namespace KaryScript.Compiler.Nodes.Body {
             let result = ( env.ScopeLevel === 0 )
                 ? compiledStatements.join( '\n' )
                 : compiledStatements.join( '\n' ).split( '\n' )
-                                    // tabs are 4 spaces
                                     .map( x => '    ' + x )
                                     .join( '\n' )
-
             // done
             return result
         }

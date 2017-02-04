@@ -24,6 +24,17 @@ namespace KaryScript.Compiler.Nodes {
 
         /** Compiles a simple given node */
         export function CompileSingleNode ( node: AST.IBase, env: IEnvInfo ): string {
+            env.ParentNode.push( node )
+            const compiledCode = SwitchCompiler( node, env )
+            env.ParentNode.pop( )
+            return compiledCode
+        }
+
+    //
+    // ─── SWITCHER ───────────────────────────────────────────────────────────────────
+    //
+
+        function SwitchCompiler ( node: AST.IBase, env: IEnvInfo ): string {
             switch ( node.type ) {
                 case 'Body':
                     return Nodes.Body.Compile( node as AST.IBody, env )
