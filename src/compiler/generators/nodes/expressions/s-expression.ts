@@ -34,10 +34,14 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                     )
 
                 case 'UnaryOperator':
-                    return CompileUnaryOperator( node as AST.IUnaryOperatorSExpression, env )
+                    return CompileUnaryOperator(
+                        node as AST.IUnaryOperatorSExpression, env
+                    )
 
                 case 'FunctionCallOnly':
-                    return CompileFunctionCallOnly( node as AST.IFunctionCallOnlySExpression, env )
+                    return CompileFunctionCallOnly(
+                        node as AST.IFunctionCallOnlySExpression, env
+                    )
             }
         }
 
