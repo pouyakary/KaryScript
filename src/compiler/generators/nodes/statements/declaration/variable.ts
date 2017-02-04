@@ -8,9 +8,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="../../switcher.ts" />
-/// <reference path="../expressions/identifier.ts" />
-
+/// <reference path="../../../switcher.ts" />
+/// <reference path="../../expressions/identifier.ts" />
 
 namespace KaryScript.Compiler.Nodes.Declaration {
 
@@ -32,7 +31,12 @@ namespace KaryScript.Compiler.Nodes.Declaration {
         function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
                                            env: IEnvInfo ) {
 
-            const key   = GetDeclarationKey( env )
+            let key: string
+            if ( node.modifier === 'const' )
+                key = 'const'
+            else
+                key = GetDeclarationKey( env )
+
             const name  = Identifier.Compile( node.assignment.name, env, node, true )
             const expr  = CompileSingleNode( node.assignment.value, env )
 

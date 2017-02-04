@@ -13,7 +13,7 @@
 /// <reference path="nodes/expressions/s-expression.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
-/// <reference path="nodes/statements/declaration.ts" />
+/// <reference path="nodes/statements/declaration/variable.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
