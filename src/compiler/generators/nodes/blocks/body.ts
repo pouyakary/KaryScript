@@ -10,7 +10,6 @@
 
 /// <reference path="../../switcher.ts" />
 
-
 namespace KaryScript.Compiler.Nodes.Body {
 
     //

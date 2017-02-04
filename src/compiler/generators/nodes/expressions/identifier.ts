@@ -10,7 +10,6 @@
 
 /// <reference path="../../../tools/reporter.ts" />
 
-
 namespace KaryScript.Compiler.Nodes.Identifier {
 
     //

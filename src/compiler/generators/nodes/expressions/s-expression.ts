@@ -13,7 +13,6 @@
 /// <reference path="../../../tools/reporter.ts" />
 /// <reference path="../../../tools/env.ts" />
 
-
 namespace KaryScript.Compiler.Nodes.SExpression {
 
     //
