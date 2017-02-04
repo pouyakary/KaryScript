@@ -32,7 +32,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
                                            env: IEnvInfo ) {
 
             let key: string
-            if ( node.modifier === 'const' )
+            if ( node.modifier === 'con' )
                 key = 'const'
             else
                 key = GetDeclarationKey( env )

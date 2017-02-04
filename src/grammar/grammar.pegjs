@@ -445,7 +445,7 @@
 //
 
     DeclarationStatement
-        = modifier:( "const" / "def" ) _+ assignment:DeclarationAssignment {
+        = modifier:( "con" / "def" ) _+ assignment:DeclarationAssignment {
             return {
                 type: 'DeclarationStatement',
                 location: location( ),
@@ -710,6 +710,7 @@
             / "cat"             !IdentifierName
             / "print"           !IdentifierName
             / "nan"             !IdentifierName
+            / "con"             !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
