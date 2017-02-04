@@ -343,7 +343,7 @@
                 type:       "SExpression",
                 location:   location( ),
                 kind:       "BinaryOperator",       
-                operator:   operator,
+                operator:   operator.operator,
                 left:       left,
                 right:      right 
             }
@@ -560,12 +560,12 @@
 //
 
     BinaryOperator
-        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'rem' / 'and' / 'or' / 
-            'eq' / 'bigger' / 'lower' ) {
+        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' / 'and' / 'or' / 
+               '=' / '>' / '<' / '<=' / '!=' / 'eq' ) {
             return {
-                type:       'BinaryOperator',
+                type:     'BinaryOperator',
                 location: location( ),
-                operator:   op
+                operator: op
             }
         }
 
@@ -700,10 +700,7 @@
             / "div"             !IdentifierName
             / "sum"             !IdentifierName
             / "pow"             !IdentifierName
-            / "rem"             !IdentifierName
-            / "eq"              !IdentifierName
-            / "bigger"          !IdentifierName
-            / "lower"           !IdentifierName
+            / "mod"             !IdentifierName
             / "on"              !IdentifierName
             / "off"             !IdentifierName
             / "true"            !IdentifierName
