@@ -28,7 +28,7 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
                            .map( arg => Identifier.Compile( arg, env, node, true ) )
                            .join(', ')
             const body = Nodes.CompileSingleNode( node.code, env )
-            return functionKey + " " + functionName + "(" + args + ") {\n" + body + "\n}"
+            return functionKey + " " + functionName + "(" + args + ") {\n" + body + "\n};"
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
