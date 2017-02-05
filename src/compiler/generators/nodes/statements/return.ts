@@ -18,7 +18,6 @@ namespace KaryScript.Compiler.Nodes.Return {
     //
 
         export function Compile ( node: AST.IReturnStatement, env: IEnvInfo ) {
-            console.log( node )
             if ( node.value)
                 return node.kind + ' ' + Nodes.CompileSingleNode( node.value, env ) +
                         Env.Semicolon( env )
