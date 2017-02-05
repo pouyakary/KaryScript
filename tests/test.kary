@@ -16,8 +16,7 @@ export def man-man:
 end
 
 async fun a b c:
-    def result = (sum a (mul b c))
-    return 1
+    return [ w => (mul w 2) ]
 end
 
 (await (fun 3 4 5))
