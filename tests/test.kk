@@ -15,10 +15,8 @@ export def man-man:
     def something = 5
 end
 
-async fun a b c:
-    return [ w => (mul w 2) ]
+async delay time:
+    return new (Promise [res => (setTimeout res time)])
 end
 
-(await (fun 3 4 5))
-
-con cool = [ h j => (sum h j) ]
+await (delay 5000)

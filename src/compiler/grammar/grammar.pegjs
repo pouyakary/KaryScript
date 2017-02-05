@@ -324,8 +324,20 @@
 //
 
     SExpression
-        = "(" __* body:SExpressionBody __* ")" {
+        = "(" __* body:( SExpressionBody  / UnaryExpressionBody ) __* ")" {
             return body
+        }
+        / UnaryExpressionBody
+
+    UnaryExpressionBody
+        = operator:UnaryOperator __+ arg:Expression {
+            return {
+                type:       "SExpression",
+                location:   location( ),
+                kind:       "UnaryOperator",       
+                operator:   operator,
+                arg:        arg
+            }
         }
 
     SExpressionBody
@@ -346,15 +358,6 @@
                 operator:   operator.operator,
                 left:       left,
                 right:      right 
-            }
-        }
-        / operator:UnaryOperator __+ arg:Expression {
-            return {
-                type:       "SExpression",
-                location:   location( ),
-                kind:       "UnaryOperator",       
-                operator:   operator,
-                arg:        arg
             }
         }
         / command:AddressIdentifier {
@@ -1012,4 +1015,5 @@
     SeperatorSpaces = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
 // ────────────────────────────────────────────────────────────────────────────────
+
 
