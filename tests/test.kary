@@ -21,3 +21,5 @@ async fun a b c:
 end
 
 (await (fun 3 4 5))
+
+con cool = [ h j => (sum h j) ]

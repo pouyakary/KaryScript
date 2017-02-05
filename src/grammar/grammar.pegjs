@@ -247,7 +247,7 @@
 //
 
     LambdaExpression
-        = "[" __* args:IdentifierList __* "=>" __* code:Body __* "]" {
+        = "[" __* args:IdentifierList __* "=>" __* code:Returnables __* "]" {
             return {
                 type: "LambdaExpression",
                 location: location( ),

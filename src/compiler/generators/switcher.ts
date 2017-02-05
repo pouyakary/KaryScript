@@ -11,6 +11,7 @@
 /// <reference path="nodes/blocks/body.ts" />
 /// <reference path="nodes/expressions/identifier.ts" />
 /// <reference path="nodes/expressions/s-expression.ts" />
+/// <reference path="nodes/expressions/lambda.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
@@ -58,6 +59,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'SExpression':
                     return Nodes.SExpression.Compile( node as AST.ISExpression, env )
+
+                case 'LambdaExpression':
+                    return Nodes.Lambda.Compile( node as AST.ILambdaExpression, env )
 
                 case 'ReturnStatement':
                     return Nodes.Return.Compile( node as AST.IReturnStatement, env )
