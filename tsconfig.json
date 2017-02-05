@@ -3,12 +3,12 @@
         "module": "system",
         "target": "es6",
         "noImplicitAny": false,
-        "sourceMap": false,
+        "sourceMap": true,
         "strictNullChecks": true,
         "removeComments": true,
         "outFile": "bin/compiler.js"
     },
     "exclude": [
-        "node_modules"
+        "node_modules", "bin"
     ]
 }
