@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/grammar/grammar.pegjs",
+    "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/compiler/grammar/grammar.pegjs",
     "build": "tsc && npm run compile-parser",
     "test": "node ./tests/test.js"
   },

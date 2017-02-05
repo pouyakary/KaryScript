@@ -34,7 +34,7 @@
 //
 
     function loadParser ( ) {
-        const p = path.resolve( path.join( __dirname, '../../src/grammar/grammar.pegjs' ) )
+        const p = path.resolve( path.join( __dirname, '../../src/compiler/grammar/grammar.pegjs' ) )
         const fileContent = fs.readFileSync( p, 'utf8' )
         return pegjs.generate( fileContent )
     }
