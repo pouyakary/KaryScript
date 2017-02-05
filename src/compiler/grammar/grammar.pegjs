@@ -135,7 +135,7 @@
 //
 
     ConditionalsPredicate
-        = __+ predicate:Predicate __* ":" __* {
+        = __+ predicate:Predicate __* DefEnd __* {
             return {
                 type: 'Predicate',
                 location: location( ),
@@ -290,8 +290,7 @@
         }
 
     PipeControl
-        = __* '>' __*
-        / __+ 'then' __+
+        = __* '->' __*
 
 //
 // ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
@@ -386,7 +385,7 @@
 //
 
     ClassDeclaration
-        = exported:ExportKey "class" _+ name:Identifier _* ":" _* EOL __* body:ClassFunctionDeclarations __* END {
+        = exported:ExportKey "class" _+ name:Identifier _* DefEnd __* body:ClassFunctionDeclarations __* END {
             return {
                 type: 'ClassDeclaration',
                 location: location( ),
@@ -395,7 +394,7 @@
                 body: body
             }
         }
-        / exported:ExportKey "class" _+ name:Identifier _* ":" Empty END {
+        / exported:ExportKey "class" _+ name:Identifier _* DefEnd __* END {
             return {
                 type: 'ClassDeclaration',
                 location: location( ),
@@ -419,7 +418,7 @@
 
     FunctionDeclaration
         = exported:ExportKey key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
-        _* ":" __* code:Body END {
+        _* DefEnd __* code:Body END {
             return {
                 type: "FunctionDeclaration",
                 location: location( ),
@@ -430,7 +429,7 @@
                 code: code
             }
         }
-        / exported:ExportKey key:FunctionDefKind _+ name:Identifier _* ":" __* code:Body END {
+        / exported:ExportKey key:FunctionDefKind _+ name:Identifier _* DefEnd __* code:Body END {
             return {
                 type: "FunctionDeclaration",
                 location: location( ),
@@ -628,7 +627,7 @@
         }
       
     ObjectDeclaration
-        = exported:ExportKey "object" __* name:Identifier __* ObjectAssignmentKeyValueCharacter
+        = exported:ExportKey "object" _* name:Identifier _* DefEnd
           __* members:ObjectPairMember __+ END {
             return {
                 type:   "ObjectDeclaration",
@@ -679,7 +678,7 @@
         }
 
     ArrayDeclaration
-        = exported:ExportKey "array" _+ name:Identifier __* ":"  __* members:ArrayMember __+ END {
+        = exported:ExportKey "array" _+ name:Identifier _* DefEnd __* members:ArrayMember __+ END {
             return {
                 type:   "ArrayDeclaration",
                 location: location( ),
@@ -951,6 +950,12 @@
     }
 
 //
+// ─── DEF END ────────────────────────────────────────────────────────────────────
+//
+
+    DefEnd = EOL
+
+//
 // ─── END KEYWORD ────────────────────────────────────────────────────────────────
 //
 
@@ -1015,5 +1020,6 @@
     SeperatorSpaces = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
 // ────────────────────────────────────────────────────────────────────────────────
+
 
 
