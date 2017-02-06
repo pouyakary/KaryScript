@@ -63,6 +63,7 @@ namespace KaryScript.Compiler.AST {
                 | "ObjectDeclaration"
                 | "Predicate"
                 | "DeclarationAssignment"
+                | "StringPart"
 
             location: ILocation
         }
@@ -287,11 +288,11 @@ namespace KaryScript.Compiler.AST {
 
         export interface IStringLiteral extends IBase {
             key:    "'" | '"'
-            value:  Array< IStringPart | ISExpression >
+            parts:  Array< IStringPart | ISExpression >
         }
 
         export interface IStringPart extends IBase {
-            part:   string
+            part: string
         }
 
     //

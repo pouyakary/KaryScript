@@ -19,7 +19,7 @@ def lambda = [ par1 par2 => (sum par1 par2) ]
 def cool = (x) -> (div $ 2) -> (z) ->
             (mul $ 5) -> (foo-bar) -> (go)
 
-(console/log 2)
+def str = "2 + 3 = #(sum 2 3)"
 
 async delay time
     return new (Promise [ res => (setTimeout res time) ])

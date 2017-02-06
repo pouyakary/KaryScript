@@ -884,7 +884,7 @@
                 type:   "StringLiteral",
                 location: location( ),
                 key:    '"',
-                value:  generateStringResult( body ),
+                parts:  generateStringResult( body ),
             }
         }
         / "'" body:( SingleQuotesStringsParts )* "'" {
@@ -892,7 +892,7 @@
                 type:   "StringLiteral",
                 location: location( ),
                 key:    "'",
-                value:  generateStringResult( body ),
+                parts:  generateStringResult( body ),
             }
         }
 
@@ -912,11 +912,7 @@
 
     StringInterpolation
         = '#' expr:SExpression {
-            return {
-                type:   "StringInterpolation",
-                location: location( ),
-                expr:   expr
-            }
+            return expr
         }
 
 //
