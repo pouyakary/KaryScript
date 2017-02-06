@@ -650,7 +650,7 @@
                 location:   location( ),
                 id:         id( ),
                 name:       name,
-                index:  i   ndex
+                index:      index
             }
         }
 
