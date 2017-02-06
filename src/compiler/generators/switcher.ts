@@ -9,18 +9,17 @@
 //
 
 /// <reference path="nodes/blocks/body.ts" />
-
 /// <reference path="nodes/expressions/s-expression.ts" />
 /// <reference path="nodes/expressions/lambda.ts" />
 /// <reference path="nodes/expressions/pipe.ts" />
-
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/literals/string.ts" />
-
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/return.ts" />
+
+/// <reference path="../sourcemap/mapper.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
@@ -37,7 +36,7 @@ namespace KaryScript.Compiler.Nodes {
             env.ParentNode.push( node )
             const compiledCode = SwitchAndCompileNode( node, env )
             env.ParentNode.pop( )
-            return compiledCode
+            return SourceMap.GenerateMap( node.id, compiledCode )
         }
 
     //

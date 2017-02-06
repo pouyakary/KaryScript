@@ -66,6 +66,8 @@ namespace KaryScript.Compiler.AST {
                 | "StringPart"
 
             location: ILocation
+
+            id: string
         }
 
     //

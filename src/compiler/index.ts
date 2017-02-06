@@ -73,6 +73,7 @@ namespace KaryScript.Compiler {
 
         export const BaseNodeObject: AST.IBase = {
             type: 'Root',
+            id: 'R00000',
             location: {
                 start: { offset: 0, column: 0, line: 0 },
                 end: { offset: 0, column: 0, line: 0 }
