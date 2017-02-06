@@ -69,16 +69,22 @@
 //
 
     SpacedStatements
-        = __* statement:Statement ( __+ / _* EOL / EOF ) {
+        = FullPlainWhiteSpace* statement:Statement
+            ( FullPlainWhiteSpace+ / PlainWhiteSpace* LineTerminator / EOF ) {
             return statement
         }
+
+    FullPlainWhiteSpace
+        = PlainWhiteSpace
+        / LineTerminator
 
 //
 // ─── STATEMENTS ─────────────────────────────────────────────────────────────────
 //
 
     Statement
-        = FunctionDeclaration
+        = InlineComment
+        / FunctionDeclaration
         / ClassDeclaration
         / ArrayDeclaration
         / ObjectDeclaration
@@ -205,7 +211,7 @@
         }
 
     ElseIfStatement
-        = "also" _+ "if" _+ predicate:ConditionalsPredicate body:Body EOL {
+        = "also" _+ "if" _+ predicate:ConditionalsPredicate body:Body LineTerminator {
             return {
                 type:       "ElseIfStatement",
                 location: location( ),
@@ -641,7 +647,7 @@
         }
 
     ObjectPairMember
-        = member:ObjectAssignment _* ( EOL / "," ) _*
+        = member:ObjectAssignment _* ( LineTerminator / "," ) _*
           more:ObjectPairMember {
             return [ member ].concat( more )
         } 
@@ -973,11 +979,24 @@
         / _
 
 //
+// ─── COMMENTS ───────────────────────────────────────────────────────────────────
+//
+
+    InlineComment
+        = '//' text:(!EOL .)* {
+            return {
+                type: "InlineComment",
+                location: location( ),
+                comment: text.map( x => x[ 1 ] ).join('')
+            }
+        }
+
+//
 // ─── WHITESPACE ─────────────────────────────────────────────────────────────────
 //
 
     Empty
-        = __* {
+        = FullPlainWhiteSpace* {
             return {
                 type: 'Empty',
                 location: location( ),
@@ -985,13 +1004,8 @@
         }
 
     _
-        = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
-            return {
-                type: '_',
-                location: location( ),
-                value: spaces
-            }
-        }
+        = PlainWhiteSpace
+        / InlineComment
 
     EOL
         = _* LineTerminator {
@@ -1003,6 +1017,16 @@
 
     EOF
         = !.
+
+
+    PlainWhiteSpace
+        = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
+            return {
+                type: '_',
+                location: location( ),
+                value: spaces
+            }
+        }
 
     LineTerminator
         = [\n\r\u2028\u2029] {
