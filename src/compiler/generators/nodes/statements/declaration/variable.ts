@@ -58,7 +58,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function GetDeclarationKey ( env: IEnvInfo ) {
-            return ( env.ScopeLevel === 0 )? 'var' : 'let'
+            return ( env.ParentNode.length === 3 )? 'var' : 'let'
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
