@@ -41,6 +41,15 @@
                 return result
             }
 
+        //
+        // ─── GENERATE ID ─────────────────────────────────────────────────
+        //
+
+            function id ( ) {
+                return String.fromCharCode( 65 + Math.floor( Math.random( ) * 26 ) )
+                      + Date.now();
+            }
+
         // ─────────────────────────────────────────────────────────────────
     }
 
@@ -57,9 +66,10 @@
     Body
         = statements:SpacedStatements+ {
             return {
-                type: 'Body',
-                location: location( ),
-                branch: statements
+                type:       'Body',
+                location:   location( ),
+                id:         id( ),
+                branch:     statements
             }
         }
         / Empty
@@ -145,9 +155,10 @@
     ConditionalsPredicate
         = __+ predicate:Predicate __* DefEnd __* {
             return {
-                type: 'Predicate',
-                location: location( ),
-                condition: predicate
+                type:       'Predicate',
+                location:   location( ),
+                id:         id( ),
+                condition:  predicate
             }
         }
 
@@ -163,37 +174,40 @@
     IfStatement
         = key:IfSwitchKey predicate:ConditionalsPredicate body:Body END {
               return {
-                  type: "IfStatement",
-                  location: location( ),
-                  key: key,
-                  kind: "if",
-                  predicate: predicate,
-                  trueBranch: body
+                  type:         "IfStatement",
+                  location:     location( ),
+                  id:           id( ),
+                  key:          key,
+                  kind:         "if",
+                  predicate:    predicate,
+                  trueBranch:   body
               }
           }
         / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body __
           elseIfBranches: ElseIfStatementArray __ "else" __ falseBranch:Body END {
               return {
-                  type: "IfStatement",
-                  location: location( ),
-                  key: key,
-                  kind: "if-else",
-                  predicate: predicate,
-                  trueBranch: trueBranch,
-                  elseIfBranches: elseIfBranches,
-                  falseBranch: falseBranch
+                  type:             "IfStatement",
+                  location:         location( ),
+                  id:               id( ),
+                  key:              key,
+                  kind:             "if-else",
+                  predicate:        predicate,
+                  trueBranch:       trueBranch,
+                  elseIfBranches:   elseIfBranches,
+                  falseBranch:      falseBranch
               }
           }
         / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body "else" __
           falseBranch:Body END {
               return {
-                  type: "IfStatement",
-                  location: location( ),
-                  key: key,
-                  kind: "if-elseif-else",
-                  predicate: predicate,
-                  trueBranch: trueBranch,
-                  falseBranch: falseBranch
+                  type:         "IfStatement",
+                  location:     location( ),
+                  id:           id( ),
+                  key:          key,
+                  kind:         "if-elseif-else",
+                  predicate:    predicate,
+                  trueBranch:   trueBranch,
+                  falseBranch:  falseBranch
               }
           }
 
@@ -214,7 +228,8 @@
         = "also" _+ "if" _+ predicate:ConditionalsPredicate body:Body LineTerminator {
             return {
                 type:       "ElseIfStatement",
-                location: location( ),
+                location:   location( ),
+                id:         id( ),
                 predicate:  predicate,
                 body:       body
             }
@@ -227,11 +242,12 @@
     ShorthandIfExpression
         = expr:SExpression _* "?" _* trueBranch:ArgumentReturnables _* "/" _* falseBranch:ArgumentReturnables {
             return {
-                type: "ShorthandIfExpression",
-                location: location( ),
-                predicate: expr,
-                trueBranch: trueBranch,
-                falseBranch: falseBranch
+                type:           "ShorthandIfExpression",
+                location:       location( ),
+                id:             id( ),
+                predicate:      expr,
+                trueBranch:     trueBranch,
+                falseBranch:    falseBranch
             }
         }
           
@@ -243,10 +259,11 @@
         = "while" predicate:ConditionalsPredicate
           body:Body END {
               return {
-                  type: "WhileStatement",
-                  location: location( ),
-                  predicate: predicate,
-                  body: body
+                  type:         "WhileStatement",
+                  location:     location( ),
+                  id:           id( ),
+                  predicate:    predicate,
+                  body:         body
               }
         }
 
@@ -257,10 +274,11 @@
     LambdaExpression
         = "[" __* args:IdentifierList __* "=>" __* code:Returnables __* "]" {
             return {
-                type: "LambdaExpression",
-                location: location( ),
-                args: args.map( x => x.name ),
-                code: code
+                type:       "LambdaExpression",
+                location:   location( ),
+                id:         id( ),
+                args:       args.map( x => x.name ),
+                code:       code
             }
         }
 
@@ -283,9 +301,10 @@
     PipeExpression
         = origin:SExpression PipeControl parts:PipeExpressionParts {
             return {
-                type:  "PipeExpression",
-                location: location( ),
-                levels: [ origin ].concat( parts )
+                type:       "PipeExpression",
+                location:   location( ),
+                id:         id( ),
+                levels:     [ origin ].concat( parts )
             }
         }
 
@@ -307,9 +326,10 @@
     ReturnKeyword
         = keyword: ( "return" / "yield" / "throw" ) {
             return {
-                type: "ReturnKeyword",
-                location: location( ),
-                keyword: keyword
+                type:       "ReturnKeyword",
+                location:   location( ),
+                id:         id( ),
+                keyword:    keyword
             }
         }
 
@@ -320,9 +340,10 @@
     AwaitStatement
         = "await" _+ expr:( SExpression / SExpressionBody ) {
             return {
-                type: "AwaitStatement",
-                location: location( ),
-                expr: expr
+                type:       "AwaitStatement",
+                location:   location( ),
+                id:         id( ),
+                expr:       expr
             }
         }    
 
@@ -341,6 +362,7 @@
             return {
                 type:       "SExpression",
                 location:   location( ),
+                id:         id( ),
                 kind:       "UnaryOperator",       
                 operator:   operator,
                 arg:        arg
@@ -351,7 +373,8 @@
         = command:AddressIdentifier __+ params:SExpressionArugmentArray? {
             return {
                 type:       "SExpression",
-                location: location( ),
+                location:   location( ),
+                id:         id( ),
                 kind:       "FunctionCallWithArgs",
                 command:    command,
                 params:     params,
@@ -361,6 +384,7 @@
             return {
                 type:       "SExpression",
                 location:   location( ),
+                id:         id( ),
                 kind:       "BinaryOperator",       
                 operator:   operator.operator,
                 left:       left,
@@ -371,6 +395,7 @@
             return {
                 type:       "SExpression",
                 location:   location( ),
+                id:         id( ),
                 kind:       "FunctionCallOnly",
                 command:    command
             }
@@ -395,20 +420,22 @@
     ClassDeclaration
         = exported:ExportKey "class" _+ name:Identifier _* DefEnd __* body:ClassFunctionDeclarations __* END {
             return {
-                type: 'ClassDeclaration',
-                location: location( ),
-                name: name.name,
-                exported: exported,
-                body: body
+                type:       'ClassDeclaration',
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                exported:   exported,
+                body:       body
             }
         }
         / exported:ExportKey "class" _+ name:Identifier _* DefEnd __* END {
             return {
-                type: 'ClassDeclaration',
-                location: location( ),
-                name: name.name,
-                exported: exported,
-                body: null
+                type:       'ClassDeclaration',
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                exported:   exported,
+                body:       null
             }
         }
 
@@ -428,24 +455,26 @@
         = exported:ExportKey key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
         _* DefEnd __* code:Body END {
             return {
-                type: "FunctionDeclaration",
-                location: location( ),
-                name: name.name,
-                key:  key,
-                exported: exported,
-                args: args.map( x => x.name ),
-                code: code
+                type:       "FunctionDeclaration",
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                key:        key,
+                exported:   exported,
+                args:       args.map( x => x.name ),
+                code:       code
             }
         }
         / exported:ExportKey key:FunctionDefKind _+ name:Identifier _* DefEnd __* code:Body END {
             return {
-                type: "FunctionDeclaration",
-                location: location( ),
-                name: name.name,
-                key:  key,
-                exported: exported,
-                args: null,
-                code: code
+                type:       "FunctionDeclaration",
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                key:        key,
+                exported:   exported,
+                args:       null,
+                code:       code
             }
         }
 
@@ -470,21 +499,23 @@
     DeclarationStatement
         = exported:ExportKey modifier:( "con" / "def" ) _+ assignment:DeclarationAssignment {
             return {
-                type: 'DeclarationStatement',
-                location: location( ),
-                kind: 'SingleAllocInit',
-                exported: exported,
-                modifier: modifier,
+                type:       'DeclarationStatement',
+                location:   location( ),
+                id:         id( ),
+                kind:       'SingleAllocInit',
+                exported:   exported,
+                modifier:   modifier,
                 assignment: assignment
             }
         }
         / exported:ExportKey "def" _+ names:NameOnlyDeclarationsArray  {
             return {
-                type: 'DeclarationStatement',
-                location: location( ),
-                kind: 'MultiAlloc',
-                exported: exported,
-                names: names.map( x => x.name )
+                type:       'DeclarationStatement',
+                location:   location( ),
+                id:         id( ),
+                kind:       'MultiAlloc',
+                exported:   exported,
+                names:      names.map( x => x.name )
             }
         }
 
@@ -505,6 +536,7 @@
             return {
                 type:       'ReturnStatement',
                 location:   location( ),
+                id:         id( ),
                 kind:       keyword.keyword,
                 value:      expr
             }
@@ -513,6 +545,7 @@
             return {
                 type:       'ReturnStatement',
                 location:   location( ),
+                id:         id( ),
                 kind:       keyword.keyword,
                 value:      null
             }
@@ -525,10 +558,11 @@
     DeclarationAssignment
         = name:Identifier _* "=" _* value:Returnables {
             return {
-                type:  'DeclarationAssignment',
-                location: location( ),
-                name:  name.name,
-                value: value
+                type:       'DeclarationAssignment',
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                value:      value
             }
         }
 
@@ -539,10 +573,11 @@
     SingleAssignmentStatement
         = name:AddressIdentifier _* "=" _* value:Returnables {
             return {
-                type:  'DeclarationAssignment',
-                location: location( ),
-                name:  name,
-                value: value
+                type:       'DeclarationAssignment',
+                location:   location( ),
+                id:         id( ),
+                name:       name,
+                value:      value
             }
         }
 
@@ -553,10 +588,12 @@
     AddressIdentifier
         = space:Identifier "/" member:( AddressIdentifier / Identifier ) {
             return {
-                type: "AddressIdentifier",
-                location: location( ),
-                address: ( member.type === "Identifier" )?
-                    [ space.name, member.name ] : [ space.name ].concat( member.address )
+                type:       "AddressIdentifier",
+                location:   location( ),
+                id:         id( ),
+                address:    ( member.type === "Identifier" )
+                            ? [ space.name, member.name ]
+                            : [ space.name ].concat( member.address )
             }
         }
         / Identifier
@@ -573,9 +610,10 @@
     IdentifierName
         = inetiferStart:[\-a-zA-Z] tail:[0-9a-zA-Z\-]* {
             return {
-                type: 'Identifier',
-                location: location( ),
-                name: inetiferStart + tail.join('')
+                type:       'Identifier',
+                location:   location( ),
+                id:         id( ),
+                name:       inetiferStart + tail.join('')
             }
         }
 
@@ -587,9 +625,10 @@
         = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' / 'and' / 'or' / 
                '=' / '>' / '<' / '<=' / '!=' / 'eq' ) {
             return {
-                type:     'BinaryOperator',
-                location: location( ),
-                operator: op
+                type:       'BinaryOperator',
+                location:   location( ),
+                id:         id( ),
+                operator:   op
             }
         }
 
@@ -607,10 +646,11 @@
     ArrayObjectIndexLoader
         = "[" __* name:AddressIdentifier __* "|" __* index:Returnables __* "]" {
             return {
-                type:   "ArrayObjectIndexLoader",
-                location: location( ),
-                name:   name,
-                index:  index
+                type:       "ArrayObjectIndexLoader",
+                location:   location( ),
+                id:         id( ),
+                name:       name,
+                index:  i   ndex
             }
         }
 
@@ -621,16 +661,18 @@
     ObjectLiteral
         = "[" __* ObjectAssignmentKeyValueCharacter __* "]" {
             return {
-                type:   "ObjectLiteral",
-                location: location( ),
-                value:  [ ]
+                type:       "ObjectLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      [ ]
             }
         }
         / "[" __* members:ObjectPairMember __* "]" {
             return {
-                type:   "ObjectLiteral",
-                location: location( ),
-                value:  members
+                type:       "ObjectLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      members
             }
         }
       
@@ -638,11 +680,12 @@
         = exported:ExportKey "object" _* name:Identifier _* DefEnd
           __* members:ObjectPairMember __+ END {
             return {
-                type:   "ObjectDeclaration",
-                location: location( ),
-                name:   name.name,
-                value:  members,
-                exported: exported
+                type:       "ObjectDeclaration",
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                value:      members,
+                exported:   exported
             }
         }
 
@@ -672,27 +715,30 @@
     ArrayLiteral
         = "[" __* "]" {
             return {
-                type:   "ArrayLiteral",
-                location: location( ),
-                value:  [ ]
+                type:       "ArrayLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      [ ]
             }
         }
         / "[" __* members:ArrayMember __* "]" {
             return {
-                type:   "ArrayLiteral",
-                location: location( ),
-                value:  members
+                type:       "ArrayLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      members
             }
         }
 
     ArrayDeclaration
         = exported:ExportKey "array" _+ name:Identifier _* DefEnd __* members:ArrayMember __+ END {
             return {
-                type:   "ArrayDeclaration",
-                location: location( ),
-                name:   name.name,
-                exported: exported,
-                value:  members
+                type:       "ArrayDeclaration",
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                exported:   exported,
+                value:      members
             }
         }
 
@@ -846,10 +892,11 @@
                     result = null
             }
             return {
-                type:   "ReservedValueLiterals",
-                location: location( ),
-                raw:    value,
-                value:  result
+                type:       "ReservedValueLiterals",
+                location:   location( ),
+                id:         id( ),
+                raw:        value,
+                value:      result
             }
         }
 
@@ -867,10 +914,11 @@
                     result = false
             }
             return {
-                type: 'BooleanLiteral',
-                location: location( ),
-                key: key,
-                value: result
+                type:       'BooleanLiteral',
+                location:   location( ),
+                id:         id( ),
+                key:        key,
+                value:      result
             }
         }
 
@@ -881,18 +929,20 @@
     StringLiteral
         = '"' body:( DoubleQuotesStringsParts )* '"' {
             return {
-                type:   "StringLiteral",
-                location: location( ),
-                key:    '"',
-                parts:  generateStringResult( body ),
+                type:       "StringLiteral",
+                location:   location( ),
+                id:         id( ),
+                key:        '"',
+                parts:      generateStringResult( body ),
             }
         }
         / "'" body:( SingleQuotesStringsParts )* "'" {
             return {
-                type:   "StringLiteral",
-                location: location( ),
-                key:    "'",
-                parts:  generateStringResult( body ),
+                type:       "StringLiteral",
+                location:   location( ),
+                id:         id( ),
+                key:        "'",
+                parts:      generateStringResult( body ),
             }
         }
 
@@ -923,10 +973,11 @@
         = sign:'-'? '0x' numerics:[0-9a-f]+ {
             let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
-                type:   'NumericLiteral',
-                location: location( ),
-                raw:    number,
-                value:  eval( number )
+                type:       'NumericLiteral',
+                location:   location( ),
+                id:         id( ),
+                raw:        number,
+                value:      eval( number )
             }
         }
         / sign:'-'? start:[0-9]+ decimals:('.'[0-9]+)? {
@@ -935,10 +986,11 @@
                 ( decimals? '.' + decimals[ 1 ].join('') : '' )
             )
             return {
-                type:   'NumericLiteral',
-                location: location( ),
-                raw:    number,
-                value:  decimals? parseFloat( number ) : parseInt( number )
+                type:       'NumericLiteral',
+                location:   location( ),
+                id:         id( ),
+                raw:        number,
+                value:      decimals? parseFloat( number ) : parseInt( number )
             }
         }
 
@@ -949,8 +1001,9 @@
     PipePlaceholder
         = "$" {
             return {
-                type: "PipePlaceholder",
-                location: location( ),
+                type:       "PipePlaceholder",
+                id:         id( ),
+                location:   location( ),
             }
         }
 
@@ -981,9 +1034,10 @@
     InlineComment
         = '//' text:(!EOL .)* {
             return {
-                type: "InlineComment",
-                location: location( ),
-                comment: text.map( x => x[ 1 ] ).join('')
+                type:       "InlineComment",
+                location:   location( ),
+                id:         id( ),
+                comment:    text.map( x => x[ 1 ] ).join('')
             }
         }
 
@@ -994,8 +1048,9 @@
     Empty
         = FullPlainWhiteSpace* {
             return {
-                type: 'Empty',
-                location: location( ),
+                type:       'Empty',
+                location:   location( ),
+                id:         id( ),
             }
         }
 
@@ -1006,8 +1061,9 @@
     EOL
         = _* LineTerminator {
             return {
-                type: 'LineTerminator',
-                location: location( ),
+                type:       'LineTerminator',
+                location:   location( ),
+                id:         id( ),
             }
         }
 
@@ -1018,25 +1074,28 @@
     PlainWhiteSpace
         = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
             return {
-                type: '_',
-                location: location( ),
-                value: spaces
+                type:       '_',
+                location:   location( ),
+                id:         id( ),
+                value:      spaces
             }
         }
 
     LineTerminator
         = [\n\r\u2028\u2029] {
             return {
-                type: 'LineTerminator',
-                location: location( ),
+                type:       'LineTerminator',
+                location:   location( ),
+                id:         id( ),
             }
         }
 
     LineTerminatorSequence
         = ( "\n"  / "\r\n" / "\r" / "\u2028" / "\u2029" ) {
             return {
-                type: 'LineTerminatorSequence',
-                location: location( ),
+                type:       'LineTerminatorSequence',
+                location:   location( ),
+                id:         id( ),
             }
         }
 
