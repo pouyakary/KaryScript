@@ -30,7 +30,6 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
                                            env: IEnvInfo ) {
-
             let key: string
             if ( node.modifier === 'con' )
                 key = 'const'
