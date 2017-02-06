@@ -21,6 +21,10 @@ def cool = (x) -> (div $ 2) -> (z) ->
 
 def str = "2 + 3 = #(sum 2 3)"
 
+def s1 = "this is a text"
+def s2 = "#(sum 1 2)"
+def s3 = "text with interpolation: #(mul 5 4)"
+
 async delay time
     return new (Promise [ res => (setTimeout res time) ])
 end
