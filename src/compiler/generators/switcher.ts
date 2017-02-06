@@ -26,7 +26,8 @@ namespace KaryScript.Compiler.Nodes {
     //
 
         /** Compiles a simple given node */
-        export function CompileSingleNode ( node: AST.IBase | string, env: IEnvInfo ): string {
+        export function CompileSingleNode ( node: AST.IBase | string,
+                                             env: IEnvInfo ): string {
             if ( typeof node === 'string' )
                 return node
 
