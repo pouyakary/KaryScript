@@ -9,6 +9,7 @@
 //
 
 /// <reference path="../../switcher.ts" />
+/// <reference path="../../../tools/env.ts" />
 
 namespace KaryScript.Compiler.Nodes.Body {
 
@@ -33,7 +34,7 @@ namespace KaryScript.Compiler.Nodes.Body {
             env.Errors = env.Errors.concat( bodyENV.Errors )
 
             // applying tabulation and we're done
-            let result = ( env.ParentNode.length === 2 )
+            let result = ( Env.GetParentType( env ) === 'Root' )
                 ? compiledStatements.join( '\n' )
                 : compiledStatements.join( '\n' ).split( '\n' )
                                     .map( x => '    ' + x )
