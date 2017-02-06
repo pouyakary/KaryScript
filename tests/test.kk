@@ -9,10 +9,12 @@ con number255 = 0xff
 
 export def man-man
     def second-level
-        throw (add 10 20) -> (div $ 5)
+        throw (foo 10 20) -> (div $ 5)
     end
     def something = 5
 end
+
+def lambda = [ par1 par2 => (sum par1 par2) ]
 
 def cool = (x) -> (div $ 2) -> (z) ->
             (mul $ 5) -> (foo-bar) -> (go)
