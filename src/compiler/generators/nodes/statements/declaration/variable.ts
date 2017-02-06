@@ -9,7 +9,6 @@
 //
 
 /// <reference path="../../../switcher.ts" />
-/// <reference path="../../expressions/identifier.ts" />
 
 namespace KaryScript.Compiler.Nodes.Declaration {
 
@@ -36,7 +35,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
             else
                 key = GetDeclarationKey( env )
 
-            const name  = Identifier.Compile( node.assignment.name, env, node, true )
+            const name  = Address.HandleName( node.assignment.name )
             const expr  = CompileSingleNode( node.assignment.value, env )
 
             return `${ key } ${ name } = ${ expr };`
@@ -48,7 +47,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileMultiAlloc ( node: AST.MultiAllocDeclaration, env: IEnvInfo ) {
             const key   = GetDeclarationKey( env )
-            const names = node.names.map( x => Identifier.Compile( x, env, node, true ) )
+            const names = node.names.map( x => Address.HandleName( x ) )
             return `${ key } ${ names.join(', ') };`
         }
 

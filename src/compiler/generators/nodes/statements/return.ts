@@ -8,7 +8,6 @@
 //
 
 /// <reference path="../../switcher.ts" />
-/// <reference path="../expressions/identifier.ts" />
 /// <reference path="../../../interfaces/envinfo.ts" />
 
 namespace KaryScript.Compiler.Nodes.Return {

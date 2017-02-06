@@ -9,7 +9,6 @@
 //
 
 /// <reference path="../../../switcher.ts" />
-/// <reference path="../../expressions/identifier.ts" />
 /// <reference path="../../../../tools/exportable.ts" />
 
 namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
@@ -19,14 +18,12 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
     //
 
         export function Compile ( node: AST.IFunctionDeclaration, env: IEnvInfo ) {
-            const functionName = Identifier.Compile( node.name, env, node, true )
+            const functionName = Address.HandleName( node.name )
             const functionKey = HandleExportedKey( node ) + (
                 ( node.key === 'def' )? 'function' : 'async function' )
             let args = ''
             if ( node.args !== null )
-                args = node.args
-                           .map( arg => Identifier.Compile( arg, env, node, true ) )
-                           .join(', ')
+                args = node.args.map( arg => Address.HandleName( arg ) ).join(', ')
             const body = Nodes.CompileSingleNode( node.code, env )
             return functionKey + " " + functionName + "(" + args + ") {\n" + body + "\n};"
         }

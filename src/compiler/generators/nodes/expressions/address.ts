@@ -8,7 +8,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="identifier.ts" />
 
 namespace KaryScript.Compiler.Nodes.Address {
 
@@ -22,7 +21,15 @@ namespace KaryScript.Compiler.Nodes.Address {
                     .map( x => x.replace( /-/g, '_' ) )
                     .join('.')
             else
-                return ( node as AST.IIdentifier ).name.replace( /-/g, '_' )
+                return HandleName( ( node as AST.IIdentifier ).name )
+        }
+
+    //
+    // ─── COMPILE IDENTIFIER NAME ────────────────────────────────────────────────────
+    //
+
+        export function HandleName ( name: string ) {
+            return name.replace( /-/g, '_' )
         }
     
     // ────────────────────────────────────────────────────────────────────────────────

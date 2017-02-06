@@ -10,7 +10,6 @@
 
 /// <reference path="nodes/blocks/body.ts" />
 
-/// <reference path="nodes/expressions/identifier.ts" />
 /// <reference path="nodes/expressions/s-expression.ts" />
 /// <reference path="nodes/expressions/lambda.ts" />
 /// <reference path="nodes/expressions/pipe.ts" />

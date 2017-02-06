@@ -8,7 +8,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="identifier.ts" />
 /// <reference path="../../../tools/reporter.ts" />
 /// <reference path="../../switcher.ts" />
 /// <reference path="./s-expression.ts" />

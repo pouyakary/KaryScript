@@ -8,7 +8,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="identifier.ts" />
 /// <reference path="../../../tools/reporter.ts" />
 /// <reference path="../../switcher.ts" />
 
@@ -30,8 +29,7 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     //
 
         function CompileSimpleLambda ( node: AST.ILambdaExpression, env: IEnvInfo ) {
-            const args = node.args.map( x => Identifier.Compile( x, env, node, true ) )
-                                  .join(', ')
+            const args = node.args.map( x => Address.HandleName( x ) ).join(', ')
             return ( ( node.args.length === 1 )? args : "(" + args + ")" ) + " => " +
                     Nodes.CompileSingleNode( node.code, env )
         }
