@@ -8,7 +8,7 @@ con number255 = 0xff
 (foo-bar)
 
 export def man-man
-    def second-level
+    def SecondLevel
         throw (foo 10 20) -> (div $ 5)
     end
     def something = 5
