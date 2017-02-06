@@ -9,7 +9,7 @@ con number255 = 0xff
 
 export def man-man
     def second-level
-        throw 0
+        throw (add 10 20) -> (div $ 5)
     end
     def something = 5
 end
