@@ -52,7 +52,7 @@ namespace KaryScript.Compiler.AST {
                 | "SpecialCommand"
                 | "SExpression"
                 | "ReturnKeyword"
-                | "PipeStatement"
+                | "PipeExpression"
                 | "LambdaExpression"
                 | "WhileStatement"
                 | "ElseIfStatement"
@@ -206,9 +206,9 @@ namespace KaryScript.Compiler.AST {
     // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
     //
 
-        export interface IPipeStatement extends IBase {
-            type:   "PipeStatement"
-            levels: IIdentifier | ISExpression | IReturnKeyword | TReturnables
+        export interface IPipeExpression extends IBase {
+            type:   "PipeExpression"
+            levels: ISExpression[ ]
         }
 
     //

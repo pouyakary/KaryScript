@@ -51,13 +51,7 @@ namespace KaryScript.Compiler {
         export function CompileAST ( src: AST.IBody ): string {
             // base env info
             let baseEnvInfo: IEnvInfo = {
-                ParentNode: [{
-                    type: 'Root',
-                    location: {
-                        start: { offset: 0, column: 0, line: 0 },
-                        end: { offset: 0, column: 0, line: 0 }
-                    }
-                }],
+                ParentNode: [],
                 ScopeLevel: 0,
                 DeclaredIdentifiers: new Set<string>( ),
                 Errors: [ ]
@@ -72,6 +66,24 @@ namespace KaryScript.Compiler {
 
             return code
         }
+
+    //
+    // ─── BASE OBJECTS ───────────────────────────────────────────────────────────────
+    //
+
+        export const BaseNodeObject = {
+            type: 'Root',
+            location: {
+                start: { offset: 0, column: 0, line: 0 },
+                end: { offset: 0, column: 0, line: 0 }
+            }
+        }
+
+    //
+    // ─── BASE ───────────────────────────────────────────────────────────────────────
+    //
+
+        export type TBase = AST.IBase | string
 
     //
     // ─── RETURN ERRORS ──────────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@ def m n k
 con f = (and on off)
 con number255 = 0xff
 
-(console/log (div x m))
+(console/log (x) -> (div $ 8))
 (foo-bar)
 
 export def man-man
@@ -13,6 +13,11 @@ export def man-man
     end
     def something = 5
 end
+
+def cool = (x) -> (div $ 2) -> (z) ->
+    (mul $ 5) -> (foo-bar) -> (go)
+
+(console/log 2)
 
 async delay time
     return new (Promise [ res => (setTimeout res time) ])

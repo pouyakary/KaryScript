@@ -19,8 +19,9 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ISExpression, env: IEnvInfo, 
-                                  placeholder?: AST.IBase ) {
+        export function Compile ( node: AST.ISExpression , env: IEnvInfo, 
+                                  placeholder?: TBase ) {
+
             switch ( node.kind ) {
                 case 'FunctionCallWithArgs':
                     return CompileFunctionCallWithArgs(
@@ -34,12 +35,12 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
                 case 'UnaryOperator':
                     return CompileUnaryOperator(
-                        node as AST.IUnaryOperatorSExpression, env
+                        node as AST.IUnaryOperatorSExpression, env, placeholder
                     )
 
                 case 'FunctionCallOnly':
                     return CompileFunctionCallOnly(
-                        node as AST.IFunctionCallOnlySExpression, env
+                        node as AST.IFunctionCallOnlySExpression, env, placeholder
                     )
             }
         }
@@ -50,16 +51,22 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CompileFunctionCallWithArgs ( node: AST.IFunctionCallWithArgsSExpression, 
                                                 env: IEnvInfo, 
-                                       placeholder?: AST.IBase ) {
+                                       placeholder?: TBase ) {
             // compiling args
             let args = new Array<string>( )
-            for ( let arg of node.params ) {
-                if ( arg.type === 'PipePlaceholder' && placeholder )
-                    args.push( Nodes.CompileSingleNode( placeholder, env ) )
-                else
-                    args.push( Nodes.CompileSingleNode( arg, env ) )
+            if ( node.params.find( x => x.type === 'PipePlaceholder' ) === undefined ) {
+                const arguments = placeholder?
+                    node.params.concat([ <AST.ISExpression> placeholder ]) : node.params
+                for ( let argument of arguments )
+                    args.push( Nodes.CompileSingleNode( argument, env ) )
+            } else {
+                for ( let arg of node.params ) {
+                    if ( arg.type === 'PipePlaceholder' && placeholder )
+                        args.push( Nodes.CompileSingleNode( placeholder, env ) )
+                    else
+                        args.push( Nodes.CompileSingleNode( arg, env ) )
+                }
             }
-
             // and done.
             return Nodes.CompileSingleNode( node.command, env ) + "(" + 
                     args.join(', ') + ")" + Env.Semicolon( env )
@@ -71,17 +78,14 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CompileBinaryOperator ( node: AST.IBinaryOperatorSExpression, 
                                           env: IEnvInfo,
-                                  placeholder?: AST.IBase ) {
-
+                                  placeholder?: TBase ) {
             const op = TranslateOperator( node.operator )
-
             function handlePlaceholder ( hand: AST.IBase ) {
                 if ( hand.type === 'PipePlaceholder' && placeholder )
                     return Nodes.CompileSingleNode( placeholder, env )
                 else
                     return Nodes.CompileSingleNode( hand, env )
             }
-
             return '(' + handlePlaceholder( node.left ) + ' ' + op + ' ' +
                     handlePlaceholder( node.right ) + ')'
         }
@@ -91,8 +95,10 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
-                                         env: IEnvInfo ) {
-            return node.operator + " " + Nodes.CompileSingleNode( node.arg, env ) +
+                                         env: IEnvInfo,
+                                placeholder?: TBase ) {
+            const ph = <AST.ISExpression> ( placeholder? node.arg : placeholder )
+            return node.operator + " " + Nodes.CompileSingleNode( ph, env ) +
                     Env.Semicolon( env )
         }
 
@@ -101,8 +107,10 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileFunctionCallOnly ( node: AST.IFunctionCallOnlySExpression,
-                                            env: IEnvInfo ) {
-            return Address.Compile( node.command, env ) + "()" + Env.Semicolon( env )
+                                            env: IEnvInfo,
+                                   placeholder?: TBase ) {
+            const ph = placeholder? Nodes.CompileSingleNode( placeholder, env ) : ''
+            return Address.Compile( node.command, env ) + "(" + ph + ")" + Env.Semicolon( env )
         }
         
     //

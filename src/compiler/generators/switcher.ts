@@ -12,6 +12,7 @@
 /// <reference path="nodes/expressions/identifier.ts" />
 /// <reference path="nodes/expressions/s-expression.ts" />
 /// <reference path="nodes/expressions/lambda.ts" />
+/// <reference path="nodes/expressions/pipe.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
@@ -25,7 +26,10 @@ namespace KaryScript.Compiler.Nodes {
     //
 
         /** Compiles a simple given node */
-        export function CompileSingleNode ( node: AST.IBase, env: IEnvInfo ): string {
+        export function CompileSingleNode ( node: AST.IBase | string, env: IEnvInfo ): string {
+            if ( typeof node === 'string' )
+                return node
+
             env.ParentNode.push( node )
             const compiledCode = SwitchAndCompileNode( node, env )
             env.ParentNode.pop( )
@@ -65,6 +69,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ReturnStatement':
                     return Nodes.Return.Compile( node as AST.IReturnStatement, env )
+
+                case 'PipeExpression':
+                    return Nodes.Pipe.Compile( node as AST.IPipeExpression, env )
 
                 case 'Identifier':
                 case 'AddressIdentifier':

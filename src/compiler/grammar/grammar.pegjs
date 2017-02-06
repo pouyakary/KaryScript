@@ -87,9 +87,9 @@
         / IfStatement
         / WhileStatement
         / ReturnStatement
-        / PipeStatement
         / SExpression
         / AwaitStatement
+        / PipeExpression
 
 //
 // ─── RETURNABLES ────────────────────────────────────────────────────────────────
@@ -104,7 +104,8 @@
     ArgumentReturnables
         = DeclarationAssignment
         / AwaitStatement
-        / Expression 
+        / Expression
+        / PipePlaceholder
 
 //
 // ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
@@ -116,6 +117,7 @@
         / ArrayObjectIndexLoader
         / LambdaExpression
         / ShorthandIfExpression
+        / PipeExpression
         / SExpression
 
 //
@@ -272,20 +274,20 @@
 // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
 //
 
-    PipeStatement
-        = origin:ArgumentReturnables PipeControl parts:PipeStatementParts {
+    PipeExpression
+        = origin:SExpression PipeControl parts:PipeExpressionParts {
             return {
-                type:  "PipeStatement",
+                type:  "PipeExpression",
                 location: location( ),
                 levels: [ origin ].concat( parts )
             }
         }
 
-    PipeStatementParts
-        = origin:ArgumentReturnables PipeControl more:PipeStatementParts {
+    PipeExpressionParts
+        = origin:SExpression PipeControl more:PipeExpressionParts {
             return [ origin ].concat( more )
         }
-        / terminal:( Identifier / SExpression / ReturnKeyword ) {
+        / terminal: SExpression {
             return [ terminal ]
         }
 
@@ -942,12 +944,13 @@
 // ─── PIPE HOLDER ────────────────────────────────────────────────────────────────
 //
 
-    PipePlaceholder = "@" {
-        return {
-            type: "PipePlaceholder",
-            location: location( ),
+    PipePlaceholder
+        = "$" {
+            return {
+                type: "PipePlaceholder",
+                location: location( ),
+            }
         }
-    }
 
 //
 // ─── DEF END ────────────────────────────────────────────────────────────────────
