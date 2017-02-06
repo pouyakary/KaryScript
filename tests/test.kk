@@ -15,7 +15,7 @@ export def man-man
 end
 
 def cool = (x) -> (div $ 2) -> (z) ->
-    (mul $ 5) -> (foo-bar) -> (go)
+            (mul $ 5) -> (foo-bar) -> (go)
 
 (console/log 2)
 
