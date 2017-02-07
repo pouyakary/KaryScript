@@ -11,10 +11,10 @@
 // ─── IMPORTS ────────────────────────────────────────────────────────────────────
 //
 
-    const pegjs = require('pegjs')
-    const fs    = require('fs')
-    const path  = require('path')
-    const wrap  = require('../libs/wordwrap')
+    const pegjs     = require('pegjs')
+    const fs        = require('fs')
+    const path      = require('path')
+    const errprint  = require('../libs/errprint.js')
 
 //
 // ─── MAIN DEFS ──────────────────────────────────────────────────────────────────
@@ -62,18 +62,7 @@
             } catch ( e ) {
                 writeLine('─')
                 console.log( code )
-                writeLine('-')
-                console.log( e.location )
-                writeLine('-')
-                console.log( `Found:    ${ e.found? `"${ e.found }"` : "NULL" }` )
-                console.log(
-                    "Expected: " + ( wrap( 70 ) ) ( Array.from( new Set(
-                                e.expected.map( x => x.text ) ) )
-                                          .filter( x => !/\s+/.test( x ) ).join( ' / ' ) )
-                                          .split( '\n' ).map( x => `          ${x}`).join( '\n' )
-                                          .replace( /^\s+/, '' ) )
-                writeLine('─')
-                console.log('\n')
+                errprint( e )
                 return false
             }
         }
