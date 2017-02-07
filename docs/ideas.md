@@ -119,6 +119,16 @@ use a b c from "module"
 // import {a, b, c} from 'module';
 ```
 
+And in the end:
+
+```
+use "fs" as fileSystem
+
+// compiles to:
+// const fileSystem = require('fs')
+// or:
+// import * as fileSystem from 'fs';
+```
 
 ## Needs Thinking
 JavaScript Has this
