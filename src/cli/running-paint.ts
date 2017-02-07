@@ -30,7 +30,7 @@ namespace KaryScript.CLI {
             const fs = require('fs')
             const path = require('path')
             let content = fs.readFileSync(
-                path.resolve( path.join( __dirname, '../tests/test.kk' ) ), 'utf8' )
+                path.resolve( path.join( __dirname, '../tests/codes/test.kk' ) ), 'utf8' )
 
             try {
                 console.log( KaryScript.Compiler.Compile( content ) )
