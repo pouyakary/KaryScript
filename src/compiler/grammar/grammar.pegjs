@@ -154,7 +154,7 @@
 //
 
     ConditionalsPredicate
-        = __+ predicate:Predicate __* DefEnd __* {
+        = __+ predicate:Predicate __* EndStructureSign {
             return {
                 type:       'Predicate',
                 location:   location( ),
@@ -419,7 +419,7 @@
 //
 
     ClassDeclaration
-        = exported:ExportKey "class" _+ name:Identifier _* DefEnd __* body:ClassFunctionDeclarations __* END {
+        = exported:ExportKey "class" _+ name:Identifier __* EndStructureSign __* body:ClassFunctionDeclarations __* END {
             return {
                 type:       'ClassDeclaration',
                 location:   location( ),
@@ -429,7 +429,7 @@
                 body:       body
             }
         }
-        / exported:ExportKey "class" _+ name:Identifier _* DefEnd __* END {
+        / exported:ExportKey "class" _+ name:Identifier __* EndStructureSign __* END {
             return {
                 type:       'ClassDeclaration',
                 location:   location( ),
@@ -454,7 +454,7 @@
 
     FunctionDeclaration
         = exported:ExportKey key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
-        _* DefEnd __* code:Body END {
+        __* EndStructureSign __* code:Body END {
             return {
                 type:       "FunctionDeclaration",
                 location:   location( ),
@@ -466,7 +466,7 @@
                 code:       code
             }
         }
-        / exported:ExportKey key:FunctionDefKind _+ name:Identifier _* DefEnd __* code:Body END {
+        / exported:ExportKey key:FunctionDefKind __+ name:Identifier __* EndStructureSign __* code:Body END {
             return {
                 type:       "FunctionDeclaration",
                 location:   location( ),
@@ -678,7 +678,7 @@
         }
       
     ObjectDeclaration
-        = exported:ExportKey "object" _* name:Identifier _* DefEnd
+        = exported:ExportKey "object" __* name:Identifier __* EndStructureSign
           __* members:ObjectPairMember __+ END {
             return {
                 type:       "ObjectDeclaration",
@@ -732,7 +732,7 @@
         }
 
     ArrayDeclaration
-        = exported:ExportKey "array" _+ name:Identifier _* DefEnd __* members:ArrayMember __+ END {
+        = exported:ExportKey "array" _+ name:Identifier __* EndStructureSign __* members:ArrayMember __+ END {
             return {
                 type:       "ArrayDeclaration",
                 location:   location( ),
@@ -1009,12 +1009,6 @@
         }
 
 //
-// ─── DEF END ────────────────────────────────────────────────────────────────────
-//
-
-    DefEnd = EOL
-
-//
 // ─── END KEYWORD ────────────────────────────────────────────────────────────────
 //
 
@@ -1041,6 +1035,12 @@
                 comment:    text.map( x => x[ 1 ] ).join('')
             }
         }
+
+//
+// ─── SPECIAL CHARACTERS ─────────────────────────────────────────────────────────
+//
+
+    EndStructureSign = ":"
 
 //
 // ─── WHITESPACE ─────────────────────────────────────────────────────────────────
