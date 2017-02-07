@@ -7,8 +7,8 @@ con number255 = 0xff
 (console/log (x) -> (div $ 8))
 (foo-bar)
 
-export def man-man
-    def SecondLevel
+export def man-man:
+    def SecondLevel:
         throw (foo 10 20) -> (div $ 5)
     end
     def something = 5
@@ -25,7 +25,7 @@ def s1 = "this is a text"
 def s2 = "#(sum 1 2)"
 def s3 = "text with interpolation: #(mul 5 4)"
 
-async delay time
+async delay time:
     return new (Promise [ res => (setTimeout res time) ])
 end
 
