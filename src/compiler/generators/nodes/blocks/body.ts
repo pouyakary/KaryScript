@@ -35,10 +35,12 @@ namespace KaryScript.Compiler.Nodes.Body {
 
             // applying tabulation and we're done
             let result = ( Env.GetParentType( env ) === 'Root' )
-                ? compiledStatements.join( '\n' )
-                : compiledStatements.join( '\n' ).split( '\n' )
+                ? compiledStatements.join( '' )
+                : compiledStatements.map( x => x.replace( /\n+$/, '\n' ) )
+                                    .join( '' ).split( '\n' )
                                     .map( x => '    ' + x )
                                     .join( '\n' )
+                                    .replace( /\s+$/, '' )
             // done
             return result
         }

@@ -83,6 +83,9 @@ namespace KaryScript.Compiler.Nodes {
                 case 'AddressIdentifier':
                     return Nodes.Address.Compile( node, env )
 
+                case 'LineTerminator':
+                    return '\n'
+
                 case 'Empty':
                 default:
                     return ''

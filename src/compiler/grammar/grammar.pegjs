@@ -46,8 +46,9 @@
         //
 
             function id ( ) {
-                return String.fromCharCode( 65 + Math.floor( Math.random( ) * 26 ) )
-                    + Date.now().toString( ).substring( 8 )
+                return ''
+                /* return String.fromCharCode( 65 + Math.floor( Math.random( ) * 26 ) )
+                    + Date.now().toString( ).substring( 8 ) */
     
             }
 
@@ -65,7 +66,7 @@
 //
 
     Body
-        = statements:SpacedStatements+ {
+        = PlainWhiteSpace* statements:SpacedStatements+ {
             return {
                 type:       'Body',
                 location:   location( ),
@@ -80,14 +81,28 @@
 //
 
     SpacedStatements
-        = FullPlainWhiteSpace* statement:Statement
-            ( FullPlainWhiteSpace+ / PlainWhiteSpace* LineTerminator / EOF ) {
+        = statement:Statement {
             return statement
         }
+        / PlainWhiteSpace+
+        / LineTerminator
 
     FullPlainWhiteSpace
-        = PlainWhiteSpace
-        / LineTerminator
+        = LineTerminator
+        / PlainWhiteSpace
+    
+
+    EmptyLineStatement
+        = PlainWhiteSpace* LineTerminator {
+            return {
+                type: "EmptyLine",
+                location: location,
+                id: id( ),
+            }
+        }
+
+    StetamentEnd
+        = ( LineTerminator / EOF )
 
 //
 // ─── STATEMENTS ─────────────────────────────────────────────────────────────────
@@ -1054,7 +1069,6 @@
                 id:         id( ),
             }
         }
-
     _
         = PlainWhiteSpace
         / InlineComment
