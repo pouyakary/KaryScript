@@ -126,6 +126,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                 case 'or':          return 'or'
                 case 'pow':         return '**'
                 case 'mod':         return '%'
+                case 'eq':
                 case '=':           return '==='
                 case '>':           return '>'
                 case '<':           return '<'
