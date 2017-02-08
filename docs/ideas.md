@@ -1,14 +1,15 @@
 # Incoming Grammars and Features
 ## Idea
 
-#### Markdown Tables `AWESOME`
-Tabels are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
+#### Table Literals `AWESOME`
+Tables are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
 
 ```
-def contacts = | name    | surname       | phone    |
-               |---------|---------------|----------|
-               | "Mr.X"  | "Jay Simpson" |          |
-               | "Bart"  | "Simpson"     | 666      |
+def contacts =
+    | name    | surname       | phone    |
+    |---------|---------------|----------|
+    | "Mr.X"  | "Jay Simpson" |          |
+    | "Bart"  | "Simpson"     | 666      |
 ```
 
 And that will compile to:
@@ -31,10 +32,11 @@ var contacts = [
 And it can be used for Objects as well:
 
 ```
-def contacts = |  #    | name    | surname       |
-               |-------|---------|---------------|
-               | homer | "Mr.X"  | "Jay Simpson" |
-               | bart  | "Bart"  | "Simpson"     |
+def contacts =
+    |  #    | name    | surname       |
+    |-------|---------|---------------|
+    | homer | "Mr.X"  | "Jay Simpson" |
+    | bart  | "Bart"  | "Simpson"     |
 ```
 
 that as well compiles to:
