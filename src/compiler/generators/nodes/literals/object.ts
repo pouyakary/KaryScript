@@ -20,6 +20,9 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
     //
 
         export function Compile ( node: AST.IObjectLiteral, env: IEnvInfo ) {
+            if ( node.value.length === 0 )
+                return '{ }'
+
             return '{\n' +
                 Indentation.AssembleLines(
                     node.value.map( x => CompileObjectPair( x, env ) + ',\n' ),

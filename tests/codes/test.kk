@@ -19,6 +19,8 @@ y = [
     d: [ hello: "hello" ]
 ]
 
+z = [:]
+
 export def man-man:
     def SecondLevel:
         throw (foo 10 20) -> (div $ 5)
