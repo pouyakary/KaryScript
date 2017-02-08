@@ -60,9 +60,8 @@ namespace KaryScript.Compiler.Nodes.If {
             let parts = [ CompileSimpleIf( node, env ) ]
 
             // also ifs 
-            for ( let part of node.elseIfBranches ) {
-                parts.push(' else ' + CompileSimpleIf( part, env ) )
-            }
+            for ( let part of node.elseIfBranches )
+                parts.push( ' else ' + CompileSimpleIf( part, env ) )
 
             // else if
             parts.push(' else {' + Nodes.CompileSingleNode( node.falseBranch, env )
