@@ -1,65 +1,122 @@
-def x = (mul 11 (sum 5 6))
-def y = (mul 34 (sum 5 (foo-bar 4 5)))
-def m n k
 
-m = 5
-x/y/z = (foo-bar 5 on)
+//
+// Copyright © 2017-present Kary Foundation, Inc. All rights reserved.
+//   Author: Pouya Kary <k@karyfoundation.org>
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
 
-con f = (and on off)
-con number255 = 0xff
+//
+// ─── DEFS ───────────────────────────────────────────────────────────────────────
+//
 
-(console/log (x) -> (div $ 8))
-(foo-bar)
+    def x = (mul 11 (sum 5 6))
+    def y = (mul 34 (sum 5 (foo-bar 4 5)))
+    def m n k
 
-x = [ 1 2 "hello world" (x)->(y) ]
+//
+// ─── ASSIGNS ────────────────────────────────────────────────────────────────────
+//
 
-y = [
-    a: 1, b: "hello"
-    c: (x) -> (y) -> (div $ 2)
-    d: [ hello: "hello" ]
-]
+    m = 5
+    x/y/z = (foo-bar 5 on)
 
-z = [:]
+//
+// ─── OPERATIONS ─────────────────────────────────────────────────────────────────
+//
 
-export def man-man:
-    def SecondLevel:
-        throw (foo 10 20) -> (div $ 5)
+    con f = (and on off)
+    con number255 = 0xff
+
+    (console/log (x) -> (div $ 8))
+    (foo-bar)
+
+//
+// ─── ARRAYS ─────────────────────────────────────────────────────────────────────
+//
+
+    x = [ 1 2 "hello world" (x)->(y) ]
+
+//
+// ─── OBJECTS ────────────────────────────────────────────────────────────────────
+//
+
+    y = [
+        a: 1, b: "hello"
+        c: (x) -> (y) -> (div $ 2)
+        d: [ hello: "hello" ]
+    ]
+
+    z = [:]
+
+//
+// ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
+//
+
+    export def man-man:
+        def SecondLevel:
+            throw (foo 10 20) -> (div $ 5)
+        end
+        def something = 5
     end
-    def something = 5
-end
 
+//
+// ─── LAMBDA ─────────────────────────────────────────────────────────────────────
+//
 
-def lambda = [ p1 p2 p3 => (sum p1 p2) -> (mul $ p3) -> (div 4 $) ]
+    def lambda = [ p1 p2 p3 => (sum p1 p2) -> (mul $ p3) -> (div 4 $) ]
 
-def cool = (x) -> (div $ 2) -> (z) ->
-           (mul $ 5) -> (foo-bar) -> (go)
+//
+// ─── PIPE ───────────────────────────────────────────────────────────────────────
+//
+        
+    def cool = (x) -> (div $ 2) -> (z) ->
+            (mul $ 5) -> (foo-bar) -> (go)
 
+//
+// ─── STRING INTERPOLATION ───────────────────────────────────────────────────────
+//
 
-def str = "2 + 3 = #(sum 2 3)"
+    def str = "2 + 3 = #(sum 2 3)"
 
-if on:
-    (foo 1)
-also unless (y):
-    (foo 2)
-also if (x) -> (z):
-    (foo 3)
-else
-    (foo 4)
-end
+    def s1 = "this is a text"
+    def s2 = "#(sum 1 2)"
+    def s3 = "text with interpolation: #(mul (x)->(y) 4)"
 
-while (not off):
-    (console/log "hello world")
-end
+//
+// ─── IFS ────────────────────────────────────────────────────────────────────────
+//
 
-x = (eq 1 1)? on / off
+    if on:
+        (foo 1)
+    also unless (y):
+        (foo 2)
+    also if (x) -> (z):
+        (foo 3)
+    else
+        (foo 4)
+    end
 
-def s1 = "this is a text"
-def s2 = "#(sum 1 2)"
-def s3 = "text with interpolation: #(mul (x)->(y) 4)"
+    x = (eq 1 1)? on / off
 
+//
+// ─── WHILE ──────────────────────────────────────────────────────────────────────
+//
 
-async delay time:
-    return new (Promise [ res => (setTimeout res time) ])
-end
+    while (not off):
+        (console/log "hello world")
+    end
 
-await (delay 5000)
+//
+// ─── ASYNC AWAIT ────────────────────────────────────────────────────────────────
+//
+
+    async delay time:
+        return new (Promise [ res => (setTimeout res time) ])
+    end
+
+    await (delay 5000)
+
+// ────────────────────────────────────────────────────────────────────────────────
