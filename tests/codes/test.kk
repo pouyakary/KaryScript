@@ -11,6 +11,7 @@ con number255 = 0xff
 (console/log (x) -> (div $ 8))
 (foo-bar)
 
+x = [ 1 2 "hello world" (x)->(y) ]
 
 export def man-man:
     def SecondLevel:

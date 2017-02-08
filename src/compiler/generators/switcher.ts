@@ -16,6 +16,7 @@
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/literals/string.ts" />
+/// <reference path="nodes/literals/array.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/assignment.ts" />
@@ -90,6 +91,9 @@ namespace KaryScript.Compiler.Nodes {
                 case 'Identifier':
                 case 'AddressIdentifier':
                     return Nodes.Address.Compile( node, env )
+
+                case 'ArrayLiteral':
+                    return Nodes.ArrayLiteral.Compile( node as AST.IArrayLiteral, env )
 
                 case 'IfStatement':
                     return Nodes.If.Compile( node as AST.IIfStatement, env )
