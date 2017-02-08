@@ -97,8 +97,8 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                                          env: IEnvInfo,
                                 placeholder?: TBase ) {
             const ph = <AST.ISExpression> ( placeholder? placeholder : node.arg )
-            return node.operator + " " + Nodes.CompileSingleNode( ph, env ) +
-                    Env.Semicolon( env )
+            const op = ( node.operator === 'not' )? '!' : node.operator
+            return op + " " + Nodes.CompileSingleNode( ph, env ) + Env.Semicolon( env )
         }
 
     //

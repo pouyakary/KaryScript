@@ -873,6 +873,9 @@
             / "false"           !IdentifierName
             / "yes"             !IdentifierName
             / "no"              !IdentifierName
+            / "right"           !IdentifierName
+            / "wrong"           !IdentifierName
+            / "not"             !IdentifierName
             / "cat"             !IdentifierName
             / "print"           !IdentifierName
             / "nan"             !IdentifierName
@@ -999,12 +1002,13 @@
 //
 
     BooleanLiteral
-        = key:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+        = key:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' / 'right' / 'wrong' ) {
             let result = true
             switch ( key ) {
                 case 'off':
                 case 'false':
                 case 'no':
+                case 'wrong':
                     result = false
             }
             return {
