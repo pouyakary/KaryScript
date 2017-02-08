@@ -72,6 +72,37 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── IF STATEMENTS ──────────────────────────────────────────────────────────────
+    //
+
+        export interface IIfStatement extends IBase {
+            key: 'if' | 'unless'
+            kind: 'if' | 'if-elseif-else' | 'if-else'
+            predicate: IBase
+        }
+
+        export interface ISimpleIf extends IIfStatement {
+            trueBranch: IBody
+        }
+
+        export interface IIfWithElse extends IIfStatement {
+            trueBranch:   IBody
+            falseBranch:  IBody
+        }
+
+        export interface IIfWithElseIfAndElse extends IIfWithElse {
+            elseIfBranches: ISimpleIf[ ]
+        }
+
+    //
+    // ─── PREDICATE ──────────────────────────────────────────────────────────────────
+    //
+
+        export interface IPredicate extends IBase {
+            condition: IBase
+        }
+
+    //
     // ─── EXPORTABLE ─────────────────────────────────────────────────────────────────
     //
 

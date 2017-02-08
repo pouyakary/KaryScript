@@ -22,6 +22,7 @@
 /// <reference path="nodes/statements/declaration/function.ts" />
 
 /// <reference path="nodes/statements/assignment.ts" />
+/// <reference path="nodes/statements/if.ts" />
 /// <reference path="nodes/statements/return.ts" />
 
 /// <reference path="../sourcemap/mapper.ts" />
@@ -93,6 +94,9 @@ namespace KaryScript.Compiler.Nodes {
                 case 'Identifier':
                 case 'AddressIdentifier':
                     return Nodes.Address.Compile( node, env )
+
+                case 'IfStatement':
+                    return Nodes.If.Compile( node as AST.IIfStatement, env )
 
                 case 'LineTerminator':
                     return '\n'

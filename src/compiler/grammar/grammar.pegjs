@@ -171,12 +171,7 @@
 
     ConditionalsPredicate
         = __+ predicate:Predicate __* EndStructureSign {
-            return {
-                type:       'Predicate',
-                location:   location( ),
-                id:         id( ),
-                condition:  predicate
-            }
+            return predicate
         }
 
     Predicate
@@ -200,31 +195,31 @@
                   trueBranch:   body
               }
           }
-        / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body __
-          elseIfBranches: ElseIfStatementArray __ "else" __ falseBranch:Body END {
-              return {
-                  type:             "IfStatement",
-                  location:         location( ),
-                  id:               id( ),
-                  key:              key,
-                  kind:             "if-else",
-                  predicate:        predicate,
-                  trueBranch:       trueBranch,
-                  elseIfBranches:   elseIfBranches,
-                  falseBranch:      falseBranch
-              }
-          }
-        / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body "else" __
+        / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body "else"
           falseBranch:Body END {
               return {
                   type:         "IfStatement",
                   location:     location( ),
                   id:           id( ),
                   key:          key,
-                  kind:         "if-elseif-else",
+                  kind:         "if-else",
                   predicate:    predicate,
                   trueBranch:   trueBranch,
                   falseBranch:  falseBranch
+              }
+          }
+        / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body
+          elseIfBranches: ElseIfStatementArray "else" falseBranch:Body END {
+              return {
+                  type:             "IfStatement",
+                  location:         location( ),
+                  id:               id( ),
+                  key:              key,
+                  kind:             "if-elseif-else",
+                  predicate:        predicate,
+                  trueBranch:       trueBranch,
+                  elseIfBranches:   elseIfBranches,
+                  falseBranch:      falseBranch
               }
           }
 
@@ -234,7 +229,7 @@
         }
 
     ElseIfStatementArray
-        = elesIfClouse:ElseIfStatement __ more:ElseIfStatementArray {
+        = elesIfClouse:ElseIfStatement more:ElseIfStatementArray {
             return [ elesIfClouse ].concat( more )
         } 
         / elesIfClouse:ElseIfStatement {
@@ -242,13 +237,15 @@
         }
 
     ElseIfStatement
-        = "also" _+ "if" _+ predicate:ConditionalsPredicate body:Body LineTerminator {
+        = FullPlainWhiteSpace* "also" PlainWhiteSpace+ key:IfSwitchKey
+          predicate:ConditionalsPredicate body:Body {
             return {
                 type:       "ElseIfStatement",
                 location:   location( ),
                 id:         id( ),
+                key:        key,
                 predicate:  predicate,
-                body:       body
+                trueBranch: body
             }
         }
 
@@ -859,6 +856,7 @@
             = "end"             !IdentifierName
             / "def"             !IdentifierName
             / "unless"          !IdentifierName
+            / "also"            !IdentifierName
             / "and"             !IdentifierName
             / "or"              !IdentifierName
             / "not"             !IdentifierName

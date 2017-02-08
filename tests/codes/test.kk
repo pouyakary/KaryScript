@@ -28,6 +28,15 @@ def cool = (x) -> (div $ 2) -> (z) ->
 
 def str = "2 + 3 = #(sum 2 3)"
 
+if on:
+    (foo 1)
+also unless (y):
+    (foo 2)
+also if (x) -> (z):
+    (foo 3)
+else
+    (foo 4)
+end
 
 def s1 = "this is a text"
 def s2 = "#(sum 1 2)"
