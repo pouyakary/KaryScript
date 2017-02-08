@@ -39,6 +39,7 @@ namespace KaryScript.Compiler.AST {
                 | "BooleanLiteral"
                 | "LineTerminator"
                 | "ReservedValueLiterals"
+                | "SingleAssignmentStatement"
                 | "ArrayLiteral"
                 | "ObjectLiteral"
                 | "Identifier"
@@ -146,6 +147,15 @@ namespace KaryScript.Compiler.AST {
         export type TReturnables
             = TExpression
             | ISExpression
+
+    //
+    // ─── SINGLE ASSIGNMENT STATEMENT ────────────────────────────────────────────────
+    //
+
+        export interface ISingleAssignmentStatement extends IBase {
+            name:       IAddressIdentifier
+            value:      TReturnables
+        }
 
     //
     // ─── RETURN STATEMENT ───────────────────────────────────────────────────────────

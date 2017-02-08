@@ -17,6 +17,7 @@
 /// <reference path="nodes/literals/string.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
+/// <reference path="nodes/statements/assignment.ts" />
 /// <reference path="nodes/statements/return.ts" />
 
 /// <reference path="../sourcemap/mapper.ts" />
@@ -65,6 +66,11 @@ namespace KaryScript.Compiler.Nodes {
                 case 'FunctionDeclaration':
                     return Nodes.FunctionDeclaration.Compile(
                         node as AST.IFunctionDeclaration, env
+                    )
+
+                case 'SingleAssignmentStatement':
+                    return Nodes.SingleAssignment.Compile(
+                        node as AST.ISingleAssignmentStatement, env
                     )
 
                 case 'SExpression':

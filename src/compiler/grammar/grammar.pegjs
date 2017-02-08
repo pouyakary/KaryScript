@@ -669,7 +669,7 @@
     SingleAssignmentStatement
         = name:AddressIdentifier __* "=" __* value:Returnables {
             return {
-                type:       'DeclarationAssignment',
+                type:       'SingleAssignmentStatement',
                 location:   location( ),
                 id:         id( ),
                 name:       name,
