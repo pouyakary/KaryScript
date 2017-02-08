@@ -163,6 +163,7 @@
         / NumericLiteral
         / ReservedValueLiterals
         / BooleanLiteral
+        / TableLiteral
 
 //
 // ─── CONDITIONABLE ──────────────────────────────────────────────────────────────
@@ -497,6 +498,85 @@
     FunctionDefKind
         = type:( 'def' / 'async' ) {
             return type
+        }
+
+//
+// ─── TABLE LITERAL ──────────────────────────────────────────────────────────────
+//
+
+    TableLiteral =
+        "|" header: TableColumnHeader _* EOL
+        _* "|" _* TableHeaderLines _* EOL
+        _* data:TableBody {
+            return {
+                type:       "TableLiteral",
+                id:         id( ),
+                location:   location( ),
+                header:     header,
+                data:       data
+            }
+        }
+
+
+    // header
+    TableColumnHeader
+        = member:TableColumnHeaderMember more:TableColumnHeader {
+            return [ member ].concat( more )
+        } 
+        / member: TableColumnHeaderMember {
+            return [ member ]
+        }
+
+    TableColumnHeaderMember
+        = _* name:( "#" / Identifier ) _* "|" {
+            if ( name === "#" )
+                return "#"
+            else
+                return name.name
+        }
+
+
+    // LineTerminatorSequence
+    TableHeaderLines
+        = TableHeaderSingleColumnLine TableHeaderLines
+        / TableHeaderSingleColumnLine
+
+    TableHeaderSingleColumnLine
+        = _* "-"+ _* "|"
+
+
+    // Table Body
+    TableBody
+        = member:TableRow _* EOL _* more:TableBody {
+            return [ member ].concat( more )
+        } 
+        / member: TableRow {
+            return [ member ]
+        }
+
+    TableRow
+        = "|" members:TableRowMemebers {
+            return members
+        }
+        
+    TableRowMemebers
+        = member:TableRowSingleMember more:TableRowMemebers {
+            return [ member ].concat( more )
+        } 
+        / member: TableRowSingleMember {
+            return [ member ]
+        }
+
+    TableRowSingleMember
+        = _* expr:Expression _* "|" {
+            return expr
+        }
+        / _+ "|" {
+            return {
+                type:       "EmptyCell",
+                id:         id( ),
+                location:   location( ),
+            }
         }
 
 //
