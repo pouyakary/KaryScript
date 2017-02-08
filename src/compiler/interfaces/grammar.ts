@@ -72,6 +72,15 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── WHILE STATEMENT ────────────────────────────────────────────────────────────
+    //
+
+        export interface IWhileStatement extends IBase {
+            predicate: IBase
+            body: IBody
+        }
+
+    //
     // ─── IF STATEMENTS ──────────────────────────────────────────────────────────────
     //
 

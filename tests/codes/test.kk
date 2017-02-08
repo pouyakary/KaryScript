@@ -38,6 +38,10 @@ else
     (foo 4)
 end
 
+while (not off):
+    (console/log "hello world")
+end
+
 def s1 = "this is a text"
 def s2 = "#(sum 1 2)"
 def s3 = "text with interpolation: #(mul (x)->(y) 4)"

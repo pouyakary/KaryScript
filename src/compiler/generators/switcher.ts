@@ -23,6 +23,7 @@
 
 /// <reference path="nodes/statements/assignment.ts" />
 /// <reference path="nodes/statements/if.ts" />
+/// <reference path="nodes/statements/while.ts" />
 /// <reference path="nodes/statements/return.ts" />
 
 /// <reference path="../sourcemap/mapper.ts" />
@@ -97,6 +98,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'IfStatement':
                     return Nodes.If.Compile( node as AST.IIfStatement, env )
+
+                case 'WhileStatement':
+                    return Nodes.While.Compile( node as AST.IWhileStatement, env )
 
                 case 'LineTerminator':
                     return '\n'
