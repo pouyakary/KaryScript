@@ -54,6 +54,20 @@ var contacts = {
 };
 ```
 
+A more complete version can be:
+
+```
+def contacts =
+    |  #    | name    | middle-name | surname       | phone-number               |
+    |-------|---------|-------------|---------------|----------------------------|
+    | homer | "Homer" | "Jay"       | "Simpson"     | (get-phone-number "homer") |
+    | bart  | "Bart"  |             | "Simpson"     | 666                        |
+
+con homer = contacts/homer
+con homer-surname = contacts/homer/surname
+```
+
+
 #### Placeholders `AWESOME`
 This:
 
