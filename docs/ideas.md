@@ -1,7 +1,7 @@
 # Incoming Grammars and Features
 ## Idea
 
-#### Table Literals `AWESOME`
+#### Table Literals `IMPLEMENTED IN GRAMMAR`
 Tables are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
 
 ```
@@ -68,7 +68,7 @@ con homer-surname = contacts/homer/surname
 ```
 
 
-#### Placeholders `AWESOME`
+#### Placeholders `IMPORTANT`
 This:
 
 ```
