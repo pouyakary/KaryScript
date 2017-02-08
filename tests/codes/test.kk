@@ -3,7 +3,7 @@ def y = (mul 34 (sum 5 (foo-bar 4 5)))
 def m n k
 
 m = 5
-n = (foo-bar 5 on)
+x/y/z = (foo-bar 5 on)
 
 con f = (and on off)
 con number255 = 0xff
