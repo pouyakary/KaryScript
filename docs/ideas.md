@@ -1,6 +1,34 @@
 # Incoming Grammars and Features
 ## Idea
 
+#### Markdown Tables `AWESOME`
+Tabels are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
+
+```
+def contacts = | name    | surname       | phone    |
+               |---------|---------------|----------|
+               | "Mr.X"  | "Jay Simpson" |          |
+               | "Bart"  | "Simpson"     | 666      |
+```
+
+And that will compile to:
+
+```
+var contacts = [
+	{
+		name: "Mr.X",
+		surname: "Jay Simpson",
+		phone: null
+	},
+	{
+		name: "Bart",
+		surname: "Simpson",
+		phone: 666
+	}
+]
+```
+
+
 #### Placeholders `AWESOME`
 This:
 
@@ -20,7 +48,7 @@ def p3 = (f 1 8 10)
 Problem here is you __have__ to use 3 vars to write this clean. And may devs use vars like this just to write cleaner code. So place holders are macro-like vars for the _preprocessor_ that helps writing clean code while keeping it fast by just replacing place holder values:
 
 ```
-hold p1 = (x) → (y) → (z $ 5)
+hold p1 = (x) ⟶ (y) ⟶ (z $ 5)
 (f (g) @p1)
 ```
 
@@ -159,9 +187,19 @@ Object loaders
 ```
 x = [ y | "hello" ]
 x = [ y | 2 ]
-x = [ y | z ⇒ (> z 2) ]
+x = [ y | z ⟶ (> z 2) ]
 ```
+
+Literal Addresses
 
 ```
 (5/toString)
+("Hello, World!".substring 5)
+```
+
+## To Do
+Nested placeholders:
+
+```
+(x) ⟶ (y (z $))
 ```
