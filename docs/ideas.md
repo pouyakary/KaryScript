@@ -28,6 +28,29 @@ var contacts = [
 ]
 ```
 
+And it can be used for Objects as well:
+
+```
+def contacts = |  #    | name    | surname       |
+               |-------|---------|---------------|
+               | homer | "Mr.X"  | "Jay Simpson" |
+               | bart  | "Bart"  | "Simpson"     |
+```
+
+that as well compiles to:
+
+```
+var contacts = {
+	homer: {
+		name: "Mr.X",
+		surname: "Jay Simpson"
+	},
+	bart: {
+		name: "Bart",
+		surname: "Simpson"
+	}
+};
+```
 
 #### Placeholders `AWESOME`
 This:
