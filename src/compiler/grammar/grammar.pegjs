@@ -254,14 +254,14 @@
 //
 
     ShorthandIfExpression
-        = expr:SExpression _* "?" _* trueBranch:ArgumentReturnables _* "/" _* falseBranch:ArgumentReturnables {
+        = expr:SExpression _* "?" _* trueExpression:ArgumentReturnables _* "/" _* falseExpression:ArgumentReturnables {
             return {
-                type:           "ShorthandIfExpression",
-                location:       location( ),
-                id:             id( ),
-                predicate:      expr,
-                trueBranch:     trueBranch,
-                falseBranch:    falseBranch
+                type:               "ShorthandIfExpression",
+                location:           location( ),
+                id:                 id( ),
+                predicate:          expr,
+                trueExpression:     trueExpression,
+                falseExpression:    falseExpression
             }
         }
           

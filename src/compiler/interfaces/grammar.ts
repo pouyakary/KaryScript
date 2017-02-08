@@ -40,6 +40,7 @@ namespace KaryScript.Compiler.AST {
                 | "LineTerminator"
                 | "ReservedValueLiterals"
                 | "SingleAssignmentStatement"
+                | "ShorthandIfExpression"
                 | "ArrayLiteral"
                 | "ObjectLiteral"
                 | "Identifier"
@@ -101,6 +102,16 @@ namespace KaryScript.Compiler.AST {
 
         export interface IIfWithElseIfAndElse extends IIfWithElse {
             elseIfBranches: ISimpleIf[ ]
+        }
+
+    //
+    // ─── SHORTHAND IF ───────────────────────────────────────────────────────────────
+    //
+
+        export interface IShorthandIfExpression extends IBase {
+            predicate:          IBase
+            trueExpression:     TExpression
+            falseExpression:    TExpression
         }
 
     //

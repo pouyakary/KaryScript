@@ -42,6 +42,8 @@ while (not off):
     (console/log "hello world")
 end
 
+x = (eq 1 1)? on / off
+
 def s1 = "this is a text"
 def s2 = "#(sum 1 2)"
 def s3 = "text with interpolation: #(mul (x)->(y) 4)"
