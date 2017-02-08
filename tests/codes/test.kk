@@ -13,6 +13,12 @@ con number255 = 0xff
 
 x = [ 1 2 "hello world" (x)->(y) ]
 
+y = [
+    a: 1, b: "hello"
+    c: (x) -> (y) -> (div $ 2)
+    d: [ hello: "hello" ]
+]
+
 export def man-man:
     def SecondLevel:
         throw (foo 10 20) -> (div $ 5)

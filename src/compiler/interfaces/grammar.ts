@@ -298,7 +298,7 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IObjectDeclaration extends IExportable {
-            type:   "ObjectDeclaration"
+
             name:   string
             value:  IObjectMemberPair[ ]
         }
@@ -307,8 +307,7 @@ namespace KaryScript.Compiler.AST {
     // ─── OBJECT LITERAL ─────────────────────────────────────────────────────────────
     //
 
-        export interface IObjectLiteral {
-            type: "ObjectLiteral"
+        export interface IObjectLiteral extends IBase {
             value: IObjectMemberPair[ ]
         }
 

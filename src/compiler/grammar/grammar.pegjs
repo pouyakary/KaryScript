@@ -794,8 +794,8 @@
     ObjectAssignment
         = name:Identifier _* ObjectAssignmentKeyValueCharacter _* value:ArgumentReturnables {
             return {
-                key:        name.name,
-                value:      value
+                key:    name.name,
+                value:  value
             }
         }
 
