@@ -10,6 +10,7 @@
 
 /// <reference path="../../switcher.ts" />
 /// <reference path="../../../tools/env.ts" />
+/// <reference path="../../../tools/indent.ts" />
 
 namespace KaryScript.Compiler.Nodes.Body {
 
@@ -32,17 +33,9 @@ namespace KaryScript.Compiler.Nodes.Body {
 
             // updating the env info
             env.Errors = env.Errors.concat( bodyENV.Errors )
-
-            // applying tabulation and we're done
-            let result = ( Env.GetParentType( env ) === 'Root' )
-                ? compiledStatements.join( '' )
-                : compiledStatements.map( x => x.replace( /\n+$/, '\n' ) )
-                                    .join( '' ).split( '\n' )
-                                    .map( x => '    ' + x )
-                                    .join( '\n' )
-                                    .replace( /\s+$/, '' )
+    
             // done
-            return result
+            return Indentation.AssembleLines( compiledStatements, env )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
