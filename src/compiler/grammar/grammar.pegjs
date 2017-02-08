@@ -652,7 +652,7 @@
 //
 
     DeclarationAssignment
-        = name:Identifier _* "=" _* value:Returnables {
+        = name:Identifier __* "=" __* value:Returnables {
             return {
                 type:       'DeclarationAssignment',
                 location:   location( ),
@@ -667,7 +667,7 @@
 //
 
     SingleAssignmentStatement
-        = name:AddressIdentifier _* "=" _* value:Returnables {
+        = name:AddressIdentifier __* "=" __* value:Returnables {
             return {
                 type:       'DeclarationAssignment',
                 location:   location( ),
