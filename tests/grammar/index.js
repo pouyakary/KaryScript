@@ -79,6 +79,9 @@
             writeLine('─')
             console.log(' A L L   G R A M M A R   T E S T S   C O M P L E T E D   S U C C E S S F U L L Y')
             writeLine('─')
+            return 0
+        } else {
+            return 1
         }
     }
 
