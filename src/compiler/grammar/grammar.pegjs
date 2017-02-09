@@ -119,9 +119,8 @@
         / IfStatement
         / WhileStatement
         / ReturnStatement
-        / SExpression
-        / AwaitStatement
         / PipeExpression
+        / SExpression
 
 //
 // ─── RETURNABLES ────────────────────────────────────────────────────────────────
@@ -129,15 +128,12 @@
 
     Returnables
         = DeclarationAssignment
-        / SExpressionBody
-        / AwaitStatement
         / Expression
 
     ArgumentReturnables
-        = DeclarationAssignment
-        / AwaitStatement
-        / Expression
+        = Returnables
         / PipePlaceholder
+        / SExpressionBody
 
 //
 // ─── SINGLE EXPRESSION ─────────────────────────────────────────────────────────
@@ -148,8 +144,8 @@
         / Identifier
         / ArrayObjectIndexLoader
         / LambdaExpression
-        / ShorthandIfExpression
         / PipeExpression
+        / ShorthandIfExpression
         / SExpression
 
 //
@@ -286,7 +282,7 @@
 //
 
     LambdaExpression
-        = "[" __* args:IdentifierList __* "=>" __* code:Returnables __* "]" {
+        = "[" __* args:IdentifierList __* "=>" __* code:ArgumentReturnables __* "]" {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -331,7 +327,7 @@
         }
 
     PipeControl
-        = __* '->' __*
+        = __* "->" __*
 
 //
 // ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
@@ -346,20 +342,6 @@
                 keyword:    keyword
             }
         }
-
-//
-// ─── AWAIT STATEMENT ────────────────────────────────────────────────────────────
-//
-
-    AwaitStatement
-        = "await" _+ expr:( SExpression / SExpressionBody ) {
-            return {
-                type:       "AwaitStatement",
-                location:   location( ),
-                id:         id( ),
-                expr:       expr
-            }
-        }    
 
 //
 // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
