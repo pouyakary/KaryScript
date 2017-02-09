@@ -1,73 +1,5 @@
 # Incoming Grammars and Features
-## Idea
-
-#### Table Literals `IMPLEMENTED IN GRAMMAR`
-Tables are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
-
-```
-def contacts =
-    | name    | surname       | phone    |
-    |---------|---------------|----------|
-    | "Mr.X"  | "Jay Simpson" |          |
-    | "Bart"  | "Simpson"     | 666      |
-```
-
-And that will compile to:
-
-```
-var contacts = [
-	{
-		name: "Mr.X",
-		surname: "Jay Simpson",
-		phone: null
-	},
-	{
-		name: "Bart",
-		surname: "Simpson",
-		phone: 666
-	}
-]
-```
-
-And it can be used for Objects as well:
-
-```
-def contacts =
-    |  #    | name    | surname       |
-    |-------|---------|---------------|
-    | homer | "Mr.X"  | "Jay Simpson" |
-    | bart  | "Bart"  | "Simpson"     |
-```
-
-that as well compiles to:
-
-```
-var contacts = {
-	homer: {
-		name: "Mr.X",
-		surname: "Jay Simpson"
-	},
-	bart: {
-		name: "Bart",
-		surname: "Simpson"
-	}
-};
-```
-
-A more complete version can be:
-
-```
-def contacts =
-    |  #    | name    | middle-name | surname       | phone-number               |
-    |-------|---------|-------------|---------------|----------------------------|
-    | homer | "Homer" | "Jay"       | "Simpson"     | (get-phone-number "homer") |
-    | bart  | "Bart"  |             | "Simpson"     | 666                        |
-
-con homer = contacts/homer
-con homer-surname = contacts/homer/surname
-```
-
-
+## Ideas
 #### Placeholders `IMPORTANT`
 This:
 
@@ -198,6 +130,8 @@ use "fs" as fileSystem
 ```
 
 ## Needs Thinking
+
+#### Object/Array returns
 JavaScript Has this
 
 ```
@@ -207,21 +141,45 @@ let {a, b, c} = g( );
 
 No clean grammar is present for this one.
 
-## Accepted 
-
-Assignments
-
+#### Rest Parameters
 ```
-x = 4
-```
-
-Inline comments
-
-```
-// inline comments
+def foo x y... z:
+	
+end
 ```
 
-Object loaders
+## Great Ideas from other languages
+
+```
+solipsism = true if mind? and not world?
+
+speed = 0
+speed ?= 15
+
+footprints = yeti ? "bear"
+```
+
+which compiles to
+
+```
+var footprints, solipsism, speed;
+
+if ((typeof mind !== "undefined" && mind !== null) && (typeof world === "undefined" || world === null)) {
+  solipsism = true;
+}
+
+speed = 0;
+
+if (speed == null) {
+  speed = 15;
+}
+
+footprints = typeof yeti !== "undefined" && yeti !== null ? yeti : "bear";
+```
+
+## To Be Implemented 
+
+#### Object Index Getters
 
 ```
 x = [ y | "hello" ]
@@ -229,16 +187,101 @@ x = [ y | 2 ]
 x = [ y | z ⟶ (> z 2) ]
 ```
 
-Literal Addresses
+#### Switch Case
+Multiple entries as well as no `break` command
+
+```
+switch x:
+	when 1 2 3:
+		(foo x)
+
+	when (f x) (g x):
+		(foo 8)
+
+	when 4:
+		(foo 5)
+	
+	else
+		(foo 7)
+end
+```
+
+#### Literal Addresses
 
 ```
 (5/toString)
 ("Hello, World!".substring 5)
 ```
 
-## To Do
-Nested placeholders:
+#### Nested placeholders
 
 ```
 (x) ⟶ (y (z $))
 ```
+
+#### Table Literals `IMPLEMENTED IN GRAMMAR`
+Tables are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
+
+```
+def contacts =
+    | name    | surname       | phone    |
+    |---------|---------------|----------|
+    | "Mr.X"  | "Jay Simpson" |          |
+    | "Bart"  | "Simpson"     | 666      |
+```
+
+And that will compile to:
+
+```
+var contacts = [
+	{
+		name: "Mr.X",
+		surname: "Jay Simpson",
+		phone: null
+	},
+	{
+		name: "Bart",
+		surname: "Simpson",
+		phone: 666
+	}
+]
+```
+
+And it can be used for Objects as well:
+
+```
+def contacts =
+    |  #    | name    | surname       |
+    |-------|---------|---------------|
+    | homer | "Mr.X"  | "Jay Simpson" |
+    | bart  | "Bart"  | "Simpson"     |
+```
+
+that as well compiles to:
+
+```
+var contacts = {
+	homer: {
+		name: "Mr.X",
+		surname: "Jay Simpson"
+	},
+	bart: {
+		name: "Bart",
+		surname: "Simpson"
+	}
+};
+```
+
+A more complete version can be:
+
+```
+def contacts =
+    |  #    | name    | middle-name | surname       | phone-number               |
+    |-------|---------|-------------|---------------|----------------------------|
+    | homer | "Homer" | "Jay"       | "Simpson"     | (get-phone-number "homer") |
+    | bart  | "Bart"  |             | "Simpson"     | 666                        |
+
+con homer = contacts/homer
+con homer-surname = contacts/homer/surname
+```
+
