@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         export function Compile ( node: AST.ISExpression , env: IEnvInfo, 
-                                  placeholder?: TBase ) {
+                                  placeholder?: TBase ): string {
 
             switch ( node.kind ) {
                 case 'FunctionCallWithArgs':
