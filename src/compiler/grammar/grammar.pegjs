@@ -250,7 +250,7 @@
 //
 
     ShorthandIfExpression
-        = expr:SExpression _* "?" _* trueExpression:ArgumentReturnables _* "/" _* falseExpression:ArgumentReturnables {
+        = expr:SExpression _* "?" _* trueExpression:ArgumentReturnables _* "!" _* falseExpression:ArgumentReturnables {
             return {
                 type:               "ShorthandIfExpression",
                 location:           location( ),
