@@ -10,7 +10,7 @@
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/compiler/grammar/grammar.pegjs",
     "build": "tsc && npm run compile-parser",
     "test": "node ./tests/test.js",
-    "test-parse-sample": "node ./tests/tools/parse.js"
+    "parser-test-drive": "node ./tests/tools/parse.js"
   },
   "repository": {
     "type": "git",

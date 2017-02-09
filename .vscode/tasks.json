@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "command": "npm",
     "isShellCommand": true,
-    "showOutput": "never",
+    "showOutput": "always",
     "suppressTaskName": true,
     "tasks": [
         {
@@ -15,7 +15,15 @@
         },
         {
             "taskName": "test",
-            "args": ["run", "test"]
+            "args": [
+                "run", "test"
+            ]
+        },
+        {
+            "taskName": "Parser Test Drive",
+            "args": [
+                "run", "parser-test-drive"
+            ]
         }
     ]
 }
