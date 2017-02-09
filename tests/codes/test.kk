@@ -119,4 +119,20 @@
 
     await (delay 5000)
 
+//
+// ─── CLASS DECLARATIONS ─────────────────────────────────────────────────────────
+//
+
+    class Foo:
+        def constructor x:
+            this/x = x
+        end
+    end
+
+    class X extends Y:
+        def something y:
+            (foo)
+        end
+    end
+
 // ────────────────────────────────────────────────────────────────────────────────

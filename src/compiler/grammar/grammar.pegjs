@@ -384,7 +384,7 @@
         }
 
     SExpressionBody
-        = command:AddressIdentifier __+ params:SExpressionArugmentArray? {
+        = command:AddressIdentifier __+ params:SExpressionArugmentArray {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -432,25 +432,34 @@
 //
 
     ClassDeclaration
-        = exported:ExportKey "class" _+ name:Identifier __* EndStructureSign __* body:ClassFunctionDeclarations __* END {
+        = exported:ExportKey "class" _+ name:Identifier origin:ClassExtends? _* 
+          EndStructureSign __* defs:ClassFunctionDeclarations __* END {
             return {
                 type:       'ClassDeclaration',
                 location:   location( ),
                 id:         id( ),
                 name:       name.name,
                 exported:   exported,
-                body:       body
+                defs:       defs,
+                origin:     origin
             }
         }
-        / exported:ExportKey "class" _+ name:Identifier __* EndStructureSign __* END {
+        / exported:ExportKey "class" _+ name:Identifier
+          origin:ClassExtends? _* EndStructureSign _* END {
             return {
                 type:       'ClassDeclaration',
                 location:   location( ),
                 id:         id( ),
                 name:       name.name,
                 exported:   exported,
-                body:       null
+                defs:       null,
+                origin:     origin
             }
+        }
+
+    ClassExtends
+        = _+ 'extends' _+ origin:AddressIdentifier {
+            return origin
         }
 
     ClassFunctionDeclarations
@@ -467,7 +476,7 @@
 
     FunctionDeclaration
         = exported:ExportKey key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
-        __* EndStructureSign __* code:Body END {
+        __* EndStructureSign code:Body END {
             return {
                 type:       "FunctionDeclaration",
                 location:   location( ),

@@ -74,12 +74,22 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── CLASS DECLARATION ──────────────────────────────────────────────────────────
+    //
+
+        export interface IClassDeclaration extends IExportable {
+            name:   string
+            defs:   IFunctionDeclaration[ ]
+            origin: IAddressIdentifier
+        }
+
+    //
     // ─── WHILE STATEMENT ────────────────────────────────────────────────────────────
     //
 
         export interface IWhileStatement extends IBase {
-            predicate: IBase
-            body: IBody
+            predicate:  IBase
+            body:       IBody
         }
 
     //
@@ -87,9 +97,9 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IIfStatement extends IBase {
-            key: 'if' | 'unless'
-            kind: 'if' | 'if-elseif-else' | 'if-else'
-            predicate: IBase
+            key:        'if' | 'unless'
+            kind:       'if' | 'if-elseif-else' | 'if-else'
+            predicate:  IBase
         }
 
         export interface ISimpleIf extends IIfStatement {

@@ -17,15 +17,19 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
     // ─── FUNCTION DECLARATION ───────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IFunctionDeclaration, env: IEnvInfo ) {
+        export function Compile ( node: AST.IFunctionDeclaration,
+                                   env: IEnvInfo,
+                               classDef = false ) {
+
             const functionName = Address.HandleName( node.name )
-            const functionKey = HandleExportedKey( node ) + (
-                ( node.key === 'def' )? 'function' : 'async function' )
+            const functionKey = HandleExportedKey( node )
+                                + (( node.key === 'def' )? '' : 'async ')
+                                + (( classDef )? '' : 'function ')
             let args = ''
             if ( node.args !== null )
                 args = node.args.map( arg => Address.HandleName( arg ) ).join(', ')
             const body = Nodes.CompileSingleNode( node.code, env )
-            return functionKey + " " + functionName + "(" + args + ") {\n" + body + "\n};"
+            return functionKey + " " + functionName + "(" + args + ") {" + body + "\n}"
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

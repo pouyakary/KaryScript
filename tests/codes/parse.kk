@@ -1,2 +1,5 @@
-def x = 5  
-def y = 5
+class x extends y/z:
+    def foo:
+
+    end
+end
