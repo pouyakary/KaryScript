@@ -427,7 +427,7 @@
             }
         }
         / exported:ExportKey "class" _+ name:Identifier
-          origin:ClassExtends? _* EndStructureSign _* END {
+          origin:ClassExtends? _* EndStructureSign __* END {
             return {
                 type:       'ClassDeclaration',
                 location:   location( ),
