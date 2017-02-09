@@ -7,4 +7,6 @@ KaryScript is an experimental project to bring a better syntax for more readabil
 
 You can find some example syntaxes is the [Grammar Test Cases](https://github.com/karyfoundation/karyscript/blob/master/tests/grammar/cases.txt)
 
+Or see [how much of the grammar](https://github.com/karyfoundation/karyscript/blob/master/tests/codes/test.kk) is currently implemented and can be compiled
+
 If you have any suggestions please [comment under this issue](https://github.com/karyfoundation/karyscript/issues/1)
