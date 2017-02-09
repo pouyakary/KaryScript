@@ -170,7 +170,7 @@
 
     ForStatement
         = "for" __+ start:Expression __+ dir:ForDirectionKey __+ "to" __+ end:Expression
-          step:ForStep? indexVar:ForIndexVar? EndStructureSign body:Body END {
+          step:ForStep? indexVar:ForIndexVar? __* EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
                 id:         id( ),
@@ -186,7 +186,7 @@
                 },
             }
         }
-        / "for" __+ upLimit:Expression step:ForStep? indexVar:ForIndexVar?
+        / "for" __+ upLimit:Expression step:ForStep? indexVar:ForIndexVar? __*
           EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
@@ -205,7 +205,7 @@
         }
 
     ForIndexVar
-        = __+ "via" __+ name:Identifier __* {
+        = __+ "via" __+ name:Identifier {
             return name.name
         }
 
