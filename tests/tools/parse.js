@@ -16,6 +16,7 @@
     const fs        = require('fs')
     const path      = require('path')
     const errprint  = require('../libs/errprint')
+    const util      = require('util')
 
 //
 // ─── MAIN ───────────────────────────────────────────────────────────────────────
@@ -32,7 +33,16 @@
 
     function test ( parser, code ) {
         try {
-            console.log( parser.parse( code ) )
+            console.log(
+                util.inspect(
+                    parser.parse( code ),
+                    {
+                        showHidden: false,
+                        depth: null,
+                        colors: true,
+                    }
+                )
+            )
         } catch ( error ) {
             errprint( error, true )
         }
