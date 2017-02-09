@@ -15,6 +15,7 @@
     const fs        = require('fs')
     const path      = require('path')
     const errprint  = require('../libs/errprint.js')
+    const wrap      = require('../libs/wordwrap.js')
 
 //
 // ─── MAIN DEFS ──────────────────────────────────────────────────────────────────
