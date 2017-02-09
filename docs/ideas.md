@@ -1,5 +1,18 @@
 # Incoming Grammars and Features
 ## Ideas
+#### Clone `IMPORTANT`
+
+```
+def y = clone x
+```
+
+Compiles to:
+
+```
+var y = Object.assign({ }, x);
+```
+
+
 #### Placeholders `IMPORTANT`
 This:
 
