@@ -1,5 +1,4 @@
-class x extends y/z:
-    def foo:
+for (x) via index:
 
-    end
+
 end

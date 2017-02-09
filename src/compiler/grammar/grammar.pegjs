@@ -118,6 +118,8 @@
         / SingleAssignmentStatement
         / IfStatement
         / WhileStatement
+        / ForStatement
+        / UseStatement
         / ReturnStatement
         / PipeExpression
         / SExpression
@@ -163,11 +165,104 @@
         / TableLiteral
 
 //
+// ─── FORS ───────────────────────────────────────────────────────────────────────
+//
+
+    ForStatement
+        = "for" __+ start:Expression __+ dir:ForDirectionKey __+ "to" __+ end:Expression
+          step:ForStep? indexVar:ForIndexVar? EndStructureSign body:Body END {
+            return {
+                type:       "ForStatement",
+                id:         id( ),
+                location:   location( ),
+                kind:       "range",
+                body:       body,
+                direction:  dir,
+                step:       step,
+                indexVar:   indexVar,
+                range:  {
+                    start:  start,
+                    end:    end
+                },
+            }
+        }
+        / "for" __+ upLimit:Expression step:ForStep? indexVar:ForIndexVar?
+          EndStructureSign body:Body END {
+            return {
+                type:       "ForStatement",
+                id:         id( ),
+                location:   location( ),
+                kind:       "range",
+                body:       body,
+                direction:  true,
+                step:       step,
+                indexVar:   indexVar,
+                range: {
+                    start:  null,
+                    end:    upLimit
+                },
+            }
+        }
+
+    ForIndexVar
+        = __+ "via" __+ name:Identifier __* {
+            return name.name
+        }
+
+    ForStep
+        = __+ "step" __+ stepExp:Expression {
+            return stepExp
+        }
+    
+    ForDirectionKey
+        = key:( "up" / "down" ) {
+            return ( key === "up" )? true : false
+        }
+
+//
+// ─── USE STATEMENT ──────────────────────────────────────────────────────────────
+//
+
+    UseStatement
+        = "use" __+ args:IdentifierList __+ 'from' __+ origin:UseOrigin {
+            return {
+                type:       'UseStatement',
+                id:         id( ),
+                location:   location( ),
+                kind:       'from-origin',
+                origin:     origin,
+                args:       args
+            }
+        }
+        / "use" _+ args:UseImportsArgs {
+            return {
+                type:       'UseStatement',
+                id:         id( ),
+                location:   location( ),
+                kind:       'simple',
+                args:       args
+            }
+        }
+
+    UseImportsArgs
+        = arg:Identifier _+ more:UseImportsArgs {
+            return [ arg ].concat( more )
+        }
+        / subArg:Expression {
+            return [ subArg ]
+        }
+
+
+    UseOrigin
+        = Identifier
+        / StringLiteral
+
+//
 // ─── CONDITIONABLE ──────────────────────────────────────────────────────────────
 //
 
     ConditionalsPredicate
-        = __+ predicate:Predicate __* EndStructureSign {
+        = __+ predicate:Predicate __* EndStructureSign __* {
             return predicate
         }
 
@@ -878,6 +973,11 @@
             / "print"           !IdentifierName
             / "nan"             !IdentifierName
             / "con"             !IdentifierName
+            / "use"             !IdentifierName
+            / "up"              !IdentifierName
+            / "down"            !IdentifierName
+            / "to"              !IdentifierName
+            / "via"             !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
