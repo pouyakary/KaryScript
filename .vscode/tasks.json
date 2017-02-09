@@ -24,6 +24,12 @@
             "args": [
                 "run", "parser-test-drive"
             ]
+        },
+        {
+            "taskName": "test drive compiler",
+            "args": [
+                "run", "tset-drive-compile"
+            ]
         }
     ]
 }
