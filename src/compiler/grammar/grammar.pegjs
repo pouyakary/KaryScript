@@ -141,6 +141,7 @@
 
     Expression
         = Literals
+        / AddressIdentifier
         / Identifier
         / ArrayObjectIndexLoader
         / LambdaExpression
