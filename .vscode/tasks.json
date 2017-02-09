@@ -20,7 +20,7 @@
             ]
         },
         {
-            "taskName": "Parser Test Drive",
+            "taskName": "test drive parser",
             "args": [
                 "run", "parser-test-drive"
             ]
