@@ -762,7 +762,7 @@
         }
       
     ObjectDeclaration
-        = exported:ExportKey "object" __* name:Identifier __* EndStructureSign
+        = exported:ExportKey kind:ObjectKindKey __* name:Identifier __* EndStructureSign
           __* members:ObjectPairMember __+ END {
             return {
                 type:       "ObjectDeclaration",
@@ -770,8 +770,14 @@
                 id:         id( ),
                 name:       name.name,
                 value:      members,
-                exported:   exported
+                exported:   exported,
+                kind:       kind
             }
+        }
+
+    ObjectKindKey
+        = key:( "object" / "template" ) {
+            return key
         }
 
     ObjectPairMember

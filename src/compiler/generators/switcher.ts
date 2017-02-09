@@ -21,6 +21,7 @@
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/declaration/class.ts" />
+/// <reference path="nodes/statements/declaration/object.ts" />
 /// <reference path="nodes/statements/assignment.ts" />
 /// <reference path="nodes/statements/if.ts" />
 /// <reference path="nodes/statements/while.ts" />
@@ -76,6 +77,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ClassDeclaration':
                     return Nodes.ClassDeclaration.Compile( node as AST.IClassDeclaration, env )
+
+                case 'ObjectDeclaration':
+                    return Nodes.ObjectDeclaration.Compile( node as AST.IObjectDeclaration, env )
 
                 case 'SingleAssignmentStatement':
                     return Nodes.SingleAssignment.Compile(

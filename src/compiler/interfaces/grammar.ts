@@ -320,6 +320,7 @@ namespace KaryScript.Compiler.AST {
 
             name:   string
             value:  IObjectMemberPair[ ]
+            kind:   "object" | "template"
         }
 
     //

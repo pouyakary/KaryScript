@@ -55,7 +55,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     // ─── GET DECLARATION KEY ───────────────────────────────────────────────────────
     //
 
-        function GetDeclarationKey ( env: IEnvInfo ) {
+        export function GetDeclarationKey ( env: IEnvInfo ) {
             return ( env.ParentNode.length === 3 )? 'var' : 'let'
         }
 

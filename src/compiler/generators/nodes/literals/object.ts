@@ -22,11 +22,17 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
             if ( node.value.length === 0 )
                 return '{ }'
 
-            return '{\n' +
-                Indentation.AssembleLines(
-                    node.value.map( x => CompileObjectPair( x, env ) + ',\n' ),
-                    env )
-                + '\n}'
+            return '{\n' + CompileObjectBody( node.value, env ) + '\n}'
+        }
+
+    //
+    // ─── COMPILE OBJECT BODY ────────────────────────────────────────────────────────
+    //
+
+        export function CompileObjectBody ( pairs: AST.IObjectMemberPair[ ],
+                                              env: IEnvInfo ) {
+            return Indentation.AssembleLines(
+                    pairs.map( x => CompileObjectPair( x, env ) + ',\n' ), env )
         }
 
     //
