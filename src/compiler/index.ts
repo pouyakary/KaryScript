@@ -54,7 +54,10 @@ namespace KaryScript.Compiler {
                 ParentNode: [ Object.assign({ }, BaseNodeObject ) ],
                 ScopeLevel: 0,
                 DeclaredIdentifiers: new Set<string>( ),
-                Errors: [ ]
+                Errors: [ ],
+                Format: {
+                    PrintComments: true
+                }
             }
 
             // compiling stuff

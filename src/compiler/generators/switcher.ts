@@ -24,6 +24,7 @@
 /// <reference path="nodes/statements/if.ts" />
 /// <reference path="nodes/statements/while.ts" />
 /// <reference path="nodes/statements/return.ts" />
+/// <reference path="nodes/spaces/inline-comment.ts" />
 /// <reference path="../sourcemap/mapper.ts" />
 
 namespace KaryScript.Compiler.Nodes {
@@ -107,6 +108,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ShorthandIfExpression':
                     return Nodes.ShorthandIf.Compile( node as AST.IShorthandIfExpression, env )
+
+                case 'InlineComment':
+                    return Nodes.InlineComment.Compile( node as AST.IInlineComment, env )
 
                 case 'LineTerminator':
                     return '\n'

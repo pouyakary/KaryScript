@@ -47,6 +47,19 @@ namespace KaryScript.Compiler {
              * Errors
              */
             Errors: Reporter.CompilerError[ ]
+
+            /**
+             * Formatting defs
+             */
+            Format: Formatter
+        }
+
+    //
+    // ─── FORMATTER ──────────────────────────────────────────────────────────────────
+    //
+
+        interface Formatter {
+            PrintComments: boolean
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

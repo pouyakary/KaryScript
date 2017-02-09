@@ -66,6 +66,7 @@ namespace KaryScript.Compiler.AST {
                 | "Predicate"
                 | "DeclarationAssignment"
                 | "StringPart"
+                | "InlineComment"
 
             location: ILocation
 
@@ -198,6 +199,14 @@ namespace KaryScript.Compiler.AST {
         export type TReturnables
             = TExpression
             | ISExpression
+
+    //
+    // ─── INLINE COMMENT ─────────────────────────────────────────────────────────────
+    //
+
+        export interface IInlineComment extends IBase {
+            comment: string
+        }
 
     //
     // ─── SINGLE ASSIGNMENT STATEMENT ────────────────────────────────────────────────
