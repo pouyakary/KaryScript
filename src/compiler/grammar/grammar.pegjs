@@ -165,6 +165,14 @@
         / TableLiteral
 
 //
+// ─── FUNCTION CALLS ─────────────────────────────────────────────────────────────
+//
+
+    FunctionCall
+        = PipeExpression
+        / SExpression
+
+//
 // ─── FORS ───────────────────────────────────────────────────────────────────────
 //
 
@@ -822,6 +830,17 @@
                 type:       'SingleAssignmentStatement',
                 location:   location( ),
                 id:         id( ),
+                key:        "=",
+                name:       name,
+                value:      value
+            }
+        }
+        / name:AddressIdentifier __* "/=" __* value:FunctionCall {
+            return {
+                type:       'SingleAssignmentStatement',
+                location:   location( ),
+                id:         id( ),
+                key:        "/=",
                 name:       name,
                 value:      value
             }

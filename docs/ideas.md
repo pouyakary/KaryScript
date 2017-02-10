@@ -1,12 +1,12 @@
 # Incoming Grammars and Features
 ## Ideas
 
-#### `.=` Operator
+#### `/=` Operator
 
 Suggested by @mlghost. However needs a better syntax
 
 ```
-x .= (replace /\s+/g "")
+x /= (replace /\s+/g "")
 ```
 
 Compiles to:
@@ -15,16 +15,6 @@ Compiles to:
 x = x.replace(/\s+/g, "")
 ```
 
-However needs a more KaryScriptish syntax:
-
-```
-1. (do x (replace /\s+/g ""))
-2. x apply (replace /\s+/g "")
-3. apply x (replace /\s+/g "")
-4. to x do (replace /\s+/g "")
-5. do x (replace /\s+/g "")
-6. x do (replace /\s+/g "")
-```
 
 #### Placeholders `IMPORTANT`
 This:

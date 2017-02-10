@@ -275,6 +275,7 @@ namespace KaryScript.Compiler.AST {
         export interface ISingleAssignmentStatement extends IBase {
             name:       IAddressIdentifier
             value:      TReturnables
+            key:        '=' | '/='
         }
 
     //

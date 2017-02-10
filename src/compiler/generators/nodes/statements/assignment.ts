@@ -18,7 +18,9 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
 
         export function Compile ( node: AST.ISingleAssignmentStatement, env: IEnvInfo ) {
             const name   = Nodes.CompileSingleNode( node.name, env )
-            const assign = Nodes.CompileSingleNode( node.value, env )
+            const assign = (( node.key === '/=' )? name + "." : '') +
+                                Nodes.CompileSingleNode( node.value, env )
+
             return name + " = " + assign + Env.Semicolon( env )
         }
 
