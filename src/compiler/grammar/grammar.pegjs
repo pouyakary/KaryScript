@@ -118,6 +118,7 @@
         / IfStatement
         / WhileStatement
         / ForStatement
+        / SwitchStatement
         / UseStatement
         / ReturnStatement
         / PipeExpression
@@ -286,6 +287,55 @@
         = SExpressionBody
         / BooleanLiteral
         / Expression
+
+//
+// ─── SWITCH ─────────────────────────────────────────────────────────────────────
+//
+
+    SwitchStatement
+        = "switch" __+ expr:Expression __* EndStructureSign __+ cases:SwitchCases
+           defaultBody:SwitchElse? END {
+            return {
+                type:           "SwitchStatement",
+                id:             id( ),
+                location:       location( ),
+                switchable:     expr,
+                cases:          cases,
+                defaultBody:    defaultBody
+            }
+        }
+
+    SwitchElse
+        = __* "else" __ body:Body {
+            return body
+        }
+    
+    SwitchCases
+        = arg:CaseStatement more:SwitchCases {
+            return [ arg ].concat( more )
+        }
+        / subArg:CaseStatement {
+            return [ subArg ]
+        }
+
+    CaseStatement
+        = __* "case" __+ cases: CaseMembers __* EndStructureSign body:Body {
+            return {
+                type:       "CaseStatement",
+                id:         id( ),
+                location:   location( ),
+                cases:      cases,
+                body:       body
+            }
+        }
+
+    CaseMembers
+        = arg:Expression __+ more:CaseMembers {
+            return [ arg ].concat( more )
+        }
+        / subArg:Expression {
+            return [ subArg ]
+        }
 
 //
 // ─── IF STATEMENT ───────────────────────────────────────────────────────────────
