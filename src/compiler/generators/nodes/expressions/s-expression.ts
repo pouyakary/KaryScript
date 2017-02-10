@@ -94,11 +94,31 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
-                                         env: IEnvInfo,
-                                placeholder?: TBase ) {
-            const ph = <AST.ISExpression> ( placeholder? placeholder : node.arg )
-            const op = ( node.operator === 'not' )? '!' : node.operator
-            return op + " " + Nodes.CompileSingleNode( ph, env ) + Env.Semicolon( env )
+                                        env: IEnvInfo,
+                                placeholder?: TBase ): string {
+
+            const ph = <AST.ISExpression> ( placeholder?
+                            placeholder : node.arg )
+
+            switch ( node.operator ) {
+                case "not":
+                case "async":
+                case "await":
+                case "new":
+                case "delete":
+                case "typeof":
+                case "void":
+                    const op = ( node.operator === 'not' )? '!' : node.operator
+                    return op + " " + Nodes.CompileSingleNode( ph, env )
+                        + Env.Semicolon( env )
+                
+                case "clone":
+                    return "Object.assign({ }, " + Nodes.CompileSingleNode( ph, env ) + ")"
+
+                default:
+                    return ''
+            }
+
         }
 
     //
@@ -111,7 +131,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
             const ph = placeholder? Nodes.CompileSingleNode( placeholder, env ) : ''
             return Address.Compile( node.command, env ) + "(" + ph + ")" + Env.Semicolon( env )
         }
-        
+
     //
     // ─── GET OPERATOR ───────────────────────────────────────────────────────────────
     //

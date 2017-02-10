@@ -833,7 +833,7 @@
 //
 
     UnaryOperator
-        = "not" / "async" / "await" / "new" / "delete" / "typeof" / "void"
+        = "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone"
 
 //
 // ─── INDEX LOADER ───────────────────────────────────────────────────────────────
@@ -994,6 +994,8 @@
             / "down"            !IdentifierName
             / "to"              !IdentifierName
             / "via"             !IdentifierName
+            / "hold"            !IdentifierName
+            / "clone"           !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
