@@ -545,7 +545,8 @@
                 params:     params,
             }
         }
-        / operator:BinaryOperator __+ left:ArgumentReturnables __+ right:ArgumentReturnables {
+        / operator:BinaryOperator __+ left:ArgumentReturnables __+
+          right:ArgumentReturnables {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -626,8 +627,8 @@
 //
 
     FunctionDeclaration
-        = exported:ExportKey key:FunctionDefKind _+ name:Identifier _* args:IdentifierList
-        __* EndStructureSign code:Body END {
+        = exported:ExportKey key:FunctionDefKind _+ name:Identifier _*
+          args:IdentifierList __* EndStructureSign code:Body END {
             return {
                 type:       "FunctionDeclaration",
                 location:   location( ),
@@ -639,7 +640,8 @@
                 code:       code
             }
         }
-        / exported:ExportKey key:FunctionDefKind __+ name:Identifier __* EndStructureSign __* code:Body END {
+        / exported:ExportKey key:FunctionDefKind __+ name:Identifier __*
+          EndStructureSign __* code:Body END {
             return {
                 type:       "FunctionDeclaration",
                 location:   location( ),
@@ -750,7 +752,8 @@
 //
 
     DeclarationStatement
-        = exported:ExportKey modifier:( "con" / "def" ) _+ assignment:DeclarationAssignment {
+        = exported:ExportKey modifier:( "con" / "def" ) _+
+          assignment:DeclarationAssignment {
             return {
                 type:       'DeclarationStatement',
                 location:   location( ),
@@ -941,8 +944,8 @@
         }
       
     ObjectDeclaration
-        = exported:ExportKey kind:ObjectKindKey __* name:Identifier __* EndStructureSign
-          __* members:ObjectPairMember __+ END {
+        = exported:ExportKey kind:ObjectKindKey __* name:Identifier __*
+          EndStructureSign __* members:ObjectPairMember __+ END {
             return {
                 type:       "ObjectDeclaration",
                 location:   location( ),
@@ -969,7 +972,8 @@
         }
 
     ObjectAssignment
-        = name:Identifier _* ObjectAssignmentKeyValueCharacter _* value:ArgumentReturnables {
+        = name:Identifier _* ObjectAssignmentKeyValueCharacter _*
+          value:ArgumentReturnables {
             return {
                 key:    name.name,
                 value:  value
@@ -1001,7 +1005,8 @@
         }
 
     ArrayDeclaration
-        = exported:ExportKey "array" _+ name:Identifier __* EndStructureSign __* members:ArrayMember __+ END {
+        = exported:ExportKey "array" _+ name:Identifier __* EndStructureSign __*
+          members:ArrayMember __+ END {
             return {
                 type:       "ArrayDeclaration",
                 location:   location( ),
