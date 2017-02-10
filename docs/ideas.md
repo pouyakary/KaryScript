@@ -1,5 +1,31 @@
 # Incoming Grammars and Features
 ## Ideas
+
+#### `.=` Operator
+
+Suggested by @mlghost. However needs a better syntax
+
+```
+x .= (replace /\s+/g "")
+```
+
+Compiles to:
+
+```
+x = x.replace(/\s+/g, "")
+```
+
+However needs a more KaryScriptish syntax:
+
+```
+1. (do x (replace /\s+/g ""))
+2. x apply (replace /\s+/g "")
+3. apply x (replace /\s+/g "")
+4. to x do (replace /\s+/g "")
+5. do x (replace /\s+/g "")
+6. x do (replace /\s+/g "")
+```
+
 #### Clone `IMPORTANT`
 
 ```
@@ -267,11 +293,12 @@ end
 ("Hello, World!".substring 5)
 ```
 
-#### Nested placeholders
+#### Shorthand Assigns:
 
-```
-(x) ⟶ (y (z $))
-```
+````
+x += 4
+y -= 3
+````
 
 #### Table Literals `IMPLEMENTED IN GRAMMAR`
 Tables are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
