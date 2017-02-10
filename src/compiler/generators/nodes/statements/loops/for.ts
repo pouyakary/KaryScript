@@ -93,7 +93,9 @@ namespace KaryScript.Compiler.Nodes.For {
     //
 
         function CompileForeachForLoop ( node: AST.IForeachForLoop, env: IEnvInfo ) {
-            return ''
+            return 'for (let ' + Nodes.Address.HandleName( node.iterator ) + ' ' +
+                node.key + ' ' + Nodes.CompileSingleNode( node.iterable, env ) + ') {'
+                + Nodes.CompileSingleNode( node.body, env ) + '\n}'
         }
 
     //

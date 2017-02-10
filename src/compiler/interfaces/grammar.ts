@@ -101,7 +101,7 @@ namespace KaryScript.Compiler.AST {
         export interface IForeachForLoop extends IForStatement {
             kind:       'foreach'
             key:        "in" | "of"
-            iterator:   IIdentifier,
+            iterator:   string,
             iterable:   TExpression,
             body:       IBody
         }

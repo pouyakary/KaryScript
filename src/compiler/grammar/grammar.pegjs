@@ -210,7 +210,7 @@
                 location:   location( ),
                 kind:       "foreach",
                 key:        key,
-                iterator:   iterator,
+                iterator:   iterator.name,
                 iterable:   iterable,
                 body:       body
             }
