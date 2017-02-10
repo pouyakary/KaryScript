@@ -8,8 +8,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="../../switcher.ts" />
-/// <reference path="../../../interfaces/envinfo.ts" />
+/// <reference path="../../../switcher.ts" />
+/// <reference path="../../../../interfaces/envinfo.ts" />
 
 namespace KaryScript.Compiler.Nodes.While {
 
