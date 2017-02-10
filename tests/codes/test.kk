@@ -149,4 +149,28 @@
         z: 523
     end
 
+//
+// ─── FOR LOOPS ──────────────────────────────────────────────────────────────────
+//
+
+    for (x):
+        (foo)
+    end
+
+    for (x) up to (y):
+        (foo)
+    end 
+
+    for (x) up to 200 step (z):
+        (do-something)
+    end
+
+    for (x) via index:
+        (foo index)
+    end
+
+    for (foo) down to (bar):
+        (nice)
+    end
+
 // ────────────────────────────────────────────────────────────────────────────────

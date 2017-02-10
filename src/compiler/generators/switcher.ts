@@ -25,6 +25,7 @@
 /// <reference path="nodes/statements/assignment.ts" />
 /// <reference path="nodes/statements/if.ts" />
 /// <reference path="nodes/statements/loops/while.ts" />
+/// <reference path="nodes/statements/loops/for.ts" />
 /// <reference path="nodes/statements/return.ts" />
 /// <reference path="nodes/spaces/inline-comment.ts" />
 /// <reference path="../sourcemap/mapper.ts" />
@@ -113,6 +114,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'WhileStatement':
                     return Nodes.While.Compile( node as AST.IWhileStatement, env )
+
+                case 'ForStatement':
+                    return Nodes.For.Compile( node as AST.IForStatement, env )
 
                 case 'ShorthandIfExpression':
                     return Nodes.ShorthandIf.Compile( node as AST.IShorthandIfExpression, env )
