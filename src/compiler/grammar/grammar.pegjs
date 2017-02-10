@@ -996,6 +996,7 @@
             / "via"             !IdentifierName
             / "hold"            !IdentifierName
             / "clone"           !IdentifierName
+            / "eq"              !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────

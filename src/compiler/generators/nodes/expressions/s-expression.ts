@@ -144,20 +144,45 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         export function TranslateOperator ( op: string ) {
             switch ( op ) {
-                case 'sum':         return '+'
-                case 'mul':         return '*'
-                case 'sub':         return '-'
-                case 'div':         return '/'
-                case 'and':         return '&&'
-                case 'or':          return 'or'
-                case 'pow':         return '**'
-                case 'mod':         return '%'
+                case 'sum':
+                    return '+'
+
+                case 'mul':
+                    return '*'
+
+                case 'sub':
+                    return '-'
+
+                case 'div':
+                    return '/'
+
+                case 'and':
+                    return '&&'
+
+                case 'or':
+                    return 'or'
+
+                case 'pow':
+                    return '**'
+
+                case 'mod':
+                    return '%'
+
                 case 'eq':
-                case '=':           return '==='
-                case '>':           return '>'
-                case '<':           return '<'
-                case '<=':          return '<='
-                case '!=':          return '!='
+                case '=':
+                    return '==='
+
+                case '>':
+                    return '>'
+
+                case '<':
+                    return '<'
+
+                case '<=':
+                    return '<='
+
+                case '!=':
+                    return '!=='
             }
         }
 
