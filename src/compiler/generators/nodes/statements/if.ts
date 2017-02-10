@@ -38,7 +38,7 @@ namespace KaryScript.Compiler.Nodes.If {
             const predicate = Nodes.CompileSingleNode( node.predicate, env )
             const sign      = ( node.key === 'unless' )? '!' : ''
             const body      = Nodes.CompileSingleNode( node.trueBranch, env )
-            return 'if (' + sign + predicate + ') {' + body + '\n}'
+            return 'if (' + sign + predicate + ') {\n' + body + '\n}'
         }
 
     //
