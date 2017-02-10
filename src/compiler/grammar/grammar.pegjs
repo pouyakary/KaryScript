@@ -436,8 +436,7 @@
 //
 
     WhileStatement
-        = "while" predicate:ConditionalsPredicate
-          body:Body END {
+        = "while" predicate:ConditionalsPredicate body:Body END {
               return {
                   type:         "WhileStatement",
                   location:     location( ),
