@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.While {
     //
 
         export function Compile ( node: AST.IWhileStatement, env: IEnvInfo ) {
-            return 'while (' + Nodes.CompileSingleNode( node.predicate, env ) + ') {'
+            return 'while (' + Nodes.CompileSingleNode( node.predicate, env ) + ') {\n'
                     + Nodes.CompileSingleNode( node.body, env ) + '\n}'
         }
 
