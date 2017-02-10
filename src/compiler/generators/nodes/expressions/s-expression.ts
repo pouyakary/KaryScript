@@ -100,25 +100,31 @@ namespace KaryScript.Compiler.Nodes.SExpression {
             const ph = <AST.ISExpression> ( placeholder?
                             placeholder : node.arg )
 
+            let result: string
+
             switch ( node.operator ) {
-                case "not":
                 case "async":
                 case "await":
                 case "new":
                 case "delete":
                 case "typeof":
                 case "void":
-                    const op = ( node.operator === 'not' )? '!' : node.operator
-                    return op + " " + Nodes.CompileSingleNode( ph, env )
-                        + Env.Semicolon( env )
+                    result = node.operator + " " + Nodes.CompileSingleNode( ph, env )
+                    break
+
+                case "not":
+                    result = "!" + Nodes.CompileSingleNode( ph, env )
+                    break
                 
                 case "clone":
-                    return "Object.assign({ }, " + Nodes.CompileSingleNode( ph, env ) + ")"
+                    result = "Object.assign({ }, " + Nodes.CompileSingleNode( ph, env ) + ")"
+                    break
 
                 default:
-                    return ''
+                    result = ''
             }
 
+            return result + Env.Semicolon( env )
         }
 
     //
