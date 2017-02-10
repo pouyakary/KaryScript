@@ -188,6 +188,9 @@ switch x:
 end
 ```
 
+#### RegExp
+"Exactly like JS"
+
 #### Literal Addresses
 
 ```

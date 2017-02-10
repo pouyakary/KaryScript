@@ -23,7 +23,7 @@
     m = 5
     x/y/z = (foo-bar 5 on)
 
-    hello /= (replace "hello" "world")
+    hello /= (replace "hello", "world")
 
 //
 // ─── OPERATIONS ─────────────────────────────────────────────────────────────────

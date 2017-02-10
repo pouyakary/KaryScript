@@ -270,7 +270,7 @@
         }
 
     UseImportsArgs
-        = arg:Identifier _+ more:UseImportsArgs {
+        = arg:Identifier SeparatorInline more:UseImportsArgs {
             return [ arg ].concat( more )
         }
         / subArg:Expression {
@@ -338,7 +338,7 @@
         }
 
     CaseMembers
-        = arg:Expression __+ more:CaseMembers {
+        = arg:Expression SeparatorMultiline more:CaseMembers {
             return [ arg ].concat( more )
         }
         / subArg:Expression {
@@ -466,7 +466,7 @@
 //
 
     IdentifierList
-        = arg:Identifier __+ more:IdentifierList {
+        = arg:Identifier SeparatorMultiline more:IdentifierList {
             return [ arg ].concat( more )
         }
         / subArg:Expression {
@@ -568,7 +568,7 @@
         }
     
     SExpressionArugmentArray
-        = arg:SExpressionArugment __+ more:SExpressionArugmentArray {
+        = arg:SExpressionArugment SeparatorMultiline more:SExpressionArugmentArray {
             return [ arg ].concat( more )
         } 
         / subArg:SExpressionArugment {
@@ -776,7 +776,7 @@
         }
 
     NameOnlyDeclarationsArray
-        = name:Identifier _+ more:NameOnlyDeclarationsArray {
+        = name:Identifier SeparatorInline more:NameOnlyDeclarationsArray {
             return [ name ].concat( more )
         } 
         / name:Identifier {
@@ -963,8 +963,7 @@
         }
 
     ObjectPairMember
-        = member:ObjectAssignment _* ( LineTerminator / "," ) _*
-          more:ObjectPairMember {
+        = member:ObjectAssignment SeparatorMultiline more:ObjectPairMember {
             return [ member ].concat( more )
         } 
         / member:ObjectAssignment {
@@ -1018,12 +1017,24 @@
         }
 
     ArrayMember
-        = member:Expression __+ more:ArrayMember {
+        = member:Expression SeparatorMultiline more:ArrayMember {
             return [ member ].concat( more )
         } 
         / member:Expression {
             return [ member ]
         }
+
+//
+// ─── COMMA ──────────────────────────────────────────────────────────────────────
+//
+
+    SeparatorMultiline
+        = __* ',' __*
+        / __+
+
+    SeparatorInline
+        = _* ',' _*
+        / _+
 
 //
 // ─── RESERVED WORDS ─────────────────────────────────────────────────────────────
