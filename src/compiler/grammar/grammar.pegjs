@@ -46,10 +46,9 @@
         //
 
             function id ( ) {
+                //return String.fromCharCode( 65 + Math.floor( Math.random( ) * 26 ) )
+                //   + Date.now().toString( ).substring( 8 ) */
                 return ''
-                /* return String.fromCharCode( 65 + Math.floor( Math.random( ) * 26 ) )
-                    + Date.now().toString( ).substring( 8 ) */
-    
             }
 
         // ─────────────────────────────────────────────────────────────────
@@ -175,7 +174,7 @@
                 type:       "ForStatement",
                 id:         id( ),
                 location:   location( ),
-                kind:       "range",
+                kind:       "repeat",
                 body:       body,
                 direction:  dir,
                 step:       step,

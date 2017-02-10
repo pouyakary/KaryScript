@@ -51,12 +51,14 @@ namespace KaryScript.Compiler.AST {
                 | "ClassDeclaration"
                 | "FunctionDeclaration"
                 | "DeclarationStatement"
+                | "ArrayObjectIndexLoader"
                 | "SpecialCommand"
                 | "SExpression"
                 | "ReturnKeyword"
                 | "PipeExpression"
                 | "LambdaExpression"
                 | "WhileStatement"
+                | "ForStatement"
                 | "ElseIfStatement"
                 | "IfStatement"
                 | "PipePlaceholder"
@@ -71,6 +73,37 @@ namespace KaryScript.Compiler.AST {
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── FOR STATEMENT ──────────────────────────────────────────────────────────────
+    //
+
+        export interface IForStatement extends IBase {
+            type:   'ForStatement'
+            kind:   'repeat' | 'foreach'
+            body:   IBase
+        }
+
+        export interface IRepeatForLoop extends IForStatement {
+            kind:       'repeat'
+            direction:  boolean
+            indexVar:   string | null
+            step:       TExpression | null
+            range:      ForRange
+        }
+
+        interface ForRange {
+            start:  TExpression | null
+            end:    TExpression
+        }
+
+        export interface IForeachForLoop extends IForStatement {
+            kind:       'foreach'
+            key:        "in" | "of"
+            iterator:   IIdentifier,
+            iterable:   TExpression,
+            body:       IBody
         }
 
     //
