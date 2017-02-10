@@ -192,7 +192,7 @@
                 type:       "ForStatement",
                 id:         id( ),
                 location:   location( ),
-                kind:       "range",
+                kind:       "repeat",
                 body:       body,
                 direction:  true,
                 step:       step,
@@ -203,6 +203,23 @@
                 },
             }
         }
+        / "for" __+ iterator:Identifier __+ key:ForIterationTypeKey __+
+          iterable:Expression __* EndStructureSign body:Body END {
+            return {
+                type:       "ForStatement",
+                id:         id( ),
+                location:   location( ),
+                kind:       "foreach",
+                key:        key,
+                iterator:   iterator,
+                iterable:   iterable,
+                body:       body
+            }
+        }
+
+    ForIterationTypeKey
+        = "of"
+        / "in"
 
     ForIndexVar
         = __+ "via" __+ name:Identifier {
