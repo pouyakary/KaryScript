@@ -60,6 +60,7 @@ namespace KaryScript.Compiler.AST {
                 | "WhileStatement"
                 | "ForStatement"
                 | "ElseIfStatement"
+                | "SwitchStatement"
                 | "IfStatement"
                 | "PipePlaceholder"
                 | "ArrayDeclaration"
@@ -69,10 +70,26 @@ namespace KaryScript.Compiler.AST {
                 | "DeclarationAssignment"
                 | "StringPart"
                 | "InlineComment"
+                | "CaseStatement"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── SWITCH STATEMENT ───────────────────────────────────────────────────────────
+    //
+
+        export interface ISwitchStatement extends IBase {
+            switchable:     TExpression,
+            cases:          ICaseStatement[ ],
+            defaultBody?:   IBody
+        }
+
+        export interface ICaseStatement extends IBase {
+            cases:      TExpression[ ],
+            body:       IBody
         }
 
     //
