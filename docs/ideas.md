@@ -26,19 +26,6 @@ However needs a more KaryScriptish syntax:
 6. x do (replace /\s+/g "")
 ```
 
-#### Clone `IMPORTANT`
-
-```
-def y = clone x
-```
-
-Compiles to:
-
-```
-var y = Object.assign({ }, x);
-```
-
-
 #### Placeholders `IMPORTANT`
 This:
 
@@ -69,11 +56,6 @@ This will compile to this:
 f(g( ), z(y(x()), 5))
 ```
 
-#### Class extensions
-
-```
-class x extends y:
-```
 
 #### Set & Map Literals
 
