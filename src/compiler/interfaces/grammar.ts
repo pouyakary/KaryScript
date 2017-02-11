@@ -268,7 +268,11 @@ namespace KaryScript.Compiler.AST {
         export interface ISelector extends IBase {
             type:       "Selector"
             searchable: IAddressIdentifier
-            query:      INumericLiteral | IAddressIdentifier | ILambdaExpression 
+            query:      ( INumericLiteral
+                        | IAddressIdentifier
+                        | ILambdaExpression
+                        | IStringLiteral
+                        )
         }
 
     //

@@ -192,6 +192,7 @@
         = NumericLiteral
         / LambdaBody
         / AddressIdentifier
+        / StringLiteral
 
 //
 // ─── FORS ───────────────────────────────────────────────────────────────────────
