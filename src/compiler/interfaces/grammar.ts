@@ -71,6 +71,7 @@ namespace KaryScript.Compiler.AST {
                 | "StringPart"
                 | "InlineComment"
                 | "CaseStatement"
+                | "Selector"
 
             location: ILocation
 
@@ -259,6 +260,16 @@ namespace KaryScript.Compiler.AST {
         export type TReturnables
             = TExpression
             | ISExpression
+
+    //
+    // ─── SELECTOR EXPRESSION ────────────────────────────────────────────────────────
+    //
+
+        export interface ISelector extends IBase {
+            type:       "Selector"
+            searchable: IAddressIdentifier
+            query:      INumericLiteral | IAddressIdentifier | ILambdaExpression 
+        }
 
     //
     // ─── INLINE COMMENT ─────────────────────────────────────────────────────────────

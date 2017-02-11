@@ -150,6 +150,7 @@
         / PipeExpression
         / ShorthandIfExpression
         / SExpression
+        / Selector
 
 //
 // ─── LITERALS ───────────────────────────────────────────────────────────────────
@@ -171,6 +172,26 @@
     FunctionCall
         = PipeExpression
         / SExpression
+
+//
+// ─── OBJECT QUERY ───────────────────────────────────────────────────────────────
+//
+
+    Selector
+        = "[" __* searchable:AddressIdentifier __* "|" __* query:QueryBody __* "]" {
+            return {
+                type:       "Selector",
+                id:         id( ),
+                location:   location( ),
+                searchable: searchable,
+                query:      query,
+            }
+        }
+
+    QueryBody
+        = NumericLiteral
+        / LambdaBody
+        / AddressIdentifier
 
 //
 // ─── FORS ───────────────────────────────────────────────────────────────────────
@@ -452,6 +473,17 @@
 
     LambdaExpression
         = "[" __* args:IdentifierList __* "=>" __* code:ArgumentReturnables __* "]" {
+            return {
+                type:       "LambdaExpression",
+                location:   location( ),
+                id:         id( ),
+                args:       args.map( x => x.name ),
+                code:       code
+            }
+        }
+
+    LambdaBody
+        = args:IdentifierList __* "=>" __* code:ArgumentReturnables {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
