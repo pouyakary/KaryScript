@@ -72,6 +72,8 @@ namespace KaryScript.Compiler.AST {
                 | "InlineComment"
                 | "CaseStatement"
                 | "Selector"
+                | "EmptyCell"
+                | "TableLiteral"
 
             location: ILocation
 
@@ -260,6 +262,15 @@ namespace KaryScript.Compiler.AST {
         export type TReturnables
             = TExpression
             | ISExpression
+
+    //
+    // ─── TABLE LITERAL ──────────────────────────────────────────────────────────────
+    //
+
+        export interface ITableLiteral extends IBase {
+            header: string[ ]
+            data:   IBase[ ][ ]
+        }
 
     //
     // ─── SELECTOR EXPRESSION ────────────────────────────────────────────────────────

@@ -19,6 +19,7 @@
 /// <reference path="nodes/literals/string.ts" />
 /// <reference path="nodes/literals/array.ts" />
 /// <reference path="nodes/literals/object.ts" />
+/// <reference path="nodes/literals/table.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/declaration/class.ts" />
@@ -110,6 +111,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ObjectLiteral':
                     return Nodes.ObjectLiteral.Compile( node as AST.IObjectLiteral, env )
+
+                case 'TableLiteral':
+                    return Nodes.Table.Compile( node as AST.ITableLiteral, env )
 
                 case 'IfStatement':
                     return Nodes.If.Compile( node as AST.IIfStatement, env )
