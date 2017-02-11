@@ -1,21 +1,6 @@
 # Incoming Grammars and Features
 ## Ideas
 
-#### `/=` Operator
-
-Suggested by @mlghost. However needs a better syntax
-
-```
-x /= (replace /\s+/g "")
-```
-
-Compiles to:
-
-```
-x = x.replace(/\s+/g, "")
-```
-
-
 #### Placeholders `IMPORTANT`
 This:
 
