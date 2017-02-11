@@ -146,33 +146,6 @@ footprints = typeof yeti !== "undefined" && yeti !== null ? yeti : "bear";
 
 ## To Be Implemented 
 
-#### Object Index Getters
-
-```
-x = [ y | "hello" ]
-x = [ y | 2 ]
-x = [ y | z ⟶ (> z 2) ]
-```
-
-#### Switch Case
-Multiple entries as well as no `break` command
-
-```
-switch x:
-	when 1 2 3:
-		(foo x)
-
-	when (f x) (g x):
-		(foo 8)
-
-	when 4:
-		(foo 5)
-	
-	else
-		(foo 7)
-end
-```
-
 #### RegExp
 "Exactly like JS"
 
