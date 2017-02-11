@@ -110,9 +110,23 @@ No clean grammar is present for this one.
 
 #### Rest Parameters
 ```
-def foo x y... z:
+def foo x [y] z:
 	
 end
+```
+
+#### Range Literals
+With exactly the implementation CoffeeScript has for them.
+
+```
+0..3  -> [0, 1, 2]
+0...3 -> [0, 1, 2, 3]
+```
+
+Also it needs special support in selector expression
+
+```
+[ x | 0..1 ]
 ```
 
 ## Great Ideas from other languages
