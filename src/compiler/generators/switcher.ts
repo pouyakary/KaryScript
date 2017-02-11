@@ -13,6 +13,7 @@
 /// <reference path="nodes/expressions/lambda.ts" />
 /// <reference path="nodes/expressions/pipe.ts" />
 /// <reference path="nodes/expressions/shorthand-if.ts" />
+/// <reference path="nodes/expressions/selector.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/literals/string.ts" />
@@ -124,6 +125,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ShorthandIfExpression':
                     return Nodes.ShorthandIf.Compile( node as AST.IShorthandIfExpression, env )
+
+                case 'Selector':
+                    return Nodes.Selector.Compile( node as AST.ISelector, env )
 
                 case 'InlineComment':
                     return Nodes.InlineComment.Compile( node as AST.IInlineComment, env )

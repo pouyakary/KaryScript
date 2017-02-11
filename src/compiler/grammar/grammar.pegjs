@@ -145,7 +145,6 @@
         = Literals
         / AddressIdentifier
         / Identifier
-        / ArrayObjectIndexLoader
         / LambdaExpression
         / PipeExpression
         / ShorthandIfExpression
@@ -189,10 +188,8 @@
         }
 
     QueryBody
-        = NumericLiteral
-        / LambdaBody
-        / AddressIdentifier
-        / StringLiteral
+        = LambdaBody
+        / Expression
 
 //
 // ─── FORS ───────────────────────────────────────────────────────────────────────
@@ -938,21 +935,6 @@
 
     UnaryOperator
         = "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone"
-
-//
-// ─── INDEX LOADER ───────────────────────────────────────────────────────────────
-//
-
-    ArrayObjectIndexLoader
-        = "[" __* name:AddressIdentifier __* "|" __* index:Returnables __* "]" {
-            return {
-                type:       "ArrayObjectIndexLoader",
-                location:   location( ),
-                id:         id( ),
-                name:       name,
-                index:      index
-            }
-        }
 
 //
 // ─── OBJECT LITERALS ────────────────────────────────────────────────────────────
