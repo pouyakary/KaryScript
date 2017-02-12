@@ -51,11 +51,14 @@ namespace KaryScript.Compiler.Nodes.SExpression {
         function CompileFunctionCallWithArgs ( node: AST.IFunctionCallWithArgsSExpression, 
                                                 env: IEnvInfo, 
                                        placeholder?: TBase ) {
+            // checks
+            if ( !CheckPlaceholderInFunctionCallWithArgsSExpression( node, env ) ) return ''
+
             // compiling args
             let args = new Array<string>( )
             if ( node.params.find( x => x.type === 'PipePlaceholder' ) === undefined ) {
-                const arguments = placeholder?
-                    node.params.concat([ <AST.ISExpression> placeholder ]) : node.params
+                const arguments = ( placeholder?
+                    node.params.concat([ <AST.ISExpression> placeholder ]) : node.params )
                 for ( let argument of arguments )
                     args.push( Nodes.CompileSingleNode( argument, env ) )
             } else {
@@ -66,6 +69,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                         args.push( Nodes.CompileSingleNode( arg, env ) )
                 }
             }
+
             // and done.
             return Nodes.CompileSingleNode( node.command, env ) + "(" + 
                     args.join(', ') + ")" + Env.Semicolon( env )
@@ -78,13 +82,19 @@ namespace KaryScript.Compiler.Nodes.SExpression {
         function CompileBinaryOperator ( node: AST.IBinaryOperatorSExpression, 
                                           env: IEnvInfo,
                                   placeholder?: TBase ) {
-            const op = TranslateOperator( node.operator )
+            // checks
+            if ( !CheckPlaceholderInCompileBinaryOperator( node, env ) ) return ''
+
+            // supporting funcs
             function handlePlaceholder ( hand: AST.IBase ) {
                 if ( hand.type === 'PipePlaceholder' && placeholder )
                     return Nodes.CompileSingleNode( placeholder, env )
                 else
                     return Nodes.CompileSingleNode( hand, env )
             }
+
+            // body
+            const op = TranslateOperator( node.operator )
             return '(' + handlePlaceholder( node.left ) + ' ' + op + ' ' +
                     handlePlaceholder( node.right ) + ')'
         }
@@ -97,9 +107,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                                         env: IEnvInfo,
                                 placeholder?: TBase ): string {
 
-            const ph = <AST.ISExpression> ( placeholder?
-                            placeholder : node.arg )
-
+            const ph = <AST.ISExpression> ( placeholder? placeholder : node.arg )
             let result: string
 
             switch ( node.operator ) {
@@ -184,6 +192,57 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                 case '!=':
                     return '!=='
             }
+        }
+
+    //
+    // ─── CHECK PLACEHOLDER FUNCTION CALL WITH SEXPRESSION ───────────────────────────
+    //
+
+        function CheckPlaceholderInFunctionCallWithArgsSExpression
+            ( node: AST.IFunctionCallWithArgsSExpression, env: IEnvInfo, ) {
+            const count = node.params.filter( x => x.type === 'PipePlaceholder' ).length
+            return ReportPlaceholderError( count, env, node )
+        }
+
+    //
+    // ─── CHECK COMPILE BINARY OPERATOR SEXPRESSION ──────────────────────────────────
+    //
+
+        function CheckPlaceholderInCompileBinaryOperator
+            ( node: AST.IBinaryOperatorSExpression, env: IEnvInfo ) {
+            let count = 0
+            if ( node.right.type === 'PipePlaceholder' )
+                count++
+            if ( node.left.type === 'PipePlaceholder' )
+                count++
+            return ReportPlaceholderError( count, env, node )
+        }
+
+    //
+    // ─── REPORT PLACEHOLDER ERROR ───────────────────────────────────────────────────
+    //
+
+        function ReportPlaceholderError ( count: number, env: IEnvInfo, node: AST.IBase ) {
+            const countLimit = GetPlaceholderCountLimit( env )
+            const state = countLimit >= count
+            if ( !state ) {
+                if ( countLimit === 0 )
+                    Reporter.Report( env,
+                        "S-Expression can contain a Placeholder only if they are" +
+                        " used within the root of a Pipe Expression.", node )
+                else
+                    Reporter.Report( env,
+                        "Pipe S-Expressions can only contain one Placeholder.", node )
+            }
+            return state
+        }
+
+    //
+    // ─── GET PLACEHOLDER COUNT LIMIT ────────────────────────────────────────────────
+    //
+
+        function GetPlaceholderCountLimit ( env: IEnvInfo ) {
+            return ( Env.GetParentType( env ) === 'PipeExpression' )? 1 : 0
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
