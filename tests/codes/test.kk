@@ -89,7 +89,7 @@
     con languages =
         | #         | name          | format                        |
         |-----------|---------------|-------------------------------|
-        | kk        | "KaryScript"  | ".kk"                         | world |
+        | kk        | "KaryScript"  | ".kk"                         |
         | orchestra | "Orchestra"   | ".orchestra"                  |
         | arendelle | "Arendelle"   | [ ".arendelle", ".space" ]    |
         | numerax   | "numeraX"     |                               |
