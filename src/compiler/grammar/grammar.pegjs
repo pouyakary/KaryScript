@@ -158,6 +158,7 @@
     Literals
         = ObjectLiteral
         / ArrayLiteral
+        / SetLiteral
         / StringLiteral
         / NumericLiteral
         / ReservedValueLiterals
@@ -995,6 +996,28 @@
         }
 
     ObjectAssignmentKeyValueCharacter = ":"
+
+//
+// ─── SET LITERALS ───────────────────────────────────────────────────────────────
+//
+
+    SetLiteral
+        = "{" __* "}" {
+            return {
+                type:       "SetLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      [ ]
+            }
+        }
+        / "{" __* members:ArrayMember __* "}" {
+            return {
+                type:       "SetLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      members
+            }
+        }
 
 //
 // ─── ARRAY LITERALS ─────────────────────────────────────────────────────────────

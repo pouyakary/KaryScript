@@ -74,6 +74,7 @@ namespace KaryScript.Compiler.AST {
                 | "Selector"
                 | "EmptyCell"
                 | "TableLiteral"
+                | "SetLiteral"
 
             location: ILocation
 
@@ -414,7 +415,14 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IArrayLiteral extends IBase {
-            type: "ArrayLiteral",
+            value: TReturnables[ ]
+        }
+
+    //
+    // ─── SET LITERAL ────────────────────────────────────────────────────────────────
+    //
+
+        export interface ISetLiteral extends IBase {
             value: TReturnables[ ]
         }
 
