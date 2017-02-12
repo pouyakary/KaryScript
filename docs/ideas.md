@@ -160,6 +160,32 @@ footprints = typeof yeti !== "undefined" && yeti !== null ? yeti : "bear";
 
 ## To Be Implemented 
 
+#### Try Catch
+
+```
+try
+
+end
+```
+
+```
+try
+
+catch error:
+
+end
+```
+
+```
+try
+
+catch e:
+
+finally
+
+end
+```
+
 #### RegExp
 "Exactly like JS"
 
