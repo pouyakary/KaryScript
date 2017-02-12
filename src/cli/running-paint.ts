@@ -29,13 +29,20 @@ namespace KaryScript.CLI {
             // ParseAndRunCommands( )
             const fs = require('fs')
             const path = require('path')
+            const util = require('util')
             let content = fs.readFileSync(
                 path.resolve( path.join( __dirname, '../tests/codes/test.kk' ) ), 'utf8' )
 
             try {
                 console.log( KaryScript.Compiler.Compile( content ) )
             } catch ( e ) {
-                console.log( e )
+                console.log( util.inspect( e,
+                    {
+                        showHidden: false,
+                        depth: null,
+                        colors: true,
+                    }
+                ))
             }
         }
     
