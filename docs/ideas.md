@@ -98,6 +98,13 @@ use "fs" as fileSystem
 
 ## Needs Thinking
 
+#### Shorthand Assigns:
+
+````
+x += 4
+y -= 3
+````
+
 #### Object/Array returns
 JavaScript Has this
 
@@ -195,77 +202,3 @@ end
 (5/toString)
 ("Hello, World!".substring 5)
 ```
-
-#### Shorthand Assigns:
-
-````
-x += 4
-y -= 3
-````
-
-#### Table Literals `IMPLEMENTED IN GRAMMAR`
-Tables are the most natural way for writing tables! so why not having them in KaryScript? It can be super awesome:
-
-```
-def contacts =
-    | name    | surname       | phone    |
-    |---------|---------------|----------|
-    | "Mr.X"  | "Jay Simpson" |          |
-    | "Bart"  | "Simpson"     | 666      |
-```
-
-And that will compile to:
-
-```
-var contacts = [
-	{
-		name: "Mr.X",
-		surname: "Jay Simpson",
-		phone: null
-	},
-	{
-		name: "Bart",
-		surname: "Simpson",
-		phone: 666
-	}
-]
-```
-
-And it can be used for Objects as well:
-
-```
-def contacts =
-    |  #    | name    | surname       |
-    |-------|---------|---------------|
-    | homer | "Mr.X"  | "Jay Simpson" |
-    | bart  | "Bart"  | "Simpson"     |
-```
-
-that as well compiles to:
-
-```
-var contacts = {
-	homer: {
-		name: "Mr.X",
-		surname: "Jay Simpson"
-	},
-	bart: {
-		name: "Bart",
-		surname: "Simpson"
-	}
-};
-```
-
-A more complete version can be:
-
-```
-def contacts =
-    |  #    | name    | middle-name | surname       | phone-number               |
-    |-------|---------|-------------|---------------|----------------------------|
-    | homer | "Homer" | "Jay"       | "Simpson"     | (get-phone-number "homer") |
-    | bart  | "Bart"  |             | "Simpson"     | 666                        |
-
-con homer = contacts/homer
-con homer-surname = contacts/homer/surname
-```
-
