@@ -54,7 +54,7 @@ namespace KaryScript.Compiler {
                 ParentNode: [ Object.assign({ }, BaseNodeObject ) ],
                 ScopeLevel: 0,
                 DeclaredIdentifiers: new Set<string>( ),
-                Errors: [ ],
+                Errors: new Set( ),
                 Format: {
                     PrintComments: true
                 }
@@ -65,7 +65,7 @@ namespace KaryScript.Compiler {
                 // compiling stuff
                 code =  Nodes.CompileSingleNode( src, baseEnvInfo )
             } finally {
-                if ( baseEnvInfo.Errors.length > 0 )
+                if ( baseEnvInfo.Errors.size > 0 )
                     throw baseEnvInfo.Errors
                 
                 return code

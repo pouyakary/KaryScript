@@ -32,7 +32,7 @@ namespace KaryScript.Compiler.Nodes.Body {
                 compiledStatements.push( Nodes.CompileSingleNode( statement, env ) )
 
             // updating the env info
-            env.Errors = Array.from( new Set( env.Errors.concat( bodyENV.Errors ) ) )
+            Reporter.ConcatEnvErrors( env, bodyENV )
     
             // done
             return Indentation.AssembleLines( compiledStatements, env )
