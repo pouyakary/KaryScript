@@ -77,11 +77,23 @@
 // ─── TABLES ─────────────────────────────────────────────────────────────────────
 //
 
-    con table =
-        | name      | family        |
-        |-----------|---------------|
-        | "Pouya"   | "Kary"        |
-        | "Sharon"  | "Adami"       |
+    con norah-jones-best =
+        | name                  | album                 | stars |
+        |-----------------------|-----------------------|-------|
+        | "Those Sweet Words"   | "Feels like home"     |   5   |
+        | "Shoot The Moon"      | "Come Away with Me"   |   5   |
+        | "Come Away with Me"   | "Come Away with Me"   |   4   |
+        | "Sunrise"             | "Feels like home"     |   3   |
+
+
+    con languages =
+        | #         | name          | format                        |
+        |-----------|---------------|-------------------------------|
+        | kk        | "KaryScript"  | ".kk"                         | world |
+        | orchestra | "Orchestra"   | ".orchestra"                  |
+        | arendelle | "Arendelle"   | [ ".arendelle", ".space" ]    |
+        | numerax   | "numeraX"     |                               |
+        | pageman   | "Pageman"     | ".pageman"                    |
 
 //
 // ─── LAMBDA ─────────────────────────────────────────────────────────────────────
