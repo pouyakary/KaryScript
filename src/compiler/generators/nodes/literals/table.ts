@@ -19,8 +19,11 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         export function Compile ( node: AST.ITableLiteral, env: IEnvInfo ) {
+            // checks
             if ( !CheckTableSize( node, env ) ) return ''
+            if ( !CheckHeaderPlaceholder( node, env ) ) return ''
 
+            // body
             if ( node.header[ 0 ] === "#" )
                 return CompileObjectTable( node, env )
             else
@@ -47,8 +50,10 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         function CompileObjectTable ( node: AST.ITableLiteral, env: IEnvInfo ) {
+            // checks
             if ( !CheckObjectTable( node, env ) ) return ''
 
+            // body
             const objectKeys = node.data.map( x => x[ 0 ] )
             const header = node.header.splice( 1 )
             let rows = new Array<string>( )
@@ -116,6 +121,24 @@ namespace KaryScript.Compiler.Nodes.Table {
                         key )
 
             return isOkay
+        }
+
+    //
+    // ─── HEADER PLACE HOLDER CHECKER ────────────────────────────────────────────────
+    //
+
+        function CheckHeaderPlaceholder ( node: AST.ITableLiteral, env: IEnvInfo ) {
+            let locationSum = 0
+
+            for ( let index = 0; index < node.header.length; index++ )
+                if ( node.header[ index ] === '#' )
+                    locationSum += index
+
+            if ( locationSum > 1 )
+                Reporter.Report( env,
+                    "'#' Can only be used at the first cell of table's header", node)
+
+            return ( locationSum > 1 )? false : true
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
