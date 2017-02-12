@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.Lambda {
 
         export function Compile ( node: AST.ILambdaExpression, env: IEnvInfo ) {
             if ( node.code.type === 'Body' )
-                return 'hello'
+                return ''
             else
                 return CompileSimpleLambda( node, env )
         }
