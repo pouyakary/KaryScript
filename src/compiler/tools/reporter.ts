@@ -28,7 +28,7 @@ namespace KaryScript.Compiler.Reporter {
                                 node: AST.IBase ) {
             env.Errors.push({
                 message: message,
-                location: node.location
+                location: Object.assign({ }, node.location )
             })
         }
 
@@ -48,7 +48,10 @@ namespace KaryScript.Compiler.Reporter {
     //
 
         function WrapErrors ( errors: CompilerError[ ] ) {
-            return Array.from( new Set( errors ) )
+            if ( typeof errors === "object" )
+                return errors
+            else
+                return Array.from( new Set( errors ) )
         }
 
     //

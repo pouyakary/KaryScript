@@ -60,14 +60,16 @@ namespace KaryScript.Compiler {
                 }
             }
 
-            // compiling stuff
-            const code =  Nodes.CompileSingleNode( src, baseEnvInfo )
-
-            // checking to see if there is any problem
-            if ( baseEnvInfo.Errors.length > 0 )
-                throw baseEnvInfo.Errors
-
-            return code
+            let code = ""
+            try {
+                // compiling stuff
+                code =  Nodes.CompileSingleNode( src, baseEnvInfo )
+            } finally {
+                if ( baseEnvInfo.Errors.length > 0 )
+                    throw baseEnvInfo.Errors
+                
+                return code
+            }
         }
 
     //
