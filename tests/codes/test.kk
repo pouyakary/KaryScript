@@ -23,7 +23,7 @@
     x = [ y | 1 ]
     x = [ y | "hello" ]
     x = [ y | hello/world ]
-    x = [ y | z => (div z 3) -> (> 3 $) ]
+    x = [ y | z => (div z 3) -> (> 3 %) ]
 
 //
 // ─── ASSIGNS ────────────────────────────────────────────────────────────────────
@@ -41,7 +41,7 @@
     con f = (and on off)
     con number255 = 0xff
 
-    (console/log (x) -> (div $ 8))
+    (console/log (x) -> (div % 2))
     (foo-bar)
 
 //
@@ -56,7 +56,7 @@
 
     y = [
         a: 1, b: "hello"
-        c: (x) -> (y) -> (div $ 2)
+        c: (x) -> (y) -> (div % 2)
         d: [ hello: "hello" ]
     ]
 
@@ -68,7 +68,7 @@
 
     export def man-man:
         def SecondLevel:
-            throw (foo 10 20) -> (div $ 5)
+            throw (foo 10 20) -> (div % 5)
         end
         def something = 5
     end
@@ -77,13 +77,14 @@
 // ─── TABLES ─────────────────────────────────────────────────────────────────────
 //
 
+
     con norah-jones-best =
-        | name                  | album                 | stars |
-        |-----------------------|-----------------------|-------|
-        | "Those Sweet Words"   | "Feels like home"     |   5   |
-        | "Shoot The Moon"      | "Come Away with Me"   |   5   |
-        | "Come Away with Me"   | "Come Away with Me"   |   4   |
-        | "Sunrise"             | "Feels like home"     |   3   |
+        | name                  | album                 | stars     |
+        |-----------------------|-----------------------|-----------|
+        | "Those Sweet Words"   | "Feels like home"     |     5     |
+        | "Shoot The Moon"      | "Come Away with Me"   |     5     |
+        | "Come Away with Me"   | "Come Away with Me"   |     4     |
+        | "Sunrise"             | "Feels like home"     |     3     |
 
 
     con languages =
@@ -99,14 +100,14 @@
 // ─── LAMBDA ─────────────────────────────────────────────────────────────────────
 //
 
-    def lambda = [ p1 p2 p3 => (sum p1 p2) -> (mul $ p3) -> (div 4 $) ]
+    def lambda = [ p1 p2 p3 => (sum p1 p2) -> (mul % p3) -> (div 4 %) ]
 
 //
 // ─── PIPE ───────────────────────────────────────────────────────────────────────
 //
         
-    def cool = (x) -> (div $ 2) -> (z) ->
-            (mul $ 5) -> (foo-bar) -> (go)
+    def cool = (x) -> (div % 2) -> (z) ->
+            (mul % 5) -> (foo-bar) -> (go)
 
 //
 // ─── STRING INTERPOLATION ───────────────────────────────────────────────────────
@@ -223,6 +224,8 @@
     switch x:
         case 1 2 (x):
             (foo)
+        case (n) -> (m):
+            (foo-bar)
         else
             (bar)
     end

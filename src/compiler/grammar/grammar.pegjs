@@ -1313,7 +1313,7 @@
 //
 
     PipePlaceholder
-        = "$" {
+        = "%" {
             return {
                 type:       "PipePlaceholder",
                 id:         id( ),
