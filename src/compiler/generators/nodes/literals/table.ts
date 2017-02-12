@@ -19,7 +19,8 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         export function Compile ( node: AST.ITableLiteral, env: IEnvInfo ) {
-            if ( !CheckTableSize( node, env ) ) return '';
+            if ( !CheckTableSize( node, env ) ) return ''
+
             if ( node.header[ 0 ] === "#" )
                 return CompileObjectTable( node, env )
             else
@@ -46,7 +47,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         function CompileObjectTable ( node: AST.ITableLiteral, env: IEnvInfo ) {
-            if ( !CheckObjectTable( node, env ) ) return '';
+            if ( !CheckObjectTable( node, env ) ) return ''
 
             const objectKeys = node.data.map( x => x[ 0 ] )
             const header = node.header.splice( 1 )
