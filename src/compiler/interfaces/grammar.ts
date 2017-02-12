@@ -75,6 +75,7 @@ namespace KaryScript.Compiler.AST {
                 | "EmptyCell"
                 | "TableLiteral"
                 | "SetLiteral"
+                | "MapLiteral"
 
             location: ILocation
 
@@ -411,11 +412,25 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── MAP LITERAL ────────────────────────────────────────────────────────────────
+    //
+
+        export interface IMapLiteral extends IBase {
+            value: IMapMemberPair[ ]
+        }
+
+        export interface IMapMemberPair {
+            key:    TExpression
+            value:  TReturnables
+        }
+
+
+    //
     // ─── ARRAY LITERAL ──────────────────────────────────────────────────────────────
     //
 
         export interface IArrayLiteral extends IBase {
-            value: TReturnables[ ]
+            value:  TReturnables[ ]
         }
 
     //
@@ -423,7 +438,7 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface ISetLiteral extends IBase {
-            value: TReturnables[ ]
+            value:  TReturnables[ ]
         }
 
     //

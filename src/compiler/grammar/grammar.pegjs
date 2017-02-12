@@ -157,6 +157,7 @@
 
     Literals
         = ObjectLiteral
+        / MapLiteral
         / ArrayLiteral
         / SetLiteral
         / StringLiteral
@@ -936,6 +937,45 @@
 
     UnaryOperator
         = "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone"
+
+//
+// ─── MAP LITERAL ────────────────────────────────────────────────────────────────
+//
+
+    MapLiteral
+        = "{" __* ObjectAssignmentKeyValueCharacter __* "}" {
+            return {
+                type:       "MapLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      [ ]
+            }
+        }
+        / "{" __* members:MapPairMember __* "}" {
+            return {
+                type:       "MapLiteral",
+                location:   location( ),
+                id:         id( ),
+                value:      members
+            }
+        }
+
+    MapPairMember
+        = member:MapAssignment SeparatorMultiline more:MapPairMember {
+            return [ member ].concat( more )
+        } 
+        / member:MapAssignment {
+            return [ member ]
+        }
+
+    MapAssignment
+        = key:Expression _* ObjectAssignmentKeyValueCharacter _*
+          value:ArgumentReturnables {
+            return {
+                key:    key,
+                value:  value
+            }
+        }
 
 //
 // ─── OBJECT LITERALS ────────────────────────────────────────────────────────────

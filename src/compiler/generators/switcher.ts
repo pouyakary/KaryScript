@@ -20,6 +20,7 @@
 /// <reference path="nodes/literals/array.ts" />
 /// <reference path="nodes/literals/set.ts" />
 /// <reference path="nodes/literals/object.ts" />
+/// <reference path="nodes/literals/map.ts" />
 /// <reference path="nodes/literals/table.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
@@ -115,6 +116,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ObjectLiteral':
                     return Nodes.ObjectLiteral.Compile( node as AST.IObjectLiteral, env )
+
+                case 'MapLiteral':
+                    return Nodes.Map.Compile( node as AST.IMapLiteral, env )
 
                 case 'TableLiteral':
                     return Nodes.Table.Compile( node as AST.ITableLiteral, env )

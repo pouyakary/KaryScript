@@ -31,23 +31,6 @@ This will compile to this:
 f(g( ), z(y(x()), 5))
 ```
 
-
-#### Set & Map Literals
-
-Set and map literals will what is there for arrays and objects in JS to sets and maps.
-
-```
-def my-set = {1 2 3}
-def my-map = {something/something: 23, 4: 2}
-```
-
-And can be compiled to:
-
-```
-var my_set = new Set([1, 2, 3]);
-var my_map = (new Map( )).set(something.something, 23).set(4, 2);
-```
-
 #### Identifier Interpolation
 
 ```
