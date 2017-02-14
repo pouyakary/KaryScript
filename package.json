@@ -31,7 +31,8 @@
   },
   "homepage": "https://github.com/karyfoundation/karyscript#readme",
   "dependencies": {
-    "pegjs": "^0.10.0"
+    "pegjs": "^0.10.0",
+    "source-map": "^0.5.6"
   },
   "devDependencies": {}
 }
