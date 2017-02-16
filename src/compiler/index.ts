@@ -11,7 +11,7 @@
 /// <reference path="version.ts" />
 /// <reference path="generators/switcher.ts" />
 /// <reference path="tools/reporter.ts" />
-
+/// <reference path="./interfaces/source-map.ts" />
 
 namespace KaryScript.Compiler {
 
@@ -24,15 +24,18 @@ namespace KaryScript.Compiler {
          * __KaryScript Source Code__ containing the __"Content of a single source file"__
          * and compiles it to a JavaScript String or throws CompilerErrors
          */
-        export function Compile( src: string ): string | null {
+        export function Compile ( src: string,
+                             filename: string ): SourceMap.SourceNode | null {
             try {
-                // parsing
+                // imports
                 const parser = require( './parser.js' )
+
+                // parsing
                 const ast = parser.parse( src ) as AST.IBody
                 
                 // generating the code
                 try {
-                    return CompileAST( ast )
+                    return CompileAST( ast, filename )
 
                 } catch ( codeErrors ) {
                     throw Reporter.HandleCodeErrorsAtCompileEnd( codeErrors )
@@ -48,27 +51,40 @@ namespace KaryScript.Compiler {
     //
 
         /** Gets the parsed AST and compiles it into JavaScript String */
-        export function CompileAST ( src: AST.IBody ): string {
+        export function CompileAST ( src: AST.IBody,
+                                filename: string ): SourceMap.SourceNode {
+            // imports
+            const sourceMap = require( 'source-map' )
+
             // base env info
             let baseEnvInfo: IEnvInfo = {
-                ParentNode: [ Object.assign({ }, BaseNodeObject ) ],
+                ParentNode: [
+                    Object.assign({ }, BaseNodeObject )
+                ],
                 ScopeLevel: 0,
                 DeclaredIdentifiers: new Set<string>( ),
                 Errors: new Set( ),
+                GenerateSourceNode: ( node, chunk ) => 
+                    <SourceMap.SourceNode> new sourceMap.SourceNode(
+                        node.location.start.line,
+                        node.location.start.column,
+                        filename,
+                        chunk ),
                 Format: {
                     PrintComments: true
                 }
             }
 
-            let code = ""
+            // compiling
+            let code: null | SourceMap.SourceNode = null
             try {
                 // compiling stuff
-                code =  Nodes.CompileSingleNode( src, baseEnvInfo )
-            } finally {
+                return <SourceMap.SourceNode> Nodes.CompileSingleNode( src, baseEnvInfo )
+            } catch ( error ) {
                 if ( baseEnvInfo.Errors.size > 0 )
                     throw baseEnvInfo.Errors
-                
-                return code
+
+                throw error
             }
         }
 
@@ -84,6 +100,12 @@ namespace KaryScript.Compiler {
                 end: { offset: 0, column: 0, line: 0 }
             }
         }
+    
+    //
+    // ─── SOURCE RESULT ──────────────────────────────────────────────────────────────
+    //
+
+        export type CompiledCode = String | SourceMap.SourceNode
 
     //
     // ─── BASE ───────────────────────────────────────────────────────────────────────

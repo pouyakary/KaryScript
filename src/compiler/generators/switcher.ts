@@ -32,8 +32,6 @@
 /// <reference path="nodes/statements/loops/for.ts" />
 /// <reference path="nodes/statements/return.ts" />
 /// <reference path="nodes/statements/switch.ts" />
-/// <reference path="nodes/spaces/inline-comment.ts" />
-/// <reference path="../sourcemap/mapper.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
@@ -43,30 +41,31 @@ namespace KaryScript.Compiler.Nodes {
 
         /** Compiles a simple given node */
         export function CompileSingleNode ( node: AST.IBase | string,
-                                             env: IEnvInfo ): string {
+                                             env: IEnvInfo ): CompiledCode {
             if ( typeof node === 'string' )
                 return node
 
             env.ParentNode.push( node )
             const compiledCode = SwitchAndCompileNode( node, env )
             env.ParentNode.pop( )
-            return SourceMap.GenerateMap( node.id, compiledCode )
+            return compiledCode
         }
 
     //
     // ─── SWITCHER ───────────────────────────────────────────────────────────────────
     //
 
-        function SwitchAndCompileNode ( node: AST.IBase, env: IEnvInfo ): string {
+        function SwitchAndCompileNode ( node: AST.IBase,
+                                         env: IEnvInfo ): CompiledCode {
             switch ( node.type ) {
                 case 'Body':
                     return Nodes.Body.Compile( node as AST.IBody, env )
 
                 case 'NumericLiteral':
-                    return Nodes.Numeric.Compile( node as AST.INumericLiteral )
+                    return Nodes.Numeric.Compile( node as AST.INumericLiteral, env )
                 
                 case 'BooleanLiteral':
-                    return Nodes.Boolean.Compile( node as AST.IBooleanLiteral )
+                    return Nodes.Boolean.Compile( node as AST.IBooleanLiteral, env )
 
                 case 'StringLiteral':
                     return Nodes.String.Compile( node as AST.IStringLiteral, env )
@@ -141,13 +140,9 @@ namespace KaryScript.Compiler.Nodes {
                 case 'Selector':
                     return Nodes.Selector.Compile( node as AST.ISelector, env )
 
-                case 'InlineComment':
-                    return Nodes.InlineComment.Compile( node as AST.IInlineComment, env )
-
                 case 'LineTerminator':
-                    return '\n'
-
                 case 'Empty':
+                case 'InlineComment':
                 default:
                     return ''
             }

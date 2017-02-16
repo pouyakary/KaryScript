@@ -9,6 +9,7 @@
 
 /// <reference path="../../switcher.ts" />
 /// <reference path="../../../interfaces/envinfo.ts" />
+/// <reference path="../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.SingleAssignment {
 
@@ -16,12 +17,15 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
     // ─── RETURN STATEMENT ───────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ISingleAssignmentStatement, env: IEnvInfo ) {
-            const name   = Nodes.CompileSingleNode( node.name, env )
-            const assign = (( node.key === '/=' )? name + "." : '') +
-                                Nodes.CompileSingleNode( node.value, env )
+        export function Compile ( node: AST.ISingleAssignmentStatement,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
 
-            return name + " = " + assign + Env.Semicolon( env )
+            const name          = Nodes.CompileSingleNode( node.name, env )
+            const assign        = ( node.key === '/=' )? name + "." : ''
+            const assignExpr    = Nodes.CompileSingleNode( node.value, env )
+
+            return env.GenerateSourceNode( node,
+                [ name, " = ", assign, assignExpr, Env.Semicolon( env ) ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

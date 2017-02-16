@@ -9,6 +9,7 @@
 //
 
 /// <reference path="../../switcher.ts" />
+/// <reference path="../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.ArrayLiteral {
 
@@ -16,8 +17,16 @@ namespace KaryScript.Compiler.Nodes.ArrayLiteral {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IArrayLiteral, env: IEnvInfo ) {
-            return '[' + node.value.map( i => Nodes.CompileSingleNode( i, env ) ).join(', ') + ']'
+        export function Compile ( node: AST.IArrayLiteral,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+
+            const body = Join( ", ",
+                node.value.map( i =>
+                    env.GenerateSourceNode( i,
+                        Nodes.CompileSingleNode( i, env ))))
+
+            return env.GenerateSourceNode( node,
+                [ '[' ].concat( ( body as any ).concat( ']' ) ) )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

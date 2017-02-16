@@ -11,6 +11,7 @@
 /// <reference path="variable.ts" />
 /// <reference path="../../literals/object.ts" />
 /// <reference path="../../../../tools/exportable.ts" />
+/// <reference path="../../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.ObjectDeclaration {
 
@@ -18,12 +19,17 @@ namespace KaryScript.Compiler.Nodes.ObjectDeclaration {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IObjectDeclaration, env: IEnvInfo ) {
-            return HandleExportedKey( node )
-                + (( node.kind === 'object' )?
-                    Nodes.Declaration.GetDeclarationKey( env ) : 'const')
-                + ' ' + Nodes.Address.HandleName( node.name ) + ' = '
-                + Nodes.ObjectLiteral.Compile( node, env )
+        export function Compile ( node: AST.IObjectDeclaration,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+            return env.GenerateSourceNode( node, Concat([
+                HandleExportedKey( node ),
+                (( node.kind === 'object' )?
+                    Nodes.Declaration.GetDeclarationKey( env ) : 'const'),
+                " ",
+                Nodes.Address.CompileIdentifier( node.name, env ),
+                " = ",
+                Nodes.ObjectLiteral.Compile( node, env )
+            ]))
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -16,12 +16,17 @@ namespace KaryScript.Compiler.Nodes.String {
     // ─── STRING LITERAL ─────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IStringLiteral, env: IEnvInfo ) {
+        export function Compile ( node: AST.IStringLiteral,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+
             if ( node.parts.length === 1 )
                 if ( node.parts[ 0 ].type === 'StringPart' )
-                    return CompileNormalString( node.parts[ 0 ] as AST.IStringPart )
+                    return CompileNormalString( node.parts[ 0 ] as AST.IStringPart, env )
                 else
-                    return Nodes.CompileSingleNode( node.parts[ 0 ], env ) + ".toString()"
+                    return env.GenerateSourceNode( node, [
+                        Nodes.CompileSingleNode( node.parts[ 0 ], env ), ".toString()"
+                    ])
+
             else
                 return CompileStringWithInterpolation( node, env )
         }
@@ -38,8 +43,10 @@ namespace KaryScript.Compiler.Nodes.String {
     // ─── COMPILE NORMAL STRING ──────────────────────────────────────────────────────
     //
 
-        function CompileNormalString ( node: AST.IStringPart ) {
-            return '"' + HandleEscapedSequences( node.part ) + '"'
+        function CompileNormalString ( node: AST.IStringPart,
+                                        env: IEnvInfo):SourceMap.SourceNode {
+            return env.GenerateSourceNode( node, '"' +
+                HandleEscapedSequences( node.part ) + '"' )
         }
 
     //
@@ -47,18 +54,24 @@ namespace KaryScript.Compiler.Nodes.String {
     //
 
         function CompileStringWithInterpolation ( node: AST.IStringLiteral,
-                                                   env: IEnvInfo ) {           
-            let parts = new Array<string>( )
+                                                   env: IEnvInfo ): SourceMap.SourceNode {
+        
+            let parts = new Array<CompiledCode>( )
             for ( let part of node.parts ) {
                 if ( part.type === 'StringPart' )
                     parts.push( HandleEscapedSequences( part.part ) )
                 else
-                    parts.push("${" + Nodes.CompileSingleNode( part, env ) + "}")
+                    parts.push( env.GenerateSourceNode( part, [
+                        "${",
+                        Nodes.CompileSingleNode( part, env ),
+                        "}"
+                    ]))
             }
 
             // \x60 is the https://en.wikipedia.org/wiki/Grave_accent used to make
             // template strings in javascript
-            return '\x60' + parts.join('') + '\x60';    
+            return env.GenerateSourceNode( node,
+                [ <any> '\x60' ].concat( parts ).concat( '\x60' ))    
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

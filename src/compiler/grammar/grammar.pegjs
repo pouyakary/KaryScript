@@ -21,8 +21,10 @@
                 function wrapPart ( ) {
                     if ( currentToken.length > 0 ) {
                         result.push({
-                            type: 'StringPart',
-                            part: currentToken.join('')
+                            type:       'StringPart',
+                            location:   location( ),
+                            id:         id( ),
+                            part:       currentToken.join('')
                         })
                     }
                 }
@@ -100,7 +102,7 @@
             }
         }
 
-    StetamentEnd
+    StatementEnd
         = ( LineTerminator / EOF )
 
 //
@@ -195,7 +197,7 @@
         / Expression
 
 //
-// ─── FORS ───────────────────────────────────────────────────────────────────────
+// ─── LOOPS ──────────────────────────────────────────────────────────────────────
 //
 
     ForStatement 'for loop statement'
@@ -241,7 +243,7 @@
                 location:   location( ),
                 kind:       "foreach",
                 key:        key,
-                iterator:   iterator.name,
+                iterator:   iterator,
                 iterable:   iterable,
                 body:       body
             }
@@ -253,7 +255,7 @@
 
     ForIndexVar
         = __+ "via" __+ name:Identifier {
-            return name.name
+            return name
         }
 
     ForStep
@@ -305,7 +307,7 @@
         / StringLiteral
 
 //
-// ─── CONDITIONABLE ──────────────────────────────────────────────────────────────
+// ─── PREDICATES ─────────────────────────────────────────────────────────────────
 //
 
     ConditionalsPredicate
@@ -417,11 +419,11 @@
         }
 
     ElseIfStatementArray
-        = elesIfClouse:ElseIfStatement more:ElseIfStatementArray {
-            return [ elesIfClouse ].concat( more )
+        = elseIfClause:ElseIfStatement more:ElseIfStatementArray {
+            return [ elseIfClause ].concat( more )
         } 
-        / elesIfClouse:ElseIfStatement {
-            return [ elesIfClouse ]
+        / elseIfClause:ElseIfStatement {
+            return [ elseIfClause ]
         }
 
     ElseIfStatement 'also if clause'
@@ -478,7 +480,7 @@
                 type:       "LambdaExpression",
                 location:   location( ),
                 id:         id( ),
-                args:       args.map( x => x.name ),
+                args:       args,
                 code:       code
             }
         }
@@ -489,7 +491,7 @@
                 type:       "LambdaExpression",
                 location:   location( ),
                 id:         id( ),
-                args:       args.map( x => x.name ),
+                args:       args,
                 code:       code
             }
         }
@@ -568,7 +570,7 @@
         }
 
     SExpressionBody
-        = command:AddressIdentifier __+ params:SExpressionArugmentArray {
+        = command:AddressIdentifier __+ params:SExpressionArgumentArray {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -600,20 +602,20 @@
             }
         }
     
-    SExpressionArugmentArray
-        = arg:SExpressionArugment SeparatorMultiline more:SExpressionArugmentArray {
+    SExpressionArgumentArray
+        = arg:SExpressionArgument SeparatorMultiline more:SExpressionArgumentArray {
             return [ arg ].concat( more )
         } 
-        / subArg:SExpressionArugment {
+        / subArg:SExpressionArgument {
             return [ subArg ]
         }
 
-    SExpressionArugment
+    SExpressionArgument
         = PipePlaceholder
         / Expression
 
 //
-// ─── CLASS DECLERATION ──────────────────────────────────────────────────────────
+// ─── CLASS DECLARATION ──────────────────────────────────────────────────────────
 //
 
     ClassDeclaration 'class declaration'
@@ -623,7 +625,7 @@
                 type:       'ClassDeclaration',
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 exported:   exported,
                 defs:       defs,
                 origin:     origin
@@ -635,7 +637,7 @@
                 type:       'ClassDeclaration',
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 exported:   exported,
                 defs:       null,
                 origin:     origin
@@ -651,12 +653,12 @@
         = arg:FunctionDeclaration __+ more:ClassFunctionDeclarations {
             return [ arg ].concat( more )
         } 
-        / decleration:FunctionDeclaration {
-            return [ decleration ]
+        / declaration:FunctionDeclaration {
+            return [ declaration ]
         }
 
 //
-// ─── FUNCTION DECLERATION ───────────────────────────────────────────────────────
+// ─── FUNCTION DECLARATION ───────────────────────────────────────────────────────
 //
 
     FunctionDeclaration 'function declaration'
@@ -666,10 +668,10 @@
                 type:       "FunctionDeclaration",
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 key:        key,
                 exported:   exported,
-                args:       args.map( x => x.name ),
+                args:       args,
                 code:       code
             }
         }
@@ -679,7 +681,7 @@
                 type:       "FunctionDeclaration",
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 key:        key,
                 exported:   exported,
                 args:       null,
@@ -722,9 +724,13 @@
     TableColumnHeaderMember
         = _* name:( "#" / Identifier ) _* "|" {
             if ( name === "#" )
-                return "#"
+                return {
+                    type:       'Octothorpe',
+                    location:   location( ),
+                    id:         id( )
+                }
             else
-                return name.name
+                return name
         }
 
 
@@ -747,12 +753,17 @@
         }
 
     TableRow
-        = "|" members:TableRowMemebers {
-            return members
+        = "|" members:TableRowMembers {
+            return {
+                type:       'TableRow',
+                location:   location( ),
+                id:         id( ),
+                cells:      members
+            }
         }
         
-    TableRowMemebers
-        = member:TableRowSingleMember more:TableRowMemebers {
+    TableRowMembers
+        = member:TableRowSingleMember more:TableRowMembers {
             return [ member ].concat( more )
         } 
         / member: TableRowSingleMember {
@@ -784,7 +795,7 @@
 // ─── DEFINE STATEMENT ───────────────────────────────────────────────────────────
 //
 
-    DeclarationStatement 'decleration statement'
+    DeclarationStatement 'declaration statement'
         = exported:ExportKey modifier:( "con" / "def" ) _+
           assignment:DeclarationAssignment {
             return {
@@ -804,7 +815,7 @@
                 id:         id( ),
                 kind:       'MultiAlloc',
                 exported:   exported,
-                names:      names.map( x => x.name )
+                names:      names
             }
         }
 
@@ -844,13 +855,13 @@
 // ─── ASSIGN STATEMENT ───────────────────────────────────────────────────────────
 //
 
-    DeclarationAssignment 'decleration statement'
+    DeclarationAssignment 'declaration statement'
         = name:Identifier __* "=" __* value:Returnables {
             return {
                 type:       'DeclarationAssignment',
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 value:      value
             }
         }
@@ -892,8 +903,8 @@
                 location:   location( ),
                 id:         id( ),
                 address:    ( member.type === "Identifier" )
-                            ? [ space.name, member.name ]
-                            : [ space.name ].concat( member.address )
+                            ? [ space, member ]
+                            : [ space ].concat( member.address )
             }
         }
         / Identifier
@@ -908,12 +919,12 @@
         }
 
     IdentifierName
-        = inetiferStart:IdentifierStart tail:IdentifierPart* {
+        = identiferStart:IdentifierStart tail:IdentifierPart* {
             return {
                 type:       'Identifier',
                 location:   location( ),
                 id:         id( ),
-                name:       inetiferStart + tail.join('')
+                name:       identiferStart + tail.join('')
             }
         }
 
@@ -933,7 +944,7 @@
         }
 
 //
-// ─── UNARAY OPERATORS ───────────────────────────────────────────────────────────
+// ─── UNARY OPERATORS ────────────────────────────────────────────────────────────
 //
 
     UnaryOperator 'unary operator'
@@ -973,6 +984,7 @@
         = key:Expression _* ObjectAssignmentKeyValueCharacter _*
           value:ArgumentReturnables {
             return {
+                location: location( ),
                 key:    key,
                 value:  value
             }
@@ -1007,7 +1019,7 @@
                 type:       "ObjectDeclaration",
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 value:      members,
                 exported:   exported,
                 kind:       kind
@@ -1031,7 +1043,7 @@
         = name:Identifier _* ObjectAssignmentKeyValueCharacter _*
           value:ArgumentReturnables {
             return {
-                key:    name.name,
+                key:    name,
                 value:  value
             }
         }
@@ -1064,7 +1076,7 @@
 // ─── ARRAY LITERALS ─────────────────────────────────────────────────────────────
 //
 
-    ArrayLiteral 'arary literal'
+    ArrayLiteral 'array literal'
         = "[" __* "]" {
             return {
                 type:       "ArrayLiteral",
@@ -1089,7 +1101,7 @@
                 type:       "ArrayDeclaration",
                 location:   location( ),
                 id:         id( ),
-                name:       name.name,
+                name:       name,
                 exported:   exported,
                 value:      members
             }
@@ -1176,7 +1188,7 @@
             / "of"              !IdentifierName
             / "in"              !IdentifierName
             / "while"           !IdentifierName
-            / "continie"        !IdentifierName
+            / "continue"        !IdentifierName
             / "debugger"        !IdentifierName
             / "delete"          !IdentifierName
             / "do"              !IdentifierName
@@ -1501,7 +1513,7 @@
 
 
     PlainWhiteSpace 'white space'
-        = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeperatorSpaces ) {
+        = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeparatorSpaces ) {
             return {
                 type:       '_',
                 location:   location( ),
@@ -1528,7 +1540,7 @@
             }
         }
 
-    SeperatorSpaces = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
+    SeparatorSpaces = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
 //
 // ─── SPECIAL PARTS FROM JAVASCRIPT GRAMMAR ──────────────────────────────────────
@@ -1676,7 +1688,7 @@
 
 
 //
-// ─── SEPCIAL CHARACTERS ─────────────────────────────────────────────────────────
+// ─── SPECIAL CHARACTERS ─────────────────────────────────────────────────────────
 //
 
     // Unicode Character Categories

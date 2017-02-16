@@ -10,6 +10,7 @@
 
 /// <reference path="../../switcher.ts" />
 /// <reference path="../../../interfaces/envinfo.ts" />
+/// <reference path="../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.Switch {
 
@@ -17,29 +18,34 @@ namespace KaryScript.Compiler.Nodes.Switch {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ISwitchStatement, env: IEnvInfo ) {
+        export function Compile ( node: AST.ISwitchStatement,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
             // header
-            const header = "switch (" + Nodes.CompileSingleNode( node.switchable, env )
-                            + ") {\n"
+            const parts = [
+                "switch (", Nodes.CompileSingleNode( node.switchable, env ), ") {"
+            ]
 
             // cases
-            let compiledCases = new Array<string>( )
             if ( node.cases )
                 for ( let caseStatement of node.cases ) {
-                    const cases = caseStatement.cases.map(
-                        x => "case " + Nodes.CompileSingleNode( x, env ) + ":" ).join('\n')
-                    compiledCases.push(
-                        cases + Nodes.CompileSingleNode( caseStatement.body, env)
-                              + "\n    break;\n")
+                    const cases = caseStatement.cases.map( x =>
+                        env.GenerateSourceNode( caseStatement, Concat([
+                            "case ", Nodes.CompileSingleNode( x, env ), ": " ])))
+
+                    parts.push( env.GenerateSourceNode( caseStatement,
+                        ( <CompiledCode[ ]> cases ).concat([
+                            Nodes.CompileSingleNode( caseStatement.body, env),
+                                " break; " ])))
                 }
 
             // default case
-            if ( node.defaultBody )
-                compiledCases.push(
-                    "default:\n" + Nodes.CompileSingleNode( node.defaultBody, env ))
+            if ( node.defaultBody ) {
+                parts.push( "default: " )
+                parts.push( Nodes.CompileSingleNode( node.defaultBody, env ) )
+            }
 
             // composing switch:
-            return header + compiledCases.join('\n') + '\n}'
+            return env.GenerateSourceNode( node, parts.concat( '}' ) )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

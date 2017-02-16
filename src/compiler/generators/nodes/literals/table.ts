@@ -10,6 +10,7 @@
 
 /// <reference path="../../switcher.ts" />
 /// <reference path="../../../tools/indent.ts" />
+/// <reference path="../../../tools/concat.ts" />
 /// <reference path="../../../tools/reporter.ts" />
 
 namespace KaryScript.Compiler.Nodes.Table {
@@ -18,13 +19,16 @@ namespace KaryScript.Compiler.Nodes.Table {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ITableLiteral, env: IEnvInfo ) {
+        export function Compile ( node: AST.ITableLiteral,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
             // checks
-            if ( !CheckTableSize( node, env ) ) return ''
-            if ( !CheckHeaderPlaceholder( node, env ) ) return ''
+            if ( !CheckTableSize( node, env ) )
+                return env.GenerateSourceNode( node, '' )
+            if ( !CheckHeaderPlaceholder( node, env ) )
+                return env.GenerateSourceNode( node, '' )
 
             // body
-            if ( node.header[ 0 ] === "#" )
+            if ( node.header[ 0 ].type === 'Octothorpe' )
                 return CompileObjectTable( node, env )
             else
                 return CompileArrayTable( node, env )
@@ -34,54 +38,73 @@ namespace KaryScript.Compiler.Nodes.Table {
     // ─── ARRAY TABLE ────────────────────────────────────────────────────────────────
     //
 
-        function CompileArrayTable ( node: AST.ITableLiteral, env: IEnvInfo ) {
-            let rows = new Array<string>( )
+        function CompileArrayTable ( node: AST.ITableLiteral,
+                                      env: IEnvInfo ): SourceMap.SourceNode {
+
+            let rows = new Array<CompiledCode>( )
 
             for ( let index = 0; index < node.data.length; index++ )
-                rows.push( CompileRow( node.header, node.data[ index ], env ) )
+                rows.push( CompileRow( node.header, node.data[ index ], env, false ) )
 
-            return "[\n" + 
-                rows.join(',\n').split('\n').map( x => "    " + x ).join('\n')
-             + "\n]"
+            return env.GenerateSourceNode( node, Concat([
+                "[",  Join('\, ', rows ), "]"
+            ]))
         }
 
     //
     // ─── OBJECT TABLES ──────────────────────────────────────────────────────────────
     //
 
-        function CompileObjectTable ( node: AST.ITableLiteral, env: IEnvInfo ) {
+        function CompileObjectTable ( node: AST.ITableLiteral,
+                                       env: IEnvInfo ): SourceMap.SourceNode {
             // checks
-            if ( !CheckObjectTable( node, env ) ) return ''
+            if ( !CheckObjectTable( node, env ) )
+                return env.GenerateSourceNode( node, '' )
 
             // body
-            const objectKeys = node.data.map( x => x[ 0 ] )
-            const header = node.header.splice( 1 )
-            let rows = new Array<string>( )
+            const   objectKeys  = node.data.map( x => x.cells[ 0 ] )
+            const   header      = node.header.splice( 1 )
+            let     rows        = new Array<SourceMap.SourceNode>( )
 
             for ( let index = 0; index < node.data.length; index++ )
-                rows.push( Nodes.CompileSingleNode( objectKeys[ index ], env ) + ": " +
-                     CompileRow( header, node.data[ index ].slice( 1 ), env ) )
+                rows.push( env.GenerateSourceNode( node, [
+                    Nodes.CompileSingleNode( objectKeys[ index ], env ),
+                    ": ",
+                     CompileRow( header, node.data[ index ], env, true )
+                ]))
             
-            return "{\n" + 
-                rows.join(',\n').split('\n').map( x => "    " + x ).join('\n')
-             + "\n}"
+            return env.GenerateSourceNode( node, Concat([ "{", Join(', ', rows),  "}" ]))
         }
 
     //
     // ─── COMPILE ROW ────────────────────────────────────────────────────────────────
     //
 
-        function CompileRow ( keys: string[ ], cells: AST.IBase[ ], env: IEnvInfo ) {
-            let compiledCells = new Array<string>( )
+        function CompileRow ( keys: AST.THeaderable[ ],
+                               row: AST.ITableRow,
+                               env: IEnvInfo,
+                             slice: boolean ): SourceMap.SourceNode {
+            // defs
+            const   cells           = ( slice? row.cells.slice( 1 ) : row.cells )
+            let     compiledCells   = new Array<SourceMap.SourceNode>( )
 
+            // body
             for ( let index = 0; index < keys.length; index++ ) {
                 const cellValue = (( cells[ index ].type === "EmptyCell" )?
                     "null" : Nodes.CompileSingleNode( cells[ index ], env ))
+
                 compiledCells.push(
-                    "    " + Nodes.Address.HandleName( keys[ index ] ) + ": " + cellValue )
+                    env.GenerateSourceNode( keys[ index ] , [
+                        Nodes.CompileSingleNode( keys[ index ], env ),
+                        ": ",
+                        cellValue
+                    ]))
             }
 
-            return "{\n" + compiledCells.join(',\n') + "\n}"
+            // done
+            return env.GenerateSourceNode( row, Concat([
+                "{", Join( ", ", compiledCells ), "}"
+            ]))
         }
 
     //
@@ -93,10 +116,12 @@ namespace KaryScript.Compiler.Nodes.Table {
             let result = true, line = 1
 
             for ( let row of node.data ) {
-                if ( row.length !== tableSize ) {
-                    let word = (( row.length > tableSize )? "more" : "less" )
+                if ( row.cells.length !== tableSize ) {
+                    let word = (( row.cells.length > tableSize )? "more" : "less" )
+
                     Reporter.Report( env,
                         `Row ${ line } has ${ word } cells than original table size`, node )
+
                     result = false
                 }
                 line++
@@ -112,9 +137,10 @@ namespace KaryScript.Compiler.Nodes.Table {
         function CheckObjectTable ( node: AST.ITableLiteral, env: IEnvInfo ) {
             let isOkay = true
             const possibleIdentifiers = [
-                "Identifier", "StringLiteral", "AddressIdentifier" ]
+                "Identifier", "StringLiteral", "AddressIdentifier"
+            ]
 
-            for ( let key of node.data.map( x => x[ 0 ] ) )
+            for ( const key of node.data.map( x => x.cells[ 0 ] ) )
                 if ( possibleIdentifiers.indexOf( key.type ) === -1 )
                     Reporter.Report( env,
                         `Object of type ${ key.type } can't be used as object table key`,
@@ -131,7 +157,7 @@ namespace KaryScript.Compiler.Nodes.Table {
             let locationSum = 0
 
             for ( let index = 0; index < node.header.length; index++ )
-                if ( node.header[ index ] === '#' )
+                if ( node.header[ index ].type === 'Octothorpe' )
                     locationSum += index
 
             if ( locationSum > 1 )

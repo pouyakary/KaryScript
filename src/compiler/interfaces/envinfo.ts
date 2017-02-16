@@ -42,6 +42,11 @@ namespace KaryScript.Compiler {
              * Formatting defs
              */
             Format: Formatter
+
+            /**
+             * SourceMap Generator
+             */
+            GenerateSourceNode: ( node: AST.IBase, chunk: Array<CompiledCode> | CompiledCode ) => SourceMap.SourceNode
         }
 
     //

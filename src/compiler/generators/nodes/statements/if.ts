@@ -17,7 +17,9 @@ namespace KaryScript.Compiler.Nodes.If {
     // ─── COMPILE IF ─────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IIfStatement, env: IEnvInfo ): string {
+        export function Compile ( node: AST.IIfStatement,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+
             switch ( node.kind ) {
                 case 'if':
                     return CompileSimpleIf( node as AST.ISimpleIf, env )
@@ -34,40 +36,48 @@ namespace KaryScript.Compiler.Nodes.If {
     // ─── COMPILE SIMPLE IF ──────────────────────────────────────────────────────────
     //
 
-        function CompileSimpleIf ( node: AST.ISimpleIf, env: IEnvInfo ) {
+        function CompileSimpleIf ( node: AST.ISimpleIf,
+                                    env: IEnvInfo ): SourceMap.SourceNode {
             const predicate = Nodes.CompileSingleNode( node.predicate, env )
             const sign      = ( node.key === 'unless' )? '!' : ''
             const body      = Nodes.CompileSingleNode( node.trueBranch, env )
-            return 'if (' + sign + predicate + ') {\n' + body + '\n}'
+            return env.GenerateSourceNode( node, 
+                [ 'if (', sign, predicate, ') {', body, '}' ])
         }
 
     //
     // ─── IF WITH ELSE ───────────────────────────────────────────────────────────────
     //
 
-        function CompileIfWithELse ( node: AST.IIfWithElse, env: IEnvInfo ) {
+        function CompileIfWithELse ( node: AST.IIfWithElse,
+                                      env: IEnvInfo ): SourceMap.SourceNode {
             const mainPart    = CompileSimpleIf( node, env )
             const falseBranch = Nodes.CompileSingleNode( node.falseBranch, env )
-            return mainPart + ' else {' + falseBranch + '\n}'
+            return env.GenerateSourceNode( node,
+                [ mainPart, ' else {', falseBranch, '}' ])
         }
 
     //
     // ─── IF WITH ELSE IF WITH ELSE ──────────────────────────────────────────────────
     //
 
-        function CompileIfWithElseIfWithElse ( node: AST.IIfWithElseIfAndElse, env ) {
+        function CompileIfWithElseIfWithElse ( node: AST.IIfWithElseIfAndElse,
+                                                env: IEnvInfo ): SourceMap.SourceNode {
             // main if (...)
-            let parts = [ CompileSimpleIf( node, env ) ]
+            let parts: CompiledCode[ ] = [ CompileSimpleIf( node, env ) ]
 
             // also ifs 
-            for ( let part of node.elseIfBranches )
-                parts.push( ' else ' + CompileSimpleIf( part, env ) )
+            for ( const part of node.elseIfBranches ) {
+                parts.push( ' else ' )
+                parts.push( CompileSimpleIf( part, env ) )
+            }
 
             // else if
-            parts.push(' else {' + Nodes.CompileSingleNode( node.falseBranch, env )
-                        + '\n}')
+            parts.push(' else {')
+            parts.push( Nodes.CompileSingleNode( node.falseBranch, env ) )
+            parts.push( '}')
 
-            return parts.join('')
+            return env.GenerateSourceNode( node, parts )
         }
     // ────────────────────────────────────────────────────────────────────────────────
 

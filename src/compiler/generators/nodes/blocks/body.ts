@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.Body {
     // ─── GENERATE FOR BODY ──────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IBody, env: IEnvInfo ): string {
+        export function Compile ( node: AST.IBody, env: IEnvInfo ): CompiledCode {
             // if the body is empty we should return nothing
             if ( ( node.branch as AST.IEmpty ).type === "Empty" ) return ''
 
@@ -27,7 +27,7 @@ namespace KaryScript.Compiler.Nodes.Body {
             bodyENV.ScopeLevel++
 
             // if not. we have to compile each statement and add them together
-            let compiledStatements = new Array<string>( )
+            let compiledStatements = new Array<CompiledCode>( )
             for ( let statement of ( node.branch as AST.TStatements[ ] ) )
                 compiledStatements.push( Nodes.CompileSingleNode( statement, env ) )
 
@@ -35,7 +35,7 @@ namespace KaryScript.Compiler.Nodes.Body {
             Reporter.ConcatEnvErrors( env, bodyENV )
     
             // done
-            return Indentation.AssembleLines( compiledStatements, env )
+            return env.GenerateSourceNode( node, compiledStatements )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

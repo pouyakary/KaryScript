@@ -34,7 +34,10 @@ namespace KaryScript.CLI {
                 path.resolve( path.join( __dirname, '../tests/codes/test.kk' ) ), 'utf8' )
 
             try {
-                console.log( KaryScript.Compiler.Compile( content ) )
+                const result = ( <SourceMap.SourceNode>
+                    KaryScript.Compiler.Compile( content, "file.kk" ))
+                    .toStringWithSourceMap( )
+                console.log( result.code )
             } catch ( e ) {
                 console.log( util.inspect( e,
                     {

@@ -10,6 +10,7 @@
 
 /// <reference path="../../../switcher.ts" />
 /// <reference path="../../../../interfaces/envinfo.ts" />
+/// <reference path="../../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.While {
 
@@ -17,9 +18,11 @@ namespace KaryScript.Compiler.Nodes.While {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IWhileStatement, env: IEnvInfo ) {
-            return 'while (' + Nodes.CompileSingleNode( node.predicate, env ) + ') {\n'
-                    + Nodes.CompileSingleNode( node.body, env ) + '\n}'
+        export function Compile ( node: AST.IWhileStatement,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+            return env.GenerateSourceNode( node,
+                [ 'while (', Nodes.CompileSingleNode( node.predicate, env ), ') {',
+                  Nodes.CompileSingleNode( node.body, env ), '}' ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -14,14 +14,8 @@ namespace KaryScript.Compiler.Indentation {
     // ─── INDENT STRING ──────────────────────────────────────────────────────────────
     //
 
-        export function AssembleLines ( lines: string[ ], env: IEnvInfo ) {
-            return ( Env.GetParentType( env ) === 'Root' )
-                ? lines.join( '' )
-                : lines.map( x => x.replace( /\n+$/, '\n' ) )
-                       .join( '' ).split( '\n' )
-                       .map( x => '    ' + x )
-                       .join( '\n' )
-                       .replace( /\s+$/, '' )
+        export function GenerateIndentation ( env: IEnvInfo ) {
+
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

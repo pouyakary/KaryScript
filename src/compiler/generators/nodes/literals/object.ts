@@ -11,6 +11,7 @@
 /// <reference path="../../switcher.ts" />
 /// <reference path="../expressions/address.ts" />
 /// <reference path="../../../tools/indent.ts" />
+/// <reference path="../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.ObjectLiteral {
 
@@ -18,30 +19,41 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IObjectLiteral, env: IEnvInfo ) {
-            if ( node.value.length === 0 )
-                return '{ }'
+        export function Compile ( node: AST.IObjectLiteral,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
 
-            return '{\n' + CompileObjectBody( node.value, env ) + '\n}'
+            if ( node.value.length === 0 )
+                return env.GenerateSourceNode( node, '{}' )
+
+            return env.GenerateSourceNode( node, Concat([
+                '{', CompileObjectBody( node, env ), '}' ]))
         }
 
     //
     // ─── COMPILE OBJECT BODY ────────────────────────────────────────────────────────
     //
 
-        export function CompileObjectBody ( pairs: AST.IObjectMemberPair[ ],
-                                              env: IEnvInfo ) {
-            return Indentation.AssembleLines(
-                    pairs.map( x => CompileObjectPair( x, env ) + ',\n' ), env )
+        export function CompileObjectBody ( node: AST.IObjectLiteral,
+                                             env: IEnvInfo ): SourceMap.SourceNode[ ] {
+
+            return <SourceMap.SourceNode[ ]>
+                Join( ", ",
+                    node.value.map( pair =>
+                        env.GenerateSourceNode( node,
+                            CompileObjectPair( pair, env ))))
         }
 
     //
     // ─── COMPILE OBJECT PAIR ────────────────────────────────────────────────────────
     //
 
-        export function CompileObjectPair ( pair: AST.IObjectMemberPair, env: IEnvInfo ) {
-            return Nodes.Address.HandleName( pair.key ) + ": " +
+        export function CompileObjectPair ( pair: AST.IObjectMemberPair,
+                                             env: IEnvInfo ): CompiledCode[ ] {
+            return [
+                Nodes.CompileSingleNode( pair.key, env ),
+                ": ",
                 Nodes.CompileSingleNode( pair.value, env )
+            ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

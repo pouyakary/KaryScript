@@ -15,11 +15,18 @@
 namespace KaryScript.Compiler.Nodes.SExpression {
 
     //
+    // ─── PLACEHOLDER TYPE ───────────────────────────────────────────────────────────
+    //
+
+        export type TPlaceholder = TBase | SourceMap.SourceNode
+
+    //
     // ─── S EXPRESSION ───────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ISExpression , env: IEnvInfo, 
-                                  placeholder?: TBase ): string {
+        export function Compile ( node: AST.ISExpression,
+                                   env: IEnvInfo, 
+                          placeholder?: TPlaceholder ): SourceMap.SourceNode {
 
             switch ( node.kind ) {
                 case 'FunctionCallWithArgs':
@@ -45,34 +52,48 @@ namespace KaryScript.Compiler.Nodes.SExpression {
         }
 
     //
+    // ─── HANDLE PLACEHOLDER ─────────────────────────────────────────────────────────
+    //
+
+        function CompilePlaceholder ( placeholder: TPlaceholder,
+                                              env: IEnvInfo ): CompiledCode {
+            if ( placeholder['$$$isSourceNode$$$'] )
+                return <SourceMap.SourceNode> placeholder
+            else
+                return Nodes.CompileSingleNode( placeholder as AST.IBase, env )
+        }
+
+    //
     // ─── FUNCTION CALL WITH ARGS ────────────────────────────────────────────────────
     //
 
         function CompileFunctionCallWithArgs ( node: AST.IFunctionCallWithArgsSExpression, 
                                                 env: IEnvInfo, 
-                                       placeholder?: TBase ) {
+                                       placeholder?: TPlaceholder ): SourceMap.SourceNode {
             // checks
-            if ( !CheckPlaceholderInFunctionCallWithArgsSExpression( node, env ) ) return ''
+            if ( !CheckPlaceholderInFunctionCallWithArgsSExpression( node, env ) )
+                return env.GenerateSourceNode( node, '' )
 
             // compiling args
-            let args = new Array<string>( )
+            let args = new Array<SourceMap.SourceNode>( )
             if ( node.params.find( x => x.type === 'PipePlaceholder' ) === undefined ) {
                 const arguments = ( placeholder?
                     node.params.concat([ <AST.ISExpression> placeholder ]) : node.params )
                 for ( let argument of arguments )
-                    args.push( Nodes.CompileSingleNode( argument, env ) )
+                    args.push( <SourceMap.SourceNode> Nodes.CompileSingleNode( argument, env ) )
             } else {
                 for ( let arg of node.params ) {
                     if ( arg.type === 'PipePlaceholder' && placeholder )
-                        args.push( Nodes.CompileSingleNode( placeholder, env ) )
+                        args.push( <SourceMap.SourceNode> CompilePlaceholder( placeholder, env ) )
                     else
-                        args.push( Nodes.CompileSingleNode( arg, env ) )
+                        args.push( <SourceMap.SourceNode> Nodes.CompileSingleNode( arg, env ) )
                 }
             }
 
             // and done.
-            return Nodes.CompileSingleNode( node.command, env ) + "(" + 
-                    args.join(', ') + ")" + Env.Semicolon( env )
+            return env.GenerateSourceNode( node,
+                [ Nodes.CompileSingleNode( node.command, env ), "(", args.join(', '), ")",
+                  Env.Semicolon( env ) ] )
         }
 
     //
@@ -81,22 +102,23 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CompileBinaryOperator ( node: AST.IBinaryOperatorSExpression, 
                                           env: IEnvInfo,
-                                  placeholder?: TBase ) {
+                                  placeholder?: TPlaceholder ): SourceMap.SourceNode {
             // checks
-            if ( !CheckPlaceholderInCompileBinaryOperator( node, env ) ) return ''
+            if ( !CheckPlaceholderInCompileBinaryOperator( node, env ) )
+                return env.GenerateSourceNode( node, '' )
 
             // supporting funcs
             function handlePlaceholder ( hand: AST.IBase ) {
                 if ( hand.type === 'PipePlaceholder' && placeholder )
-                    return Nodes.CompileSingleNode( placeholder, env )
+                    return CompilePlaceholder( placeholder, env )
                 else
                     return Nodes.CompileSingleNode( hand, env )
             }
 
             // body
-            const op = TranslateOperator( node.operator )
-            return '(' + handlePlaceholder( node.left ) + ' ' + op + ' ' +
-                    handlePlaceholder( node.right ) + ')'
+            const op = <string> TranslateOperator( node.operator )
+            return env.GenerateSourceNode( node, [ '(', handlePlaceholder( node.left ),
+                 ' ', op, ' ', handlePlaceholder( node.right ), ')' ])
         }
 
     //
@@ -105,10 +127,10 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
                                         env: IEnvInfo,
-                                placeholder?: TBase ): string {
+                                placeholder?: TPlaceholder ): SourceMap.SourceNode {
 
             const ph = <AST.ISExpression> ( placeholder? placeholder : node.arg )
-            let result: string
+            let result: CompiledCode[]
 
             switch ( node.operator ) {
                 case "async":
@@ -117,22 +139,22 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                 case "delete":
                 case "typeof":
                 case "void":
-                    result = node.operator + " " + Nodes.CompileSingleNode( ph, env )
+                    result = [ node.operator, " ", CompilePlaceholder( ph, env ) ]
                     break
 
                 case "not":
-                    result = "!" + Nodes.CompileSingleNode( ph, env )
+                    result = [ "!", CompilePlaceholder( ph, env ) ]
                     break
                 
                 case "clone":
-                    result = "Object.assign({ }, " + Nodes.CompileSingleNode( ph, env ) + ")"
+                    result = [ "Object.assign({ }, ", CompilePlaceholder( ph, env ), ")" ]
                     break
 
                 default:
-                    result = ''
+                    result = [ '' ]
             }
 
-            return result + Env.Semicolon( env )
+            return env.GenerateSourceNode( node, result.concat( Env.Semicolon( env ) ) )
         }
 
     //
@@ -141,9 +163,10 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CompileFunctionCallOnly ( node: AST.IFunctionCallOnlySExpression,
                                             env: IEnvInfo,
-                                   placeholder?: TBase ) {
-            const ph = placeholder? Nodes.CompileSingleNode( placeholder, env ) : ''
-            return Address.Compile( node.command, env ) + "(" + ph + ")" + Env.Semicolon( env )
+                                   placeholder?: TPlaceholder ): SourceMap.SourceNode {
+            const ph = placeholder? CompilePlaceholder( placeholder, env ) : ''
+            return env.GenerateSourceNode( node,
+                [ Address.Compile( node.command, env ),  "(", ph, ")", Env.Semicolon( env ) ])
         }
 
     //

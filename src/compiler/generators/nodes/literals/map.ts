@@ -16,11 +16,15 @@ namespace KaryScript.Compiler.Nodes.Map {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IMapLiteral, env: IEnvInfo ) {
-            if ( node.value.length === 0 )
-                return 'new Map( )'
+        export function Compile ( node: AST.IMapLiteral,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
 
-            return "(new Map( ))" + node.value.map( x => CompileMapPair( x, env ) ).join('')
+            if ( node.value.length === 0 )
+                return env.GenerateSourceNode( node, 'new Map( )' )
+
+            return env.GenerateSourceNode( node, 
+                [ <any> "(new Map( ))" ]
+                    .concat( node.value.map( x => CompileMapPair( x, env ))))
         }
 
     //
@@ -28,8 +32,13 @@ namespace KaryScript.Compiler.Nodes.Map {
     //
 
         function CompileMapPair ( node: AST.IMapMemberPair, env: IEnvInfo ) {
-            return ".set(" + Nodes.CompileSingleNode( node.key, env ) + ", "
-                + Nodes.CompileSingleNode( node.value, env ) + ")"
+            return env.GenerateSourceNode( node, [
+                ".set(", 
+                Nodes.CompileSingleNode( node.key, env ),
+                ", ",
+                Nodes.CompileSingleNode( node.value, env ),
+                ")"
+            ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

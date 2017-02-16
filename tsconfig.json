@@ -9,6 +9,7 @@
         "outFile": "bin/compiler.js"
     },
     "exclude": [
-        "node_modules", "bin"
+        "node_modules",
+        "bin"
     ]
 }

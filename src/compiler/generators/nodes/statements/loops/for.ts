@@ -16,7 +16,9 @@ namespace KaryScript.Compiler.Nodes.For {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IForStatement, env: IEnvInfo ): string {
+        export function Compile ( node: AST.IForStatement,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+
             if ( node.kind === 'repeat' )
                 return CompileRepeatFor( node as AST.IRepeatForLoop, env )
             else
@@ -27,17 +29,19 @@ namespace KaryScript.Compiler.Nodes.For {
     // ─── REPEAT FOR ─────────────────────────────────────────────────────────────────
     //
 
-        function CompileRepeatFor ( node: AST.IRepeatForLoop, env: IEnvInfo ) {
+        function CompileRepeatFor ( node: AST.IRepeatForLoop,
+                                     env: IEnvInfo ): SourceMap.SourceNode {
 
             //
             // ─── SUPPORTING DATA ─────────────────────────────────────────────
             //
 
                 const iterator = (( node.indexVar )?
-                    Nodes.Address.HandleName( node.indexVar ) : GenerateRandomId( ))
+                    Nodes.Address.CompileIdentifier( node.indexVar, env )
+                    : GenerateRandomId( ))
 
                 const step = (( node.step )?
-                    Nodes.CompileSingleNode( node.step, env ) : '1')
+                    Nodes.CompileSingleNode( node.step, env ) : '1' )
 
             //
             // ─── VALUES ──────────────────────────────────────────────────────
@@ -46,11 +50,10 @@ namespace KaryScript.Compiler.Nodes.For {
                 const startingValue = HandleForChangeableExpressions( node, env, true )
                 const endingValue   = HandleForChangeableExpressions( node, env, false )
 
-                const defs = [ startingValue, endingValue ]
-                                .filter( x => x.type === 'def' )
-                                .map( x => x.def )
-
-                const defLines = (( defs.length === 0 )? "" : defs.join( '\n' ) + '\n' )
+                const defs = Join( ' ', 
+                                   <CompiledCode[ ]> [ startingValue, endingValue ]
+                                        .filter( x => x.type === 'def' )
+                                        .map( x => x.def ))
 
             //
             // ─── BODY ────────────────────────────────────────────────────────
@@ -64,25 +67,24 @@ namespace KaryScript.Compiler.Nodes.For {
 
                 const header = (( node.direction )
                     // up direction 
-                    ?(
-                        "for (let " + iterator + " = " + startingValue.inLocation + "; " +
-                        iterator + " < " + endingValue.inLocation + "; " +
-                        iterator + " += " + step + ") {"
-                    )
+                    ? env.GenerateSourceNode( node, [
+                        "for (let ", iterator,  " = ", startingValue.inLocation,
+                        "; ", iterator, " < ", endingValue.inLocation, "; ",
+                        iterator, " += ", step, ") {" ])
 
                     // down direction:
-                    :(
-                        "for (let " + iterator + " = " + endingValue.inLocation + "; " +
-                        iterator + " > " + startingValue.inLocation + "; " +
-                        iterator + " -= " + step + ") {"
-                    )
+                    : env.GenerateSourceNode( node, [
+                        "for (let ", iterator, " = ", endingValue.inLocation, "; ",
+                        iterator, " > ", startingValue.inLocation, "; ", iterator,
+                        " -= ", step, ") {" ])
                 )
 
             //
             // ─── DONE ────────────────────────────────────────────────────────
             //
 
-                return defLines + header + body + '\n}'
+                return env.GenerateSourceNode( node,
+                    Concat([ defs, header, body, '}' ]))
 
             // ─────────────────────────────────────────────────────────────────
 
@@ -92,10 +94,12 @@ namespace KaryScript.Compiler.Nodes.For {
     // ─── FOREACH LOOP ───────────────────────────────────────────────────────────────
     //
 
-        function CompileForeachForLoop ( node: AST.IForeachForLoop, env: IEnvInfo ) {
-            return 'for (let ' + Nodes.Address.HandleName( node.iterator ) + ' ' +
-                node.key + ' ' + Nodes.CompileSingleNode( node.iterable, env ) + ') {'
-                + Nodes.CompileSingleNode( node.body, env ) + '\n}'
+        function CompileForeachForLoop ( node: AST.IForeachForLoop,
+                                          env: IEnvInfo ): SourceMap.SourceNode {
+            return env.GenerateSourceNode( node,
+                [ 'for (let ', Nodes.Address.CompileIdentifier( node.iterator, env ),
+                  ' ', node.key, ' ', Nodes.CompileSingleNode( node.iterable, env ),
+                  ') {', Nodes.CompileSingleNode( node.body, env ), '}' ])
         }
 
     //
@@ -104,8 +108,8 @@ namespace KaryScript.Compiler.Nodes.For {
 
         interface IForDefs {
             type:           'def' | 'use'
-            inLocation:     string
-            def?:           string
+            inLocation:     CompiledCode
+            def?:           SourceMap.SourceNode
         }
 
         function HandleForChangeableExpressions ( parent: AST.IRepeatForLoop,
@@ -173,7 +177,9 @@ namespace KaryScript.Compiler.Nodes.For {
                     return {
                         type:           'def',
                         inLocation:     identifierName,
-                        def:            `const ${ identifierName } = ${ compiledNode };`
+                        def:            env.GenerateSourceNode( node, [
+                                            "const ", identifierName, " = ",
+                                            compiledNode, "; "]) 
                     }
                 }
 

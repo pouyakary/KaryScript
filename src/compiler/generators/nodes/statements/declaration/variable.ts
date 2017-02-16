@@ -9,6 +9,7 @@
 //
 
 /// <reference path="../../../switcher.ts" />
+/// <reference path="../../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.Declaration {
 
@@ -16,7 +17,8 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     // ─── DECLARATION ───────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.DeclarationStatementBase, env: IEnvInfo ) {
+        export function Compile ( node: AST.DeclarationStatementBase,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
             if ( node.kind === "SingleAllocInit" )
                 return CompileSingleAllocInit( node as AST.SingleAllocInitDeclaration , env )
             else
@@ -28,27 +30,32 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
-                                           env: IEnvInfo ) {
+                                           env: IEnvInfo ): SourceMap.SourceNode {
             let key: string
             if ( node.modifier === 'con' )
                 key = 'const'
             else
                 key = GetDeclarationKey( env )
 
-            const name  = Address.HandleName( node.assignment.name )
+            const name  = Address.CompileIdentifier( node.assignment.name, env )
             const expr  = CompileSingleNode( node.assignment.value, env )
 
-            return `${ key } ${ name } = ${ expr };`
+            return env.GenerateSourceNode( node, [
+                key, " ", name, " = ", expr, Env.Semicolon( env )
+            ])
         }
 
     //
     // ─── MULTI ALLOC DECLARATION ───────────────────────────────────────────────────
     //
 
-        function CompileMultiAlloc ( node: AST.MultiAllocDeclaration, env: IEnvInfo ) {
+        function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
+                                      env: IEnvInfo ): SourceMap.SourceNode {
             const key   = GetDeclarationKey( env )
-            const names = node.names.map( x => Address.HandleName( x ) )
-            return `${ key } ${ names.join(', ') };`
+            const names = Join( ', ',
+                 node.names.map( x => Address.CompileIdentifier( x, env ) ))
+            return env.GenerateSourceNode( node,
+                Concat([ key, " ", names, Env.Semicolon( env ) ]))
         }
 
     //

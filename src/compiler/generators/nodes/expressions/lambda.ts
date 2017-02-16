@@ -17,9 +17,10 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     // ─── LAMBDA EXPRESSION ──────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ILambdaExpression, env: IEnvInfo ) {
+        export function Compile ( node: AST.ILambdaExpression,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
             if ( node.code.type === 'Body' )
-                return ''
+                return env.GenerateSourceNode( node, '' )
             else
                 return CompileSimpleLambda( node, env )
         }
@@ -29,9 +30,23 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     //
 
         function CompileSimpleLambda ( node: AST.ILambdaExpression, env: IEnvInfo ) {
-            const args = node.args.map( x => Address.HandleName( x ) ).join(', ')
-            return ( ( node.args.length === 1 )? args : "(" + args + ")" ) + " => " +
-                    Nodes.CompileSingleNode( node.code, env )
+            const args = Join(', ',
+                node.args.map( x =>
+                    Address.CompileIdentifier( x, env ) ) )
+
+            let parts = Array<CompiledCode>( )
+            if ( node.args.length === 1 ) {
+                parts = parts.concat( args )
+            } else {
+                parts.push("(")
+                parts = parts.concat( args )
+                parts.push(")")
+            }
+
+            parts.push( ' => ' )
+            parts.push( Nodes.CompileSingleNode( node.code, env ) )
+
+            return env.GenerateSourceNode( node, parts )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

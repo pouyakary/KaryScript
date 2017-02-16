@@ -17,11 +17,14 @@ namespace KaryScript.Compiler.Nodes.ShorthandIf {
     // ─── COMPILE IF ─────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IShorthandIfExpression, env: IEnvInfo ) {
-            return '(' + Nodes.CompileSingleNode( node.predicate, env ) + ')? ' +
-                    Nodes.CompileSingleNode( node.trueExpression, env ) + ' : ' +
-                    Nodes.CompileSingleNode( node.falseExpression, env ) +
-                    Env.Semicolon( env )
+        export function Compile ( node: AST.IShorthandIfExpression,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
+
+            return env.GenerateSourceNode( node, [
+                '(', Nodes.CompileSingleNode( node.predicate, env ), ")? ",
+                Nodes.CompileSingleNode( node.trueExpression, env ), " : ",
+                Nodes.CompileSingleNode( node.falseExpression, env ),
+                Env.Semicolon( env ) ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

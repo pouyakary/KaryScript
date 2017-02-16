@@ -16,12 +16,15 @@ namespace KaryScript.Compiler.Nodes.Return {
     // ─── RETURN STATEMENT ───────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IReturnStatement, env: IEnvInfo ) {
+        export function Compile ( node: AST.IReturnStatement,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
             if ( node.value)
-                return node.kind + ' ' + Nodes.CompileSingleNode( node.value, env ) +
-                        Env.Semicolon( env )
+                return env.GenerateSourceNode( node,
+                    [ node.kind, ' ', Nodes.CompileSingleNode( node.value, env ),
+                        Env.Semicolon( env ) ])
             else
-                return node.kind + Env.Semicolon( env )            
+                return env.GenerateSourceNode( node,
+                    [ node.kind, Env.Semicolon( env ) ])      
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

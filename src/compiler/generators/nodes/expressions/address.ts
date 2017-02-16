@@ -15,21 +15,24 @@ namespace KaryScript.Compiler.Nodes.Address {
     // ─── ADDRESS ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IBase, env: IEnvInfo ) {
+        export function Compile ( node: AST.IBase, env: IEnvInfo ): SourceMap.SourceNode {
+            let result: CompiledCode
             if ( node.type === 'AddressIdentifier' )
-                return ( node as AST.IAddressIdentifier ).address
-                    .map( x => x.replace( /-/g, '_' ) )
+                result = ( node as AST.IAddressIdentifier ).address
+                    .map( x => x.name.replace( /-/g, '_' ) )
                     .join('.')
             else
-                return HandleName( ( node as AST.IIdentifier ).name )
+                result = CompileIdentifier( node as AST.IIdentifier, env )
+
+            return env.GenerateSourceNode( node, result )
         }
 
     //
     // ─── COMPILE IDENTIFIER NAME ────────────────────────────────────────────────────
     //
 
-        export function HandleName ( name: string ) {
-            return name.replace( /-/g, '_' )
+        export function CompileIdentifier ( node: AST.IIdentifier, env: IEnvInfo ) {
+            return env.GenerateSourceNode( node, node.name.replace( /-/g, '_' ) )
         }
     
     // ────────────────────────────────────────────────────────────────────────────────

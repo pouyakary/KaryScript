@@ -18,24 +18,29 @@ namespace KaryScript.Compiler.Nodes.Pipe {
     // ─── PIPE STATEMENT ─────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IPipeExpression, env: IEnvInfo ) {
+        export function Compile ( node: AST.IPipeExpression,
+                                   env: IEnvInfo ): SourceMap.SourceNode {
             env.ParentNode.push( node )
-            const code = CompileLevelsArray( node.levels.reverse( ), env )
+            const code = env.GenerateSourceNode( node, [
+                CompileLevelsArray( node.levels.reverse( ), env ), Env.Semicolon( env )
+            ])
             env.ParentNode.pop( )
-            return code + Env.Semicolon( env )
+            return code
         }
 
     //
     // ─── RECURSIVE PIPE COMPILER ────────────────────────────────────────────────────
     //
 
-        function CompileLevelsArray ( levels: AST.IBase[ ], env: IEnvInfo ): string {
-            if ( levels.length === 2 ) {
-                return SExpression.Compile( <AST.ISExpression> levels[ 0 ], env, levels[ 1 ] )
-            } else {
+        function CompileLevelsArray ( levels: AST.IBase[ ],
+                                         env: IEnvInfo ): SourceMap.SourceNode {
+            if ( levels.length === 2 )
+                return SExpression.Compile(
+                    <AST.ISExpression> levels[ 0 ], env, levels[ 1 ] )
+
+            else
                 return SExpression.Compile( <AST.ISExpression> levels[ 0 ], env,
                         CompileLevelsArray( levels.splice( 1 ), env ) )
-            }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

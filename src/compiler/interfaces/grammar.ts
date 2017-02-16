@@ -76,6 +76,8 @@ namespace KaryScript.Compiler.AST {
                 | "TableLiteral"
                 | "SetLiteral"
                 | "MapLiteral"
+                | "TableRow"
+                | "Octothorpe"
 
             location: ILocation
 
@@ -110,7 +112,7 @@ namespace KaryScript.Compiler.AST {
         export interface IRepeatForLoop extends IForStatement {
             kind:       'repeat'
             direction:  boolean
-            indexVar:   string | null
+            indexVar:   IIdentifier | null
             step:       TExpression | null
             range:      ForRange
         }
@@ -123,7 +125,7 @@ namespace KaryScript.Compiler.AST {
         export interface IForeachForLoop extends IForStatement {
             kind:       'foreach'
             key:        "in" | "of"
-            iterator:   string,
+            iterator:   IIdentifier,
             iterable:   TExpression,
             body:       IBody
         }
@@ -133,7 +135,7 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IClassDeclaration extends IExportable {
-            name:   string
+            name:   IIdentifier
             defs:   IFunctionDeclaration[ ]
             origin: IAddressIdentifier
         }
@@ -201,9 +203,9 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IFunctionDeclaration extends IExportable {
-            name:   string
+            name:   IIdentifier
             key:    "def" | "async"
-            args:   string[ ] | null
+            args:   IIdentifier[ ] | null
             code:   IBody
         }
 
@@ -266,12 +268,26 @@ namespace KaryScript.Compiler.AST {
             | ISExpression
 
     //
+    // ─── OCTOTHORPE ─────────────────────────────────────────────────────────────────
+    //
+
+        export interface IOctothorpe extends IBase {
+            type:       "Octothorpe"
+        }
+
+    //
     // ─── TABLE LITERAL ──────────────────────────────────────────────────────────────
     //
 
+        export type THeaderable = IIdentifier | IOctothorpe
+
         export interface ITableLiteral extends IBase {
-            header: string[ ]
-            data:   IBase[ ][ ]
+            header:     THeaderable[ ]
+            data:       ITableRow[ ]
+        }
+
+        export interface ITableRow extends IBase {
+            cells:      IBase[ ]
         }
 
     //
@@ -279,9 +295,9 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface ISelector extends IBase {
-            type:       "Selector"
-            searchable: IAddressIdentifier
-            query:      IBase
+            type:           "Selector"
+            searchable:     IAddressIdentifier
+            query:          IBase
         }
 
     //
@@ -289,7 +305,7 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IInlineComment extends IBase {
-            comment: string
+            comment:    IIdentifier
         }
 
     //
@@ -328,7 +344,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface MultiAllocDeclaration extends DeclarationStatementBase {
             kind: "MultiAlloc"
-            names: string[ ]
+            names: IIdentifier[ ]
         }
 
     //
@@ -337,7 +353,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface DeclarationAssignment extends IExportable {
             type:   "DeclarationAssignment"
-            name:   string
+            name:   IIdentifier
             value:  TReturnables
         }
 
@@ -356,7 +372,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface ILambdaExpression extends IBase {
             type: "LambdaExpression"
-            args: string[ ]
+            args: IIdentifier[ ]
             code: IBody
         }
 
@@ -393,7 +409,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface IObjectDeclaration extends IExportable {
 
-            name:   string
+            name:   IIdentifier
             value:  IObjectMemberPair[ ]
             kind:   "object" | "template"
         }
@@ -406,9 +422,9 @@ namespace KaryScript.Compiler.AST {
             value: IObjectMemberPair[ ]
         }
 
-        export interface IObjectMemberPair {
-            key: string
-            value: TReturnables
+        export interface IObjectMemberPair extends IBase {
+            key:    IIdentifier
+            value:  TReturnables
         }
 
     //
@@ -419,7 +435,7 @@ namespace KaryScript.Compiler.AST {
             value: IMapMemberPair[ ]
         }
 
-        export interface IMapMemberPair {
+        export interface IMapMemberPair extends IBase {
             key:    TExpression
             value:  TReturnables
         }
@@ -447,7 +463,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface IArrayDeclaration extends IExportable {
             type:   "ArrayDeclaration"
-            name:   string
+            name:   IIdentifier
             value:  TReturnables[ ]
         }
 
@@ -456,8 +472,8 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IReservedValueLiterals extends IBase {
-            raw: string,
-            value: TReservedValues
+            raw:    string,
+            value:  TReservedValues
         }
 
     //
@@ -519,13 +535,13 @@ namespace KaryScript.Compiler.AST {
         export type TAddressOrIdentifier = IAddressIdentifier | IIdentifier
 
         export interface IAddressIdentifier extends IBase {
-            type:   "AddressIdentifier"
-            address: string[ ]
+            type:       "AddressIdentifier"
+            address:    IIdentifier[ ]
         }
 
         export interface IIdentifier extends IBase {
-            type: "Identifier"
-            name: string
+            type:   "Identifier"
+            name:   string
         }
 
     //

@@ -10,6 +10,7 @@
 
 /// <reference path="../../../switcher.ts" />
 /// <reference path="../../../../tools/exportable.ts" />
+/// <reference path="../../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
 
@@ -21,15 +22,23 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
                                    env: IEnvInfo,
                                classDef = false ) {
 
-            const functionName = Address.HandleName( node.name )
-            const functionKey = HandleExportedKey( node )
+            const functionName  = env.GenerateSourceNode( node.name, 
+                                    Address.CompileIdentifier( node.name, env ))
+            const functionKey   = HandleExportedKey( node )
                                 + (( node.key === 'def' )? '' : 'async ')
                                 + (( classDef )? '' : 'function ')
-            let args = ''
+
+            let args = new Array<CompiledCode>( )
             if ( node.args !== null )
-                args = node.args.map( arg => Address.HandleName( arg ) ).join(', ')
+                args = Join(', ', node.args.map( arg =>
+                    env.GenerateSourceNode( arg,
+                        Nodes.CompileSingleNode( arg, env ))))
+    
             const body = Nodes.CompileSingleNode( node.code, env )
-            return functionKey + " " + functionName + "(" + args + ") {" + body + "\n}"
+
+            return env.GenerateSourceNode( node, Concat([
+                functionKey, functionName, "(", args, ") {", body, "}"
+            ]))
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
