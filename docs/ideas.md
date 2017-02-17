@@ -1,34 +1,11 @@
 # Incoming Grammars and Features
 ## Ideas
 
-#### Placeholders `IMPORTANT`
-This:
-
+#### Types
 ```
-x(y(), z(), f(1, 8, 10))
-```
-
-Can be written as:
-
-```
-def p1 = (y)
-def p2 = (z)
-def p3 = (f 1 8 10)
-(x p1 p2 p3)
-```
-
-Problem here is you __have__ to use 3 vars to write this clean. And may devs use vars like this just to write cleaner code. So place holders are macro-like vars for the _preprocessor_ that helps writing clean code while keeping it fast by just replacing place holder values:
-
-```
-hold p1 = (x) ⟶ (y) ⟶ (z $ 5)
-(f (g) @p1)
-```
-
-This will compile to this:
-
-```
-// without using any variables
-f(g( ), z(y(x()), 5))
+def add ( x: number, y: number ) number: 
+    return (sum x y)
+end
 ```
 
 #### Identifier Interpolation
