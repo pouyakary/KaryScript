@@ -3,17 +3,21 @@
   "version": "0.0.1",
   "description": "KaryScript Language Compiler and infrastructures",
   "main": "bin/index.js",
+  "bin": {
+    "kc": "./bin/kc.js"
+  },
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/compiler/grammar/grammar.pegjs",
-    "build": "npm run compile; npm run pack",
+    "build": "npm run compile; npm run pack; npm run after-pack; npm link",
     "compile": "tsc && npm run compile-parser",
     "test": "node ./tests/test.js",
     "parser-test-drive": "node ./tests/tools/parse.js",
     "tset-drive-compile": "node bin/compiler.js",
-    "pack": "webpack --config ./pack.js"
+    "pack": "webpack --config ./build/pack.js", 
+    "after-pack": "node ./build/after-pack.js"
   },
   "repository": {
     "type": "git",
