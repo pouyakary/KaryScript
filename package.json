@@ -16,7 +16,7 @@
     "test": "node ./tests/test.js",
     "parser-test-drive": "node ./tests/tools/parse.js",
     "tset-drive-compile": "node bin/compiler.js",
-    "pack": "webpack --config ./build/pack.js", 
+    "pack": "webpack --config ./build/pack.js",
     "after-pack": "node ./build/after-pack.js"
   },
   "repository": {
@@ -36,9 +36,9 @@
     "url": "https://github.com/karyfoundation/karyscript/issues"
   },
   "homepage": "https://github.com/karyfoundation/karyscript#readme",
-  "dependencies": {
+  "devDependencies": {
     "pegjs": "^0.10.0",
-    "source-map": "^0.5.6"
-  },
-  "devDependencies": {}
+    "source-map": "^0.5.6",
+    "js-yaml": "^3.8.1"
+  }
 }
