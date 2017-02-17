@@ -157,6 +157,7 @@
         / ShorthandIfExpression
         / SExpression
         / Selector
+        / BracedComparison
 
 //
 // ─── LITERALS ───────────────────────────────────────────────────────────────────
@@ -187,7 +188,7 @@
 //
 
     Comparison 'comparison expression'
-        = left:ExpressionsButComparison __* key:ComparisonKey __*
+        = left:ExpressionsButComparison key:ComparisonKey
           right:ExpressionsButComparison {
             return {
                 type:       'Comparison',
@@ -199,9 +200,16 @@
             }
         }
 
+    BracedComparison
+        = '(' __* expr:Comparison __* ')' {
+            return expr
+        }
+
     ComparisonKey
-        = '==' / '<=' / '>=' / '!=' / '<' / '>'
-        / __ key:( 'and' / 'or' ) __ {
+        = __* op:( '==' / '<=' / '>=' / '!=' / '<' / '>' ) __* {
+            return op
+        }
+        / __+ key:( 'and' / 'or' ) __+ {
             return key
         }
 

@@ -1,9 +1,6 @@
 
-if [x|type] == "awesome":
-    (console/log x)
+if (x == 4) and (foo):
+   x /= (y)
 end
-
-
-
 
 
