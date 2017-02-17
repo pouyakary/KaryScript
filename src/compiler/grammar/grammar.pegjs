@@ -124,8 +124,7 @@
         / SwitchStatement
         / UseStatement
         / ReturnStatement
-        / PipeExpression
-        / SExpression
+        / Expression
 
 //
 // ─── RETURNABLES ────────────────────────────────────────────────────────────────
@@ -145,6 +144,10 @@
 //
 
     Expression 'expressions'
+        = Comparison
+        / ExpressionsButComparison
+
+    ExpressionsButComparison
         = Literals
         / AddressIdentifier
         / Identifier
@@ -178,6 +181,29 @@
     FunctionCall 'function call'
         = PipeExpression
         / SExpression
+
+//
+// ─── COMPARE STATEMENT ──────────────────────────────────────────────────────────
+//
+
+    Comparison 'comparison expression'
+        = left:ExpressionsButComparison __* key:ComparisonKey __*
+          right:ExpressionsButComparison {
+            return {
+                type:       'Comparison',
+                location:   location( ),
+                id:         id( ),
+                key:        key,
+                left:       left,
+                right:      right,
+            }
+        }
+
+    ComparisonKey
+        = '==' / '<=' / '>=' / '!=' / '<' / '>'
+        / __ key:( 'and' / 'or' ) __ {
+            return key
+        }
 
 //
 // ─── OBJECT QUERY ───────────────────────────────────────────────────────────────
@@ -318,7 +344,8 @@
         }
 
     Predicate 'predicate'
-        = SExpressionBody
+        = Comparison
+        / SExpressionBody
         / BooleanLiteral
         / Expression
 
@@ -960,8 +987,7 @@
 //
 
     BinaryOperator 'binary operator'
-        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' / 'and' / 'or' / 
-               '=' / '>' / '<' / '<=' / '!=' / 'eq' ) {
+        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' ) {
             return {
                 type:       'BinaryOperator',
                 location:   location( ),

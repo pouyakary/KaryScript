@@ -80,6 +80,7 @@ namespace KaryScript.Compiler.AST {
                 | "Octothorpe"
                 | "HolderDeclarationStatement"
                 | "HolderIdentifier"
+                | "Comparison"
 
             location: ILocation
 
@@ -87,16 +88,26 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── COMPARISON ─────────────────────────────────────────────────────────────────
+    //
+
+        export interface IComparison extends IBase {
+            key:            '==' | '<=' | '>=' | '!=' | '<' | '>' | 'and' | 'or',
+            left:           IBase,
+            right:          IBase,
+        }
+
+    //
     // ─── HOLDERS ────────────────────────────────────────────────────────────────────
     //
 
         export interface IHolderDeclarationStatement extends IBase {
-            holder:     IHolderIdentifier,
-            value:      IBase
+            holder:         IHolderIdentifier,
+            value:          IBase
         }
 
         export interface IHolderIdentifier extends IBase {
-            name:       string
+            name:           string
         }
 
     //
@@ -110,8 +121,8 @@ namespace KaryScript.Compiler.AST {
         }
 
         export interface ICaseStatement extends IBase {
-            cases:      TExpression[ ],
-            body:       IBody
+            cases:          TExpression[ ],
+            body:           IBody
         }
 
     //
@@ -119,30 +130,30 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IForStatement extends IBase {
-            type:   'ForStatement'
-            kind:   'repeat' | 'foreach'
-            body:   IBase
+            type:           'ForStatement'
+            kind:           'repeat' | 'foreach'
+            body:           IBase
         }
 
         export interface IRepeatForLoop extends IForStatement {
-            kind:       'repeat'
-            direction:  boolean
-            indexVar:   IIdentifier | null
-            step:       TExpression | null
-            range:      ForRange
+            kind:           'repeat'
+            direction:      boolean
+            indexVar:       IIdentifier | null
+            step:           TExpression | null
+            range:          ForRange
         }
 
         interface ForRange {
-            start:  TExpression | null
-            end:    TExpression
+            start:          TExpression | null
+            end:            TExpression
         }
 
         export interface IForeachForLoop extends IForStatement {
-            kind:       'foreach'
-            key:        "in" | "of"
-            iterator:   IIdentifier,
-            iterable:   TExpression,
-            body:       IBody
+            kind:           'foreach'
+            key:            "in" | "of"
+            iterator:       IIdentifier,
+            iterable:       TExpression,
+            body:           IBody
         }
 
     //
@@ -150,9 +161,9 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IClassDeclaration extends IExportable {
-            name:   IIdentifier
-            defs:   IFunctionDeclaration[ ]
-            origin: IAddressIdentifier
+            name:           IIdentifier
+            defs:           IFunctionDeclaration[ ]
+            origin:         IAddressIdentifier
         }
 
     //
@@ -160,8 +171,8 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IWhileStatement extends IBase {
-            predicate:  IBase
-            body:       IBody
+            predicate:      IBase
+            body:           IBody
         }
 
     //
@@ -169,18 +180,18 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IIfStatement extends IBase {
-            key:        'if' | 'unless'
-            kind:       'if' | 'if-elseif-else' | 'if-else'
-            predicate:  IBase
+            key:            'if' | 'unless'
+            kind:           'if' | 'if-elseif-else' | 'if-else'
+            predicate:      IBase
         }
 
         export interface ISimpleIf extends IIfStatement {
-            trueBranch: IBody
+            trueBranch:     IBody
         }
 
         export interface IIfWithElse extends IIfStatement {
-            trueBranch:   IBody
-            falseBranch:  IBody
+            trueBranch:     IBody
+            falseBranch:    IBody
         }
 
         export interface IIfWithElseIfAndElse extends IIfWithElse {

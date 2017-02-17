@@ -14,6 +14,7 @@
 /// <reference path="nodes/expressions/pipe.ts" />
 /// <reference path="nodes/expressions/shorthand-if.ts" />
 /// <reference path="nodes/expressions/selector.ts" />
+/// <reference path="nodes/expressions/comparison.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/literals/string.ts" />
@@ -103,6 +104,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'PipeExpression':
                     return Nodes.Pipe.Compile( node as AST.IPipeExpression, env )
+
+                case 'Comparison':
+                    return Nodes.Comparison.Compile( node as AST.IComparison, env )
 
                 case 'Identifier':
                 case 'AddressIdentifier':
