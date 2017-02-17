@@ -116,6 +116,7 @@
         / ArrayDeclaration
         / ObjectDeclaration
         / DeclarationStatement
+        / HolderDeclarationStatement
         / SingleAssignmentStatement
         / IfStatement
         / WhileStatement
@@ -147,6 +148,7 @@
         = Literals
         / AddressIdentifier
         / Identifier
+        / HolderIdentifier
         / LambdaExpression
         / PipeExpression
         / ShorthandIfExpression
@@ -789,6 +791,31 @@
     ExportKey
         = key:("export" _)? _* {
             return key? true : false
+        }
+
+//
+// ─── HOLD STATEMENT ─────────────────────────────────────────────────────────────
+//
+
+    HolderDeclarationStatement 'hold statement'
+        = holder:HolderIdentifier __* "=" __* value:Expression {
+            return {
+                type:       'HolderDeclarationStatement',
+                location:   location( ),
+                id:         id( ),
+                holder:     holder,
+                value:      value
+            }
+        }
+
+    HolderIdentifier 'holder identifer'
+        = '@' parts:IdentifierPart+ {
+            return {
+                type:       'HolderIdentifier',
+                location:   location( ),
+                id:         id( ),
+                name:       parts.join('')
+            }
         }
 
 //

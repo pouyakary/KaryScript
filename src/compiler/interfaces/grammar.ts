@@ -78,10 +78,25 @@ namespace KaryScript.Compiler.AST {
                 | "MapLiteral"
                 | "TableRow"
                 | "Octothorpe"
+                | "HolderDeclarationStatement"
+                | "HolderIdentifier"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── HOLDERS ────────────────────────────────────────────────────────────────────
+    //
+
+        export interface IHolderDeclarationStatement extends IBase {
+            holder:     IHolderIdentifier,
+            value:      IBase
+        }
+
+        export interface IHolderIdentifier extends IBase {
+            name:       string
         }
 
     //
