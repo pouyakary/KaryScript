@@ -159,6 +159,15 @@
         / Selector
         / BracedComparison
 
+    ShorthandIfParts
+        = AddressIdentifier
+        / Identifier
+        / HolderIdentifier
+        / PipeExpression
+        / SExpression
+        / Selector
+        / BracedComparison
+
 //
 // ─── LITERALS ───────────────────────────────────────────────────────────────────
 //
@@ -481,7 +490,8 @@
 //
 
     ShorthandIfExpression 'shorthand if expression'
-        = expr:SExpression _* "?" _* trueExpression:ArgumentReturnables _* "!" _* falseExpression:ArgumentReturnables {
+        = expr:ShorthandIfParts _* "?" _*  trueExpression:ArgumentReturnables _* "!" _*
+        falseExpression:ArgumentReturnables {
             return {
                 type:               "ShorthandIfExpression",
                 location:           location( ),
@@ -491,7 +501,7 @@
                 falseExpression:    falseExpression
             }
         }
-          
+
 //
 // ─── WHILE STATEMENT ────────────────────────────────────────────────────────────
 //
