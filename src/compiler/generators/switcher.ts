@@ -26,6 +26,7 @@
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/declaration/class.ts" />
 /// <reference path="nodes/statements/declaration/object.ts" />
+/// <reference path="nodes/statements/declaration/holder.ts" />
 /// <reference path="nodes/statements/assignment.ts" />
 /// <reference path="nodes/statements/if.ts" />
 /// <reference path="nodes/statements/loops/while.ts" />
@@ -139,6 +140,13 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'Selector':
                     return Nodes.Selector.Compile( node as AST.ISelector, env )
+
+                case 'HolderDeclarationStatement':
+                    return Nodes.Holder.Declare(
+                        node as AST.IHolderDeclarationStatement, env )
+
+                case 'HolderIdentifier':
+                    return Nodes.Holder.Use( node as AST.IHolderIdentifier, env )
 
                 case 'LineTerminator':
                 case 'Empty':

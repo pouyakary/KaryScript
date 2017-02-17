@@ -23,6 +23,11 @@ namespace KaryScript.Compiler {
             ScopeLevel: number
 
             /**
+             * Available Holders
+             */
+            Holders: Map<string, CompiledCode>
+
+            /**
              * A __Stack of Parent Nodes__ so that you can have a clear view
              * on compilation should happen
              */

@@ -62,6 +62,7 @@ namespace KaryScript.Compiler {
                     Object.assign({ }, BaseNodeObject )
                 ],
                 ScopeLevel: 0,
+                Holders: new Map<string, CompiledCode>( ),
                 DeclaredIdentifiers: new Set<string>( ),
                 Errors: new Set( ),
                 GenerateSourceNode: ( node, chunk ) => 

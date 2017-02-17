@@ -33,7 +33,14 @@ namespace KaryScript.Compiler.Nodes.Body {
                     case 'LineTerminator':
                     case 'Empty':
                     case 'InlineComment':
+                    case undefined:
                         break;
+
+                    case 'HolderDeclarationStatement':
+                        compiledStatements.push(
+                            Nodes.CompileSingleNode( statement, env ) )
+                        break;
+
                     default:
                         compiledStatements.push(
                             Nodes.CompileSingleNode( statement, env ) )
