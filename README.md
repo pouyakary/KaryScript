@@ -1,9 +1,7 @@
 
-[![](http://www.karyfoundation.org/developer/dead-repo/gitbadge.png)](http://www.karyfoundation.org/developer/dead-repo/)
+# KaryScript
 
-<br>
-
-<img src="https://cloud.githubusercontent.com/assets/2157285/22703613/028dde82-ed7a-11e6-9c6f-1043aef08ef2.png" width="300">
+<img width="1028" alt="screen shot 2017-02-16 at 10 47 38 pm" src="https://cloud.githubusercontent.com/assets/2157285/23047076/bd1a8c60-f4c2-11e6-9a4a-cbec9d60873f.png">
 
 [![Build Status](https://travis-ci.org/karyfoundation/karyscript.svg?branch=master)](https://travis-ci.org/karyfoundation/karyscript)
 
