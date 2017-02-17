@@ -40,9 +40,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
             const name  = Address.CompileIdentifier( node.assignment.name, env )
             const expr  = CompileSingleNode( node.assignment.value, env )
 
-            return env.GenerateSourceNode( node, [
-                key, " ", name, " = ", expr, Env.Semicolon( env )
-            ])
+            return env.GenerateSourceNode( node, [  key, " ", name, " = ", expr ])
         }
 
     //
@@ -54,8 +52,8 @@ namespace KaryScript.Compiler.Nodes.Declaration {
             const key   = GetDeclarationKey( env )
             const names = Join( ', ',
                  node.names.map( x => Address.CompileIdentifier( x, env ) ))
-            return env.GenerateSourceNode( node,
-                Concat([ key, " ", names, Env.Semicolon( env ) ]))
+
+            return env.GenerateSourceNode( node, Concat([ key, " ", names ]))
         }
 
     //

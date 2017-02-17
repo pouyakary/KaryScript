@@ -25,8 +25,9 @@ namespace KaryScript.Compiler.Nodes.ArrayLiteral {
                     env.GenerateSourceNode( i,
                         Nodes.CompileSingleNode( i, env ))))
 
-            return env.GenerateSourceNode( node,
-                [ '[' ].concat( ( body as any ).concat( ']' ) ) )
+            return env.GenerateSourceNode( node, Concat([
+                '[', body, ']'
+            ]))
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

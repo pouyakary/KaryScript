@@ -92,8 +92,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
             // and done.
             return env.GenerateSourceNode( node,
-                [ Nodes.CompileSingleNode( node.command, env ), "(", args.join(', '), ")",
-                  Env.Semicolon( env ) ] )
+                [ Nodes.CompileSingleNode( node.command, env ), "(", args.join(', '), ")" ])
         }
 
     //
@@ -166,7 +165,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                                    placeholder?: TPlaceholder ): SourceMap.SourceNode {
             const ph = placeholder? CompilePlaceholder( placeholder, env ) : ''
             return env.GenerateSourceNode( node,
-                [ Address.Compile( node.command, env ),  "(", ph, ")", Env.Semicolon( env ) ])
+                [ Address.Compile( node.command, env ),  "(", ph, ")"  ])
         }
 
     //

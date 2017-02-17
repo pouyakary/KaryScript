@@ -8,6 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+/// <reference path="../../../tools/concat.ts" />
 
 namespace KaryScript.Compiler.Nodes.Address {
 
@@ -18,9 +19,9 @@ namespace KaryScript.Compiler.Nodes.Address {
         export function Compile ( node: AST.IBase, env: IEnvInfo ): SourceMap.SourceNode {
             let result: CompiledCode
             if ( node.type === 'AddressIdentifier' )
-                result = ( node as AST.IAddressIdentifier ).address
-                    .map( x => x.name.replace( /-/g, '_' ) )
-                    .join('.')
+                result = env.GenerateSourceNode( node, 
+                    Join('.', ( node as AST.IAddressIdentifier ).address
+                        .map( x => CompileIdentifier( x, env ))))
             else
                 result = CompileIdentifier( node as AST.IIdentifier, env )
 

@@ -23,8 +23,7 @@ namespace KaryScript.Compiler.Nodes.Return {
                     [ node.kind, ' ', Nodes.CompileSingleNode( node.value, env ),
                         Env.Semicolon( env ) ])
             else
-                return env.GenerateSourceNode( node,
-                    [ node.kind, Env.Semicolon( env ) ])      
+                return env.GenerateSourceNode( node, [ node.kind ])      
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

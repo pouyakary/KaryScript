@@ -28,8 +28,18 @@ namespace KaryScript.Compiler.Nodes.Body {
 
             // if not. we have to compile each statement and add them together
             let compiledStatements = new Array<CompiledCode>( )
-            for ( let statement of ( node.branch as AST.TStatements[ ] ) )
-                compiledStatements.push( Nodes.CompileSingleNode( statement, env ) )
+            for ( let statement of ( node.branch as AST.TStatements[ ] ) ) {
+                switch ( statement.type ) {
+                    case 'LineTerminator':
+                    case 'Empty':
+                    case 'InlineComment':
+                        break;
+                    default:
+                        compiledStatements.push(
+                            Nodes.CompileSingleNode( statement, env ) )
+                        compiledStatements.push("; ")
+                }
+            }
 
             // updating the env info
             Reporter.ConcatEnvErrors( env, bodyENV )

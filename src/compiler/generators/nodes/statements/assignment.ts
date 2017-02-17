@@ -24,8 +24,7 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
             const assign        = ( node.key === '/=' )? name + "." : ''
             const assignExpr    = Nodes.CompileSingleNode( node.value, env )
 
-            return env.GenerateSourceNode( node,
-                [ name, " = ", assign, assignExpr, Env.Semicolon( env ) ])
+            return env.GenerateSourceNode( node, [ name, " = ", assign, assignExpr ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -23,8 +23,8 @@ namespace KaryScript.Compiler.Nodes.ShorthandIf {
             return env.GenerateSourceNode( node, [
                 '(', Nodes.CompileSingleNode( node.predicate, env ), ")? ",
                 Nodes.CompileSingleNode( node.trueExpression, env ), " : ",
-                Nodes.CompileSingleNode( node.falseExpression, env ),
-                Env.Semicolon( env ) ])
+                Nodes.CompileSingleNode( node.falseExpression, env )
+            ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -21,9 +21,8 @@ namespace KaryScript.Compiler.Nodes.Pipe {
         export function Compile ( node: AST.IPipeExpression,
                                    env: IEnvInfo ): SourceMap.SourceNode {
             env.ParentNode.push( node )
-            const code = env.GenerateSourceNode( node, [
-                CompileLevelsArray( node.levels.reverse( ), env ), Env.Semicolon( env )
-            ])
+            const code = env.GenerateSourceNode( node,
+                CompileLevelsArray( node.levels.reverse( ), env ))
             env.ParentNode.pop( )
             return code
         }

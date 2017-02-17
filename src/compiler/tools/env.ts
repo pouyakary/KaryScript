@@ -15,7 +15,7 @@ namespace KaryScript.Compiler.Env {
     //
 
         export function Semicolon ( env ) {
-            return ( GetParentType( env ) === 'Body' )? ';' : ''
+            return ( GetParentType( env ) === 'Body' )? '; ' : ''
         }
 
     //
