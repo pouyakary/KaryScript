@@ -8,10 +8,12 @@
   },
   "scripts": {
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/compiler/grammar/grammar.pegjs",
-    "build": "tsc && npm run compile-parser",
+    "build": "npm run compile; npm run pack",
+    "compile": "tsc && npm run compile-parser",
     "test": "node ./tests/test.js",
     "parser-test-drive": "node ./tests/tools/parse.js",
-    "tset-drive-compile": "node bin/compiler.js"
+    "tset-drive-compile": "node bin/compiler.js",
+    "pack": "webpack --config ./pack.js"
   },
   "repository": {
     "type": "git",
