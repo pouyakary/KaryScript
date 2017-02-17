@@ -1,9 +1,7 @@
 
-# KaryScript
+# KaryScript [![Build Status](https://travis-ci.org/karyfoundation/karyscript.svg?branch=master)](https://travis-ci.org/karyfoundation/karyscript)
 
-<img width="1028" alt="screen shot 2017-02-16 at 10 47 38 pm" src="https://cloud.githubusercontent.com/assets/2157285/23047076/bd1a8c60-f4c2-11e6-9a4a-cbec9d60873f.png">
-
-[![Build Status](https://travis-ci.org/karyfoundation/karyscript.svg?branch=master)](https://travis-ci.org/karyfoundation/karyscript)
+![screen shot 2017-02-17 at 3 41 39 am](https://cloud.githubusercontent.com/assets/2157285/23047119/10573536-f4c3-11e6-8afb-8fbdf511068f.png)
 
 KaryScript is an experimental project to bring a better syntax for more readability. That's our only goal: Readability in the code. It compiles to JavaScript. If the experiment goes well we might even integrate it to the TypeScript compiler services and let you have a powerful tooling alongside of it.
 
