@@ -9,8 +9,7 @@
 //
 
 /// <reference path="../compiler/index.ts" />
-/// <reference path="configs/cli-configs.ts" />
-
+/// <reference path="configs/index.ts" />
 
 namespace KaryScript.CLI {
         
@@ -20,7 +19,13 @@ namespace KaryScript.CLI {
 
         export function Main ( ) {
 
-            console.log( CLI.LoadConfigurationsFromCLIArgs( ) )
+            try {
+                console.log( GetConfigs( ) )
+
+            } catch ( e ) {
+                // errors are handles in place
+                console.log( e )
+            }
 
             /*
             // ParseAndRunCommands( )

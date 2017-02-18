@@ -27,7 +27,8 @@ namespace KaryScript.CLI {
             // loading configs from command line and assigning them to the configs
             Object.assign( config, 
                 CLI.LoadConfigurationsFromCLIArgs( ) )
-            
+
+            return config
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
