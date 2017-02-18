@@ -11,8 +11,9 @@
   },
   "scripts": {
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/compiler/grammar/grammar.pegjs",
+    "compile-cli-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/cli-parser.js ./src/cli/configs/parser/arg-lang.pegjs",
     "build": "npm run compile; npm run pack; npm run after-pack; npm link",
-    "compile": "tsc && npm run compile-parser",
+    "compile": "tsc && npm run compile-parser && npm run compile-cli-parser",
     "test": "node ./tests/test.js",
     "parser-test-drive": "node ./tests/tools/parse.js",
     "tset-drive-compile": "node bin/compiler.js",
