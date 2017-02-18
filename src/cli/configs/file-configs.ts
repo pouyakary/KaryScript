@@ -17,7 +17,7 @@ namespace KaryScript.CLI {
     // ─── LOAD CONFIGURATIONS ────────────────────────────────────────────────────────
     //
 
-        export function LoadConfigurations ( ): ICLIConfig {
+        export function LoadConfigurationsFromConfigFile ( ): ICLIConfig {
             // defs
             const userConfig    = LookForConfigurationFile( )
             let   resultConfig  = Object.assign({ }, BaseConfigObject )

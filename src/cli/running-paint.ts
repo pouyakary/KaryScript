@@ -9,29 +9,26 @@
 //
 
 /// <reference path="../compiler/index.ts" />
+/// <reference path="configs/cli-configs.ts" />
+
 
 namespace KaryScript.CLI {
-
-    //
-    // ─── RUNNING POINT ──────────────────────────────────────────────────────────────
-    //
-
-        export function RunningPoint ( ) {
-            if ( typeof module !== 'undefined' && module.exports )
-                Main( )
-        }
         
     //
     // ─── MAIN ───────────────────────────────────────────────────────────────────────
     //
 
-        function Main ( ) {
+        export function Main ( ) {
+
+            console.log( CLI.LoadConfigurationsFromCLIArgs( ) )
+
+            /*
             // ParseAndRunCommands( )
             const fs = require('fs')
             const path = require('path')
             const util = require('util')
-            let content = fs.readFileSync(
-                path.resolve( path.join( __dirname, '../tests/codes/test.kk' ) ), 'utf8' )
+            let content = fs.readFileSync( 
+                path.join( process.cwd( ), 'bin', 'test.kk' ), 'utf8' )
 
             try {
                 const result = ( <SourceMap.SourceNode>
@@ -47,6 +44,7 @@ namespace KaryScript.CLI {
                     }
                 ))
             }
+            */
         }
     
     // ────────────────────────────────────────────────────────────────────────────────
