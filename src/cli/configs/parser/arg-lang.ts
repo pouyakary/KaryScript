@@ -19,8 +19,18 @@ namespace KaryScript.CLI.ArgLang {
         }
 
     //
+    // ─── ROOT ───────────────────────────────────────────────────────────────────────
+    //
+
+        export interface IRoot {
+            args: TArg[ ]
+        }
+
+    //
     // ─── VALUE ──────────────────────────────────────────────────────────────────────
     //
+
+        export type TArg = ICommand | TValue
 
         export type TValue = IArray | ILiteral
 
