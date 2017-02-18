@@ -127,6 +127,28 @@ footprints = typeof yeti !== "undefined" && yeti !== null ? yeti : "bear";
 
 ## To Be Implemented 
 
+#### closure namespaces
+
+```
+space main:
+  space sub:
+    def foo:
+      (bar)
+    end
+  end
+end
+```
+Compiles to:
+```
+(function (main) {
+  (function (sub) {
+    function foo {
+      bar( )
+    }
+  })(sum = main.sub || (main.sub = {}))
+})(main || (main = {}))
+```
+
 #### Try Catch
 
 ```
