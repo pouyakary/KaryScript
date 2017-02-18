@@ -22,16 +22,52 @@ namespace KaryScript.CLI.ArgLang {
             const argLangParser = require('./arglang-parser.js')
 
             try {
-                return argLangParser.parse( argCode ) as ArgLang.IRoot
-
+                const AST = argLangParser.parse( argCode ) as ArgLang.IRoot
+                return FormatAST( AST )
             } catch ( e ) {
                 throw PrintParseError( e.location, argCode )
             }
         }
-    
+
+    //
+    // ─── FORMAT AST ─────────────────────────────────────────────────────────────────
+    //
+
+        function FormatAST ( ast: ArgLang.IRoot ): IFormattedAST {
+            // checking if it's empty:
+            if ( ast.args.length === 0 )
+                return { commands: { }, others: [ ] }
+
+            // doing this for non-empty stuff:
+            let result: IFormattedAST = {
+                commands: { },
+                others: new Array<ArgLang.IBase>( )
+            }
+            for ( const arg of ast.args )
+                if ( arg.type === 'Command' )
+                    result.commands[ ( arg as ArgLang.ICommand ).name ] =
+                        ( arg as ArgLang.ICommand ).arg
+                else
+                    result.others.push( arg )
+        
+            // done
+            return result
+        }
+
+    //
+    // ─── FORMATTED AST ──────────────────────────────────────────────────────────────
+    //
+
+        export interface IFormattedAST {
+            commands:   any
+            others:     ArgLang.IBase[ ]
+        }
+
     //
     // ─── PRINT ERROR ────────────────────────────────────────────────────────────────
     //
+
+        // please don't expect this function to be pretty
 
         function PrintParseError ( location, code: string ) {
             const colors = require('colors/safe')
@@ -43,19 +79,32 @@ namespace KaryScript.CLI.ArgLang {
                 return result.join('')
             }
 
-            const paddingString = " " + colors.yellow('│') + " "
+            const paddingString = "  │"
             const length = location.end.offset - location.start.offset
+            const restLength = code.length - location.end.offset
+ 
+            //console.log( colors.red( 'Failed to parse command line args:') )
+            console.log( )
 
-            console.log( 'Failed to parse command line args:\n')
+            console.log( colors.grey.bold(
+                            "  ┌" +
+                            repeat( '─', location.start.offset ) + " " +
+                            colors.red.bold( repeat( '↓', length ) ) +
+                            " " + repeat( '─', restLength ) +
+                            "┐"))
 
-            console.log( colors.red( paddingString +
-                            repeat( ' ', location.start.offset) +
-                            repeat( '↓', length )))
-            console.log( paddingString + code )
-            console.log( colors.red( paddingString +
-                            repeat( ' ', location.start.offset) +
-                            repeat( '↑', length )))
-            console.log('')
+            console.log( colors.grey.bold("  │ ") +
+                            code + colors.grey.bold(" │"))
+
+            console.log( colors.grey.bold(
+                            "  └" +
+                            repeat( '─', location.start.offset) + " " +
+                            colors.red.bold( repeat( '↑', length ) ) +
+                            " " + repeat( '─', restLength ) +
+                            "┘"
+                            ))
+
+            console.log( )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
