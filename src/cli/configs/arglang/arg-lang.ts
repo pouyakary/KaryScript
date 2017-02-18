@@ -14,8 +14,8 @@ namespace KaryScript.CLI.ArgLang {
     // ─── INTERFACE BASE ─────────────────────────────────────────────────────────────
     //
 
-        interface IBase {
-            type: 'Literal' | 'Array' | 'Command'
+        export interface IBase {
+            type: 'Literal' | 'Array' | 'Command' | 'Root' | 'Unkown'
         }
 
     //
@@ -23,24 +23,15 @@ namespace KaryScript.CLI.ArgLang {
     //
 
         export interface IRoot {
-            args: TArg[ ]
+            args: IBase[ ]
         }
-
-    //
-    // ─── VALUE ──────────────────────────────────────────────────────────────────────
-    //
-
-        export type TArg = ICommand | TValue
-
-        export type TValue = IArray | ILiteral
 
     //
     // ─── ARRAY ──────────────────────────────────────────────────────────────────────
     //
 
         export interface IArray extends IBase {
-            type:   'Array'
-            value:  TValue[ ]
+            value:  IBase[ ]
         }
 
     //
@@ -48,9 +39,8 @@ namespace KaryScript.CLI.ArgLang {
     //
 
         export interface ICommand extends IBase {
-            type:   'Command'
             name:   string
-            arg:    TValue
+            arg:    IBase | null
         }
 
     //
@@ -58,8 +48,17 @@ namespace KaryScript.CLI.ArgLang {
     //
 
         export interface ILiteral extends IBase {
-            type:   'Literal'
             value:  string
+        }
+
+    //
+    // ─── UNKOWN COMMAND ─────────────────────────────────────────────────────────────
+    //
+
+        export interface IUnkown extends IBase {
+            name:       string
+            kind:       'command'
+            location:   KaryScript.Compiler.AST.ILocation
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

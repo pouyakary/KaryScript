@@ -14,11 +14,15 @@
 
     Root =
         _* body:Arguments _* {
-            return body
+            return {
+                type: 'Root',
+                args:   body
+            }
         }
         / '' {
             return {
-                type: 'Empty'
+                type: 'Root',
+                args: [ ]
             }
         }
 
@@ -51,12 +55,41 @@
 //
 
     Command
-        = '--' name:[a-z]+ _ value:Value {
+        = '--' name:CommandsWithArgs _ value:Value {
             return {
                 type: 	'Command',
-                name: 	name.join(''),
+                name: 	name,
                 arg: 	value
             }
+        }
+        / '--' name:BooleanCommands {
+        	return {
+            	type: 	'Command',
+                name: 	name,
+                arg: 	null
+            }
+        }
+        / '--' name:[a-zA-Z0-9\-]+ {
+        	return {
+            	type: "Unkown",
+                kind: 'command',
+                name: name.join(''),
+                location: location( )
+            }
+        }
+        
+//
+// ─── COMMANDS ───────────────────────────────────────────────────────────────────
+//
+
+    CommandsWithArgs
+    	= name:( 'srcDir' / 'outDir' ) {
+        	return name
+        }
+        
+    BooleanCommands
+    	= name:( 'source-map' ) {
+        	return name
         }
 
 //
@@ -88,10 +121,10 @@
 //
 
     Literal
-        = value:[a-zA-Z0-9_\.\-/]+  {
+        = start:[a-zA-Z0-9_\./] value:[a-zA-Z0-9_\.\-/]*  {
             return {
                 type: 	'Literal',
-                value: 	value.join('')
+                value: 	start + value.join('')
             }
         }
 
@@ -103,3 +136,4 @@
         = " "+
 
 // ────────────────────────────────────────────────────────────────────────────────
+
