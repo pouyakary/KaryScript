@@ -32,11 +32,14 @@ namespace KaryScript.CLI {
 
             switch ( args ) {
                 case '--help':
+                case '-h':
                     Commands.PrintHelp( )
                     break
 
                 case '--init':
+                case '-i':
                 case '--version':
+                case '-v':
                     console.log('not implemented yet')
                     break
 
