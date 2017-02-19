@@ -70,8 +70,6 @@ namespace KaryScript.CLI.ArgLang {
         // please don't expect this function to be pretty
 
         function PrintParseError ( location, code: string ) {
-            const colors = require('colors/safe')
-
             function repeat ( char: string , times: number ) {
                 let result: string[ ] = [ ]
                 for ( let i = 0; i < times; i++ )

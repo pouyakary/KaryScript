@@ -11,14 +11,15 @@
 namespace KaryScript.CLI {
 
     //
-    // ─── IMPORTS ────────────────────────────────────────────────────────────────────
+    // ─── TOOLS ──────────────────────────────────────────────────────────────────────
     //
 
-        export const fs         = require('fs')
-        export const path       = require('path')
-        export const util       = require('util')
-        export const colors     = require('colors/safe')
-        export const yaml       = require('js-yaml')
+            export function repeat ( char: string , times: number ) {
+                let result: string[ ] = [ ]
+                for ( let i = 0; i < times; i++ )
+                    result.push( char )
+                return result.join('')
+            }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

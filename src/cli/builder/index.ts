@@ -8,17 +8,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="../compiler/index.ts" />
-/// <reference path="configs/index.ts" />
+/// <reference path="../imports.ts" />
 
-namespace KaryScript.CLI {
-        
+namespace KaryScript.CLI.Builder {
+
     //
-    // ─── MAIN ───────────────────────────────────────────────────────────────────────
+    // ─── BUILD SOLUTION ─────────────────────────────────────────────────────────────
     //
 
-        export function Main ( ) {
-
+        export function RunBuild ( ) {
             try {
                 console.log( GetConfigs( ) )
 
@@ -51,7 +49,7 @@ namespace KaryScript.CLI {
             }
             */
         }
-    
+
     // ────────────────────────────────────────────────────────────────────────────────
 
 }

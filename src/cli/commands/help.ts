@@ -8,17 +8,20 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-namespace KaryScript.CLI {
+/// <reference path="tools.ts" />
+
+namespace KaryScript.CLI.Commands {
 
     //
-    // ─── IMPORTS ────────────────────────────────────────────────────────────────────
+    // ─── HELP ───────────────────────────────────────────────────────────────────────
     //
 
-        export const fs         = require('fs')
-        export const path       = require('path')
-        export const util       = require('util')
-        export const colors     = require('colors/safe')
-        export const yaml       = require('js-yaml')
+        export function PrintHelp ( ) {
+            console.log()
+            console.log('  KaryScript')
+            console.log('  ' + repeat('-', process.env.COLUMNS - 4 ) )
+            console.log()
+        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

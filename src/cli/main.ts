@@ -8,7 +8,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-/// <reference path="running-paint.ts" />
+/// <reference path="../compiler/index.ts" />
+/// <reference path="configs/index.ts" />
+/// <reference path="builder/index.ts" />
 
 namespace KaryScript.CLI {
 
@@ -16,9 +18,28 @@ namespace KaryScript.CLI {
     // ─── RUNNING POINT ──────────────────────────────────────────────────────────────
     //
 
-        export function RunningPoint ( ) {
+        export function Main ( ) {
             if ( typeof module !== 'undefined' && module.exports )
-                Main( )
+                SwitchRunner( )
+        }
+
+    //
+    // ─── SWITCHER ───────────────────────────────────────────────────────────────────
+    //
+
+        function SwitchRunner ( ) {
+            const args = process.argv.slice(2).join('')
+
+            switch ( args ) {
+                case '--init':
+                case '--help':
+                case '--version':
+                    console.log('not supported')
+                    break;
+
+                default:
+                    Builder.RunBuild( )
+            }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
@@ -29,7 +50,7 @@ namespace KaryScript.CLI {
 // ─── MAIN ───────────────────────────────────────────────────────────────────────
 //
 
-    KaryScript.CLI.RunningPoint( )
+    KaryScript.CLI.Main( )
 
 // ────────────────────────────────────────────────────────────────────────────────
 
