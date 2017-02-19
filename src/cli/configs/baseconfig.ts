@@ -17,6 +17,7 @@ namespace KaryScript.CLI {
         export const BaseConfigObject: ICLIConfig = {
             srcDir:         process.cwd( ),
             files:          [ ],
+            ignores:        [ ],
             outDir:         process.cwd( ),
             sourceMap:      true,
         }
@@ -28,6 +29,7 @@ namespace KaryScript.CLI {
         export interface ICLIConfig {
             srcDir?:        string
             files?:         string[ ]
+            ignores?:       string[ ]
             outDir?:        string
             sourceMap?:     boolean
         }
