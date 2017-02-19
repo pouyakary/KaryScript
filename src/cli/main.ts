@@ -21,6 +21,8 @@ namespace KaryScript.CLI {
         export function Main ( ) {
             if ( typeof module !== 'undefined' && module.exports )
                 SwitchRunner( )
+            else
+                eval('KaryScript.CLI  = null')
         }
 
     //
