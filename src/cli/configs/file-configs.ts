@@ -33,7 +33,7 @@ namespace KaryScript.CLI {
                     path.join( process.cwd( ), userConfig.srcDir ) )
 
             // sourceMap
-            if ( userConfig.sourceMap !== undefined )
+            if ( userConfig.sourceMap )
                 resultConfig.sourceMap = userConfig.sourceMap
 
             return resultConfig

@@ -19,7 +19,7 @@ namespace KaryScript.CLI {
             files:          [ ],
             ignores:        [ ],
             outDir:         process.cwd( ),
-            sourceMap:      true,
+            sourceMap:      false,
         }
 
     //

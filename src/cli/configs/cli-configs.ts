@@ -54,7 +54,6 @@ namespace KaryScript.CLI {
             // ─── SOURCE MAP ──────────────────────────────────────────────────
             //
 
-                result.sourceMap = false
                 if ( inputs.commands['source-map'])
                     result.sourceMap = true
 
