@@ -17,28 +17,55 @@ namespace KaryScript.CLI {
     //
 
         export function LoadConfigurationsFromCLIArgs ( ) {
-            // parsing inputs
-            const inputs = ArgLang.Parse( )
 
-            // result object
-            let result: ICLIConfig = { }
+            //
+            // ─── PARSING ─────────────────────────────────────────────────────
+            //
 
-            // source dir
-            if ( inputs.commands['srcDir'] ) {
-                const arg = inputs.commands['srcDir'].arg
-                if ( arg.type === 'Literal' )
-                    result.srcDir = ( arg as ArgLang.ILiteral ).value
-            }
+                const inputs = ArgLang.Parse( )
 
-            // out dir
-            if ( inputs.commands['outDir'] ) {
-                const arg = inputs.commands['outDir'].arg
-                if ( arg.type === 'Literal' )
-                    result.outDir = ( arg as ArgLang.ILiteral ).value
-            }
+            //
+            // ─── RESULT ──────────────────────────────────────────────────────
+            //
 
-            console.log( inputs )
-            return result
+                let result: ICLIConfig = { }
+
+            //
+            // ─── SOURCE DIR ──────────────────────────────────────────────────
+            //
+
+                if ( inputs.commands['--srcDir']) {
+                    const arg = inputs.commands['srcDir'].arg
+                    if ( arg.type === 'Literal' )
+                        result.srcDir = ( arg as ArgLang.ILiteral ).value
+                }
+
+            //
+            // ─── OUT DIR ─────────────────────────────────────────────────────
+            //
+
+                if ( inputs.commands['--outDir']) {
+                    const arg = inputs.commands['outDir'].arg
+                    if ( arg.type === 'Literal' )
+                        result.outDir = ( arg as ArgLang.ILiteral ).value
+                }
+
+            //
+            // ─── SOURCE MAP ──────────────────────────────────────────────────
+            //
+
+                result.sourceMap = false
+                if ( inputs.commands['source-map'])
+                    result.sourceMap = true
+
+            //
+            // ─── DONE ────────────────────────────────────────────────────────
+            //
+
+                return result
+            
+            // ─────────────────────────────────────────────────────────────────
+
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
