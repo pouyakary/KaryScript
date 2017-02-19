@@ -60,7 +60,7 @@ namespace KaryScript.CLI.Builder.TaskRunner {
             fs.writeFileSync( mapPath, code.map.toString( ) )
 
             // so now that we have source map let's map!
-            return `${ code.code }\n//# sourceMappingURL=${ mapPath }`
+            return `${ code.code }\n//# sourceMappingURL=${ path.basename( mapPath ) }`
         }
 
     //
