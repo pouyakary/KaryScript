@@ -24,35 +24,35 @@ namespace KaryScript.CLI.Commands {
                 KaryScript.Compiler.Version.Release + ')')
 
             console.log()
-            console.log('  Command                  Description')
+            console.log('  Command                               Description')
             console.log( colors.bold( termLine( ) ) )
             
-            console.log('  --help                   Prints this help page')
+            console.log('  --help, -h                            Prints this help page')
             console.log( colors.bold.grey( termLine( ) ) )
 
-            console.log('  --version                Prints version of currently installed KaryScript')
+            console.log('  --version, -v                         Prints version of currently installed KaryScript')
             console.log( colors.bold.grey( termLine( ) ) )
 
-            console.log(`  --init                   Initializes a ${
+            console.log(`  --init, -i                            Initializes a ${
                 colors.underline( 'k.yml' ) } configuration file.`)
             console.log( colors.bold.grey( termLine( ) ) )
 
 
             // build way
             console.log()
-            console.log('  Build Option             Description')
+            console.log('  Build Option          Parameter       Description')
             console.log( colors.bold( termLine( ) ) )
     
-            console.log('  --srcDir "dir"           Sets root directory for codes to "dir"')
+            console.log('  --srcDir, -sd         "dir"           Sets root directory for codes to "dir"')
             console.log( colors.bold.grey( termLine( ) ) )
 
-            console.log('  --files [files]          Adds the [files] array to included files')
+            console.log('  --files, -f           [files]         Adds the [files] array to list of source files')
             console.log( colors.bold.grey( termLine( ) ) )
 
-            console.log('  --outDir "dir"           Sets root directory for compilation to "dir"')
+            console.log('  --outDir, -od         "dir"           Sets root directory for compilation to "dir"')
             console.log( colors.bold.grey( termLine( ) ) )
 
-            console.log('  --source-map             Enables source map generation')
+            console.log('  --source-map, -sm                     Enables source map generation')
             console.log( colors.bold.grey( termLine( ) ) )
 
 
