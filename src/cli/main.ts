@@ -31,11 +31,14 @@ namespace KaryScript.CLI {
             const args = process.argv.slice(2).join('')
 
             switch ( args ) {
-                case '--init':
                 case '--help':
+                    Commands.PrintHelp( )
+                    break
+
+                case '--init':
                 case '--version':
-                    console.log('not supported')
-                    break;
+                    console.log('not implemented yet')
+                    break
 
                 default:
                     Builder.RunBuild( )
