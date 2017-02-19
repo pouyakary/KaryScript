@@ -22,13 +22,15 @@ namespace KaryScript.CLI {
             const userConfig    = LookForConfigurationFile( )
             let   resultConfig  = Object.assign({ }, BaseConfigObject )
         
-            // source dir
+            // out dir
             if ( userConfig.outDir )
                 resultConfig.outDir = path.resolve(
-                    path.join( process.cwd, userConfig.outDir ) )
+                    path.join( process.cwd( ), userConfig.outDir ) )
+
+            // source dir
             if ( userConfig.srcDir )
                 resultConfig.srcDir = path.resolve(
-                    path.join( process.cwd, userConfig.srcDir ) )
+                    path.join( process.cwd( ), userConfig.srcDir ) )
 
             // sourceMap
             if ( userConfig.sourceMap !== undefined )
@@ -44,8 +46,8 @@ namespace KaryScript.CLI {
         function LookForConfigurationFile ( ) {
             const pathToConfig = path.join( process.cwd( ), 'k.yml' )
             try {
-                return <ICLIConfig> yaml.load(
-                    fs.readFileSync( pathToConfig, 'utf8' ) )
+                const file = fs.readFileSync( pathToConfig, 'utf8' )
+                return <ICLIConfig> yaml.load( file )
 
             } catch ( e ) {
                 return <ICLIConfig> { }

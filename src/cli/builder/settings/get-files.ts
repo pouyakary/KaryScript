@@ -44,34 +44,39 @@ namespace KaryScript.CLI.Builder.Settings {
         function GetDirectoryFiles ( ignoredFiles: string[ ],
                                               pwd: string,
                                           folder?: string ): string[ ] {
-            // path
-            const currentPath = folder? pwd : path.resolve( pwd, folder )
+            try {
+                // path
+                const currentPath = folder? pwd : path.resolve( pwd, folder )
 
-            // is this path ignored?
-            if ( IsDirectoryOrFileIgnored( currentPath, ignoredFiles ) )
+                // is this path ignored?
+                if ( IsDirectoryOrFileIgnored( currentPath, ignoredFiles ) )
+                    return [ ]
+
+                // files / dirs in the current working directory
+                const entries = fs.readdirSync( currentPath )
+
+                // result
+                let results = new Array<string>( )
+
+                // investigating the dir
+                for ( const entry of entries )
+                    // going down recursively if it's directory
+                    if ( IsDirectory( pwd, entry ) )
+                        results = results.concat(
+                            GetDirectoryFiles( ignoredFiles,
+                                path.join( pwd, folder ), entry ) )
+
+                    // or adding files if they are karyscript formatted
+                    else
+                        if ( /\.k$/.test( entry ) )
+                            results.push( path.join( pwd, entry ) )
+
+                // done
+                return results
+
+            } catch ( e ) {
                 return [ ]
-
-            // files / dirs in the current working directory
-            const entries = fs.readdirSync( currentPath )
-
-            // result
-            let results = new Array<string>( )
-
-            // investigating the dir
-            for ( const entry of entries )
-                // going down recursively if it's directory
-                if ( IsDirectory( pwd, entry ) )
-                    results = results.concat(
-                        GetDirectoryFiles( ignoredFiles,
-                            path.join( pwd, folder ), entry ) )
-
-                // or adding files if they are karyscript formatted
-                else
-                    if ( /\.k$/.test( entry ) )
-                        results.push( path.join( pwd, entry ) )
-
-            // done
-            return results
+            }
         }
 
     //

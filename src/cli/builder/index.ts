@@ -18,7 +18,11 @@ namespace KaryScript.CLI.Builder {
 
         export function RunBuild ( ) {
             try {
-                console.log( GetConfigs( ) )
+                const configs = GetConfigs( )
+                console.log( configs )
+
+                const settings = Settings.GetBuildSettings( configs )
+                console.log( settings )
 
             } catch ( e ) {
                 // errors are handles in place
