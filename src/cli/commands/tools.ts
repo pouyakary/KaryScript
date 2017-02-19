@@ -14,12 +14,29 @@ namespace KaryScript.CLI {
     // ─── TOOLS ──────────────────────────────────────────────────────────────────────
     //
 
-            export function repeat ( char: string , times: number ) {
-                let result: string[ ] = [ ]
-                for ( let i = 0; i < times; i++ )
-                    result.push( char )
-                return result.join('')
-            }
+        export function repeat ( char: string , times: number ) {
+            let result: string[ ] = [ ]
+            for ( let i = 0; i < times; i++ )
+                result.push( char )
+            return result.join('')
+        }
+
+    //
+    // ─── LINE ───────────────────────────────────────────────────────────────────────
+    //
+
+        export function termLine ( ) {
+            return '  ' + repeat( '─', (<any>process.stdout).columns - 5 )
+        }
+
+    //
+    // ─── TITLE ──────────────────────────────────────────────────────────────────────
+    //
+
+        export function makeTitleLine ( title: string ) {
+            return '\n  ' + title.toUpperCase( ) + '\n' +
+                colors.bold( termLine( ) ) + '\n'
+        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 
