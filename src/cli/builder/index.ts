@@ -9,6 +9,7 @@
 //
 
 /// <reference path="../imports.ts" />
+/// <reference path="runner/main.ts" />
 
 namespace KaryScript.CLI.Builder {
 
@@ -19,39 +20,17 @@ namespace KaryScript.CLI.Builder {
         export function RunBuild ( ) {
             try {
                 const configs = GetConfigs( )
-                console.log( configs )
+                //console.log( configs )
 
                 const settings = Settings.GetBuildSettings( configs )
-                console.log( settings )
+                //console.log( settings )
+
+                TaskRunner.Build( settings )
 
             } catch ( e ) {
                 // errors are handles in place
                 console.log( e )
             }
-
-            /*
-            // ParseAndRunCommands( )
-            const fs = require('fs')
-            const path = require('path')
-            const util = require('util')
-            let content = fs.readFileSync( 
-                path.join( process.cwd( ), 'bin', 'test.kk' ), 'utf8' )
-
-            try {
-                const result = ( <SourceMap.SourceNode>
-                    KaryScript.Compiler.Compile( content, "file.kk" ))
-                    .toStringWithSourceMap( )
-                console.log( result.code )
-            } catch ( e ) {
-                console.log( util.inspect( e,
-                    {
-                        showHidden: false,
-                        depth: null,
-                        colors: true,
-                    }
-                ))
-            }
-            */
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

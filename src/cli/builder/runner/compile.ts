@@ -20,6 +20,8 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 // reading the file
                 const fileString = fs.readFileSync( file, 'utf8' )
 
+                settings.sourceMap = true
+
                 // out file GetNewAddress
                 const outFileAddress = GetNewAddress( settings, file )
 
@@ -36,7 +38,7 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 fs.writeFileSync( outFileAddress, codeAfterHandlingSourceMap )
 
             } catch ( e ) {
-
+                console.log( e )
             }
         }
     
