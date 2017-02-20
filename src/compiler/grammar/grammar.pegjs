@@ -343,10 +343,9 @@
         = arg:Identifier SeparatorInline more:UseImportsArgs {
             return [ arg ].concat( more )
         }
-        / subArg:Returnable {
+        / subArg:Identifier {
             return [ subArg ]
         }
-
 
     UseOrigin
         = Identifier

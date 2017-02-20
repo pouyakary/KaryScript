@@ -49,6 +49,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
                                       env: IEnvInfo ): SourceMap.SourceNode {
+
             const key   = GetDeclarationKey( env )
             const names = Join( ', ',
                  node.names.map( x => Address.CompileIdentifier( x, env ) ))

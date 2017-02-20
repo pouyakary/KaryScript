@@ -82,10 +82,24 @@ namespace KaryScript.Compiler.AST {
                 | "HolderIdentifier"
                 | "Comparison"
                 | "ExpressionMember"
+                | "UseStatement"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── USE STATEMENT ──────────────────────────────────────────────────────────────
+    //
+
+        export interface IUseStatement extends IBase {
+            kind:           'from-origin' | 'simple'
+        }
+
+        export interface IUseStatementSimpleImport extends IUseStatement {
+            kind:           'simple'
+            args:           IIdentifier[ ]
         }
 
     //
