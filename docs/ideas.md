@@ -138,7 +138,9 @@ space main:
   end
 end
 ```
+
 Compiles to:
+
 ```
 (function (main) {
   (function (sub) {
