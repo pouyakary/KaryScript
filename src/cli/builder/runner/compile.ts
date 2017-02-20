@@ -56,8 +56,15 @@ namespace KaryScript.CLI.Builder.TaskRunner {
             // path to HandleSourceMap
             const mapPath = filePath.replace(/\.js$/, '.map.js')
 
+            // fixing the sourceMap path
+            let mapObject = JSON.parse( code.map.toString( ) )
+            console.log( mapObject )
+            mapObject['sources'][ 0 ] = path.relative(
+                mapPath, mapObject['sources'][ 0 ] )
+
             // applying the map
-            fs.writeFileSync( mapPath, code.map.toString( ) )
+            fs.writeFileSync( mapPath, JSON.stringify( mapObject) )
+
 
             // so now that we have source map let's map!
             return `${ code.code }\n//# sourceMappingURL=${ path.basename( mapPath ) }`
