@@ -33,7 +33,7 @@ namespace KaryScript.Compiler.Nodes.Address {
     //
 
         export function CompileIdentifier ( node: AST.IIdentifier, env: IEnvInfo ) {
-            return env.GenerateSourceNode( node, node.name.replace( /-/g, '_' ) )
+            return env.GenerateSourceNode( node, node.name.replace( /-/g, '_' ), node.name )
         }
     
     // ────────────────────────────────────────────────────────────────────────────────

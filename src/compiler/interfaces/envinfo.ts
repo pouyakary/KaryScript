@@ -51,7 +51,9 @@ namespace KaryScript.Compiler {
             /**
              * SourceMap Generator
              */
-            GenerateSourceNode: ( node: AST.IBase, chunk: Array<CompiledCode> | CompiledCode ) => SourceMap.SourceNode
+            GenerateSourceNode: ( node: AST.IBase,
+                                 chunk: Array<CompiledCode> | CompiledCode,
+                                 name?: string ) => SourceMap.SourceNode
         }
 
     //

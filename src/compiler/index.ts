@@ -65,12 +65,13 @@ namespace KaryScript.Compiler {
                 Holders: new Map<string, CompiledCode>( ),
                 DeclaredIdentifiers: new Set<string>( ),
                 Errors: new Set( ),
-                GenerateSourceNode: ( node, chunk ) => 
+                GenerateSourceNode: ( node, chunk, name = undefined ) => 
                     <SourceMap.SourceNode> new sourceMap.SourceNode(
                         node.location.start.line,
                         node.location.start.column,
                         filename,
-                        chunk ),
+                        chunk,
+                        name ),
                 Format: {
                     PrintComments: true
                 }
