@@ -15,6 +15,7 @@
 /// <reference path="nodes/expressions/shorthand-if.ts" />
 /// <reference path="nodes/expressions/selector.ts" />
 /// <reference path="nodes/expressions/comparison.ts" />
+/// <reference path="nodes/expressions/exprmember.ts" />
 /// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/numeric.ts" />
 /// <reference path="nodes/literals/string.ts" />
@@ -141,6 +142,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'ShorthandIfExpression':
                     return Nodes.ShorthandIf.Compile( node as AST.IShorthandIfExpression, env )
+
+                case 'ExpressionMember':
+                    return Nodes.ExpressionMember.Compile( node as AST.IExpressionMember, env )
 
                 case 'Selector':
                     return Nodes.Selector.Compile( node as AST.ISelector, env )

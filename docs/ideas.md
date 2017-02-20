@@ -177,10 +177,3 @@ end
 
 #### RegExp
 "Exactly like JS"
-
-#### Literal Addresses
-
-```
-(5/toString)
-("Hello, World!".substring 5)
-```

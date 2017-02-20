@@ -127,15 +127,16 @@
         / Expression
 
 //
-// ─── RETURNABLES ────────────────────────────────────────────────────────────────
+// ─── Returnable ─────────────────────────────────────────────────────────────────
 //
 
-    Returnables
+    Returnable
         = DeclarationAssignment
         / Expression
+        / ExpressionMember
 
-    ArgumentReturnables
-        = Returnables
+    ArgumentReturnable
+        = Returnable
         / PipePlaceholder
         / SExpressionBody
 
@@ -246,7 +247,7 @@
 //
 
     ForStatement 'for loop statement'
-        = "for" __+ start:Expression __+ dir:ForDirectionKey __+ "to" __+ end:Expression
+        = "for" __+ start:Returnable __+ dir:ForDirectionKey __+ "to" __+ end:Returnable
           step:ForStep? indexVar:ForIndexVar? __* EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
@@ -263,7 +264,7 @@
                 },
             }
         }
-        / "for" __+ upLimit:Expression step:ForStep? indexVar:ForIndexVar? __*
+        / "for" __+ upLimit:Returnable step:ForStep? indexVar:ForIndexVar? __*
           EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
@@ -281,7 +282,7 @@
             }
         }
         / "for" __+ iterator:Identifier __+ key:ForIterationTypeKey __+
-          iterable:Expression __* EndStructureSign body:Body END {
+          iterable:Returnable __* EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
                 id:         id( ),
@@ -304,7 +305,7 @@
         }
 
     ForStep
-        = __+ "step" __+ stepExp:Expression {
+        = __+ "step" __+ stepExp:Returnable {
             return stepExp
         }
     
@@ -342,7 +343,7 @@
         = arg:Identifier SeparatorInline more:UseImportsArgs {
             return [ arg ].concat( more )
         }
-        / subArg:Expression {
+        / subArg:Returnable {
             return [ subArg ]
         }
 
@@ -365,13 +366,14 @@
         / SExpressionBody
         / BooleanLiteral
         / Expression
+        / Returnable
 
 //
 // ─── SWITCH ─────────────────────────────────────────────────────────────────────
 //
 
     SwitchStatement 'switch statement'
-        = "switch" __+ expr:Expression __* EndStructureSign __+ cases:SwitchCases
+        = "switch" __+ expr:Returnable __* EndStructureSign __+ cases:SwitchCases
            defaultBody:SwitchElse? END {
             return {
                 type:           "SwitchStatement",
@@ -408,10 +410,10 @@
         }
 
     CaseMembers
-        = arg:Expression SeparatorMultiline more:CaseMembers {
+        = arg:Returnable SeparatorMultiline more:CaseMembers {
             return [ arg ].concat( more )
         }
-        / subArg:Expression {
+        / subArg:Returnable {
             return [ subArg ]
         }
 
@@ -490,8 +492,8 @@
 //
 
     ShorthandIfExpression 'shorthand if expression'
-        = expr:ShorthandIfParts _* "?" _*  trueExpression:ArgumentReturnables _* "!" _*
-        falseExpression:ArgumentReturnables {
+        = expr:ShorthandIfParts _* "?" _*  trueExpression:ArgumentReturnable _* "!" _*
+        falseExpression:ArgumentReturnable {
             return {
                 type:               "ShorthandIfExpression",
                 location:           location( ),
@@ -522,7 +524,7 @@
 //
 
     LambdaExpression 'lambda expression'
-        = "[" __* args:IdentifierList __* "=>" __* code:ArgumentReturnables __* "]" {
+        = "[" __* args:IdentifierList __* "=>" __* code:ArgumentReturnable __* "]" {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -533,7 +535,7 @@
         }
 
     LambdaBody 'lambda expression'
-        = args:IdentifierList __* "=>" __* code:ArgumentReturnables {
+        = args:IdentifierList __* "=>" __* code:ArgumentReturnable {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -551,7 +553,7 @@
         = arg:Identifier SeparatorMultiline more:IdentifierList {
             return [ arg ].concat( more )
         }
-        / subArg:Expression {
+        / subArg:Returnable {
             return [ subArg ]
         }
 
@@ -605,7 +607,7 @@
         / UnaryExpressionBody
 
     UnaryExpressionBody 's-expression'
-        = operator:UnaryOperator __+ arg:Expression {
+        = operator:UnaryOperator __+ arg:Returnable {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -617,7 +619,7 @@
         }
 
     SExpressionBody
-        = command:AddressIdentifier __+ params:SExpressionArgumentArray {
+        = command:SExpressionCommand __+ params:SExpressionArgumentArray {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -627,8 +629,8 @@
                 params:     params,
             }
         }
-        / operator:BinaryOperator __+ left:ArgumentReturnables __+
-          right:ArgumentReturnables {
+        / operator:BinaryOperator __+ left:ArgumentReturnable __+
+          right:ArgumentReturnable {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -639,7 +641,7 @@
                 right:      right 
             }
         }
-        / command:AddressIdentifier {
+        / command:SExpressionCommand {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -659,7 +661,11 @@
 
     SExpressionArgument
         = PipePlaceholder
-        / Expression
+        / Returnable
+
+    SExpressionCommand
+        = AddressIdentifier
+        / ExpressionMember
 
 //
 // ─── CLASS DECLARATION ──────────────────────────────────────────────────────────
@@ -818,7 +824,7 @@
         }
 
     TableRowSingleMember
-        = _* expr:Expression _* "|" {
+        = _* expr:Returnable _* "|" {
             return expr
         }
         / _+ "|" {
@@ -843,7 +849,7 @@
 //
 
     HolderDeclarationStatement 'hold statement'
-        = holder:HolderIdentifier __* "=" __* value:Expression {
+        = holder:HolderIdentifier __* "=" __* value:Returnable {
             return {
                 type:       'HolderDeclarationStatement',
                 location:   location( ),
@@ -904,7 +910,7 @@
 //
 
     ReturnStatement 'return statement'
-        = keyword:ReturnKeyword _+ expr:ArgumentReturnables {
+        = keyword:ReturnKeyword _+ expr:ArgumentReturnable {
             return {
                 type:       'ReturnStatement',
                 location:   location( ),
@@ -928,7 +934,7 @@
 //
 
     DeclarationAssignment 'declaration statement'
-        = name:Identifier __* "=" __* value:Returnables {
+        = name:Identifier __* "=" __* value:Returnable {
             return {
                 type:       'DeclarationAssignment',
                 location:   location( ),
@@ -943,7 +949,7 @@
 //
 
     SingleAssignmentStatement 'assignment statement'
-        = name:AddressIdentifier __* "=" __* value:Returnables {
+        = name:AddressIdentifier __* "=" __* value:Returnable {
             return {
                 type:       'SingleAssignmentStatement',
                 location:   location( ),
@@ -965,11 +971,25 @@
         }
 
 //
+// ─── LITERAL MEMBER CALL ────────────────────────────────────────────────────────
+//
+
+    ExpressionMember 'literal member call'
+        = expr:Expression _* "/" _* member:( AddressIdentifier / Identifier ) {
+            return {
+                type:       "ExpressionMember",
+                location:   location( ),
+                id:         id( ),
+                expr:       expr,
+                member:     member
+            }
+        }
+//
 // ─── ADDRESS IDENTIFIER ─────────────────────────────────────────────────────────
 //
 
     AddressIdentifier 'address identifier'
-        = space:Identifier "/" member:( AddressIdentifier / Identifier ) {
+        = space:Identifier _* "/" _* member:( AddressIdentifier / Identifier ) {
             return {
                 type:       "AddressIdentifier",
                 location:   location( ),
@@ -1052,8 +1072,8 @@
         }
 
     MapAssignment
-        = key:Expression _* ObjectAssignmentKeyValueCharacter _*
-          value:ArgumentReturnables {
+        = key:Returnable _* ObjectAssignmentKeyValueCharacter _*
+          value:ArgumentReturnable {
             return {
                 location: location( ),
                 key:    key,
@@ -1112,7 +1132,7 @@
 
     ObjectAssignment
         = name:Identifier _* ObjectAssignmentKeyValueCharacter _*
-          value:ArgumentReturnables {
+          value:ArgumentReturnable {
             return {
                 key:    name,
                 value:  value
@@ -1179,10 +1199,10 @@
         }
 
     ArrayMember
-        = member:Expression SeparatorMultiline more:ArrayMember {
+        = member:Returnable SeparatorMultiline more:ArrayMember {
             return [ member ].concat( more )
         } 
-        / member:Expression {
+        / member:Returnable {
             return [ member ]
         }
 

@@ -81,10 +81,20 @@ namespace KaryScript.Compiler.AST {
                 | "HolderDeclarationStatement"
                 | "HolderIdentifier"
                 | "Comparison"
+                | "ExpressionMember"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── LITERAL MEMBER CALL ────────────────────────────────────────────────────────
+    //
+
+        export interface IExpressionMember extends IBase {
+            expr:           IBase
+            member:         IAddressIdentifier | IIdentifier
         }
 
     //
@@ -532,7 +542,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface IFunctionCallWithArgsSExpression extends ISExpression {
             kind:       "FunctionCallWithArgs"
-            command:    TAddressOrIdentifier
+            command:    TAddressOrIdentifier | IExpressionMember
             params:     TReturnables[ ]
         }
 

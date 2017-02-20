@@ -165,7 +165,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                                    placeholder?: TPlaceholder ): SourceMap.SourceNode {
             const ph = placeholder? CompilePlaceholder( placeholder, env ) : ''
             return env.GenerateSourceNode( node,
-                [ Address.Compile( node.command, env ),  "(", ph, ")"  ])
+                [ Nodes.CompileSingleNode( node.command, env ),  "(", ph, ")"  ])
         }
 
     //
