@@ -20,8 +20,6 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 // reading the file
                 const fileString = fs.readFileSync( file, 'utf8' )
 
-                settings.sourceMap = true
-
                 // out file GetNewAddress
                 const outFileAddress = GetNewAddress( settings, file )
 
@@ -58,9 +56,8 @@ namespace KaryScript.CLI.Builder.TaskRunner {
 
             // fixing the sourceMap path
             let mapObject = JSON.parse( code.map.toString( ) )
-            console.log( mapObject )
             mapObject['sources'][ 0 ] = path.relative(
-                mapPath, mapObject['sources'][ 0 ] )
+                mapPath, mapObject['sources'][ 0 ] ).substring( 3 )
 
             // applying the map
             fs.writeFileSync( mapPath, JSON.stringify( mapObject) )
