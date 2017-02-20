@@ -124,7 +124,7 @@
         / SwitchStatement
         / UseStatement
         / ReturnStatement
-        / Expression
+        / Returnable
 
 //
 // ─── Returnable ─────────────────────────────────────────────────────────────────
@@ -132,8 +132,8 @@
 
     Returnable
         = DeclarationAssignment
-        / Expression
         / ExpressionMember
+        / Expression
 
     ArgumentReturnable
         = Returnable
