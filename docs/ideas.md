@@ -1,6 +1,5 @@
 # Incoming Grammars and Features
 ## Ideas
-
 #### Types
 ```
 def add ( x: number, y: number ) number: 
@@ -126,6 +125,14 @@ footprints = typeof yeti !== "undefined" && yeti !== null ? yeti : "bear";
 ```
 
 ## To Be Implemented 
+
+#### UNIX First Line
+This needs to be implemented
+
+```
+#! /usr/local/bin/node
+```
+
 
 #### closure namespaces
 
