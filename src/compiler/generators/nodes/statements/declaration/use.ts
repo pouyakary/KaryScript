@@ -53,12 +53,12 @@ namespace KaryScript.Compiler.Nodes.Use {
                                                   env: IEnvInfo ) {
             let state = true
             for ( const arg of node.args ) {
-                if ( !/^[a-bA-B_0-9]+$/.test( arg.name ) ) {
+                if ( !/^[a-bA-B0-9]+$/.test( arg.name ) ) {
                     state = false
                     Reporter.Report(
                         env,
                         '"' + arg.name + '" cant be used with shortcut use statement.'+
-                        ' Names must be simple (only containing [a-bA-B_0-9])',
+                        ' Names must be simple (only containing [a-bA-B0-9])',
                         arg
                     )
                 }
