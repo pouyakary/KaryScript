@@ -115,6 +115,7 @@ namespace KaryScript.Compiler.Nodes.For {
         function HandleForChangeableExpressions ( parent: AST.IRepeatForLoop,
                                                      env: IEnvInfo,
                                                    start: boolean ): IForDefs {
+
             //
             // ─── NODE CODE ───────────────────────────────────────────────────
             //

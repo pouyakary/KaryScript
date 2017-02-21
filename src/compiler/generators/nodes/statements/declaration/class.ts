@@ -39,13 +39,14 @@ namespace KaryScript.Compiler.Nodes.ClassDeclaration {
         function GenerateHeader ( node: AST.IClassDeclaration,
                                    env: IEnvInfo ): SourceMap.SourceNode {
             return env.GenerateSourceNode( node, [
-                HandleExportedKey( node ), "class ",
+                HandleExportedKey( node ),
+                "class ",
                 Nodes.Address.CompileIdentifier( node.name, env ),
                 (( node.origin !== null )?
                     env.GenerateSourceNode( node.origin,[
                         ' extends ',  Address.Compile( node.origin, env )]) : ''),
-                    ' {'
-                ])
+                ' {'
+            ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

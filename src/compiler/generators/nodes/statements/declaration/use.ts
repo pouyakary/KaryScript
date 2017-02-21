@@ -32,6 +32,7 @@ namespace KaryScript.Compiler.Nodes.Use {
 
         function CompileSimpleUse ( node: AST.IUseStatementSimpleImport,
                                      env: IEnvInfo ) {
+
             if ( !CheckSimpleUseIdentifierNames( node, env ) ) return ''
 
             let results = new Array<SourceMap.SourceNode>( )

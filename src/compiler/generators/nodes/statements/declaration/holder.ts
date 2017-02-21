@@ -37,7 +37,6 @@ namespace KaryScript.Compiler.Nodes.Holder {
                 const result = <CompiledCode> env.Holders.get( node.name )
                 env.Holders.delete( node.name )
                 return result
-
             } else {
                 throw Reporter.Report( env,
                     `No holder as @${ node.name } was found.`, node )
