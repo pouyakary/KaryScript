@@ -20,11 +20,62 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
         export function Compile ( node: AST.ISingleAssignmentStatement,
                                    env: IEnvInfo ): SourceMap.SourceNode {
 
-            const name          = Nodes.CompileSingleNode( node.name, env )
-            const assign        = ( node.key === '/=' )? name + "." : ''
-            const assignExpr    = Nodes.CompileSingleNode( node.value, env )
+            const name  = Nodes.CompileSingleNode( node.name, env )
+            const value = Nodes.CompileSingleNode( node.value, env )
 
-            return env.GenerateSourceNode( node, [ name, " = ", assign, assignExpr ])
+            let compiledCodeArray = new Array<CompiledCode>( )
+
+            switch ( node.key ) {
+                case '=':
+                    compiledCodeArray = CompileSingleAssignment( name, value, env )
+                    break
+
+                case '/=':
+                    compiledCodeArray = CompileSlashAssignment( name, value, env )
+                    break
+
+                case '?=':
+                    compiledCodeArray = CompileNullCheckAssignment( name, value, env )
+                    break
+            }
+
+            return env.GenerateSourceNode( node, compiledCodeArray )
+        }
+
+    //
+    // ─── COMPILE SIMPLE ASSIGNMENT ──────────────────────────────────────────────────
+    //
+
+        function CompileSingleAssignment ( name: CompiledCode,
+                                          value: CompiledCode,
+                                            env: IEnvInfo ) {
+            return [
+                name, ' = ', value
+            ]
+        }
+
+    //
+    // ─── COMPILE SLASH ASSIGNMENTS ──────────────────────────────────────────────────
+    //
+
+        function CompileSlashAssignment ( name: CompiledCode,
+                                         value: CompiledCode,
+                                           env: IEnvInfo ) {
+            return [
+                name, ' = ', name, '.', value
+            ]
+        }
+
+    //
+    // ─── COMPILE NULL CHECK ASSIGN ──────────────────────────────────────────────────
+    //
+
+        function CompileNullCheckAssignment ( name: CompiledCode,
+                                             value: CompiledCode,
+                                               env: IEnvInfo ) {
+            return [
+                'if (', name , ' == null) {', name , ' = ', value, '}'
+            ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

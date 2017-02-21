@@ -992,12 +992,12 @@
 //
 
     SingleAssignmentStatement 'assignment statement'
-        = name:AddressIdentifier __* "=" __* value:Returnable {
+        = name:AddressIdentifier __* key:( "=" / "?=" ) __* value:Returnable {
             return {
                 type:       'SingleAssignmentStatement',
                 location:   location( ),
                 id:         id( ),
-                key:        "=",
+                key:        key,
                 name:       name,
                 value:      value
             }
