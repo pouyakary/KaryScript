@@ -118,6 +118,7 @@
         / DeclarationStatement
         / HolderDeclarationStatement
         / SingleAssignmentStatement
+        / TryCatchStatement
         / IfStatement
         / WhileStatement
         / ForStatement
@@ -192,6 +193,40 @@
     FunctionCall 'function call'
         = PipeExpression
         / SExpression
+
+//
+// ─── TRY CATCH STATEMENT ────────────────────────────────────────────────────────
+//
+
+    TryCatchStatement 'try catch statement'
+        = "try" body:Body "catch" __+ exceptionIdentifier:Identifier __*
+          EndStructureSign catchBody:Body finallyBody:TryCatchFinallyBody? END {
+              return {
+                  type:                 'TryCatchStatement',
+                  id:                   id( ),
+                  location:             location( ),
+                  body:                 body,
+                  exceptionIdentifier:  exceptionIdentifier,
+                  catchBody:            catchBody,
+                  finallyBody:          finallyBody
+              }
+          }
+        / "try" body:Body finallyBody:TryCatchFinallyBody? END {
+              return {
+                  type:                 'TryCatchStatement',
+                  id:                   id( ),
+                  location:             location( ),
+                  body:                 body,
+                  exceptionIdentifier:  null,
+                  catchBody:            null,
+                  finallyBody:          finallyBody
+              }
+          }
+
+    TryCatchFinallyBody 'try catch finally body'
+        = 'finally' body:Body {
+            return body
+        }
 
 //
 // ─── COMPARE STATEMENT ──────────────────────────────────────────────────────────

@@ -83,10 +83,22 @@ namespace KaryScript.Compiler.AST {
                 | "Comparison"
                 | "ExpressionMember"
                 | "UseStatement"
+                | "TryCatchStatement"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── TRY CATCH STATEMENT ────────────────────────────────────────────────────────
+    //
+
+        export interface ITryCatchStatement extends IBase {
+            body:                 IBody
+            exceptionIdentifier:  IIdentifier | null
+            catchBody:            IBody | null
+            finallyBody:          IBody | null
         }
 
     //

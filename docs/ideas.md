@@ -158,31 +158,5 @@ Compiles to:
 })(main || (main = {}))
 ```
 
-#### Try Catch
-
-```
-try
-
-end
-```
-
-```
-try
-
-catch error:
-
-end
-```
-
-```
-try
-
-catch e:
-
-finally
-
-end
-```
-
 #### RegExp
 "Exactly like JS"

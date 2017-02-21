@@ -36,6 +36,7 @@
 /// <reference path="nodes/statements/loops/for.ts" />
 /// <reference path="nodes/statements/return.ts" />
 /// <reference path="nodes/statements/switch.ts" />
+/// <reference path="nodes/statements/try.ts" />
 
 namespace KaryScript.Compiler.Nodes {
 
@@ -159,6 +160,9 @@ namespace KaryScript.Compiler.Nodes {
 
                 case 'UseStatement':
                     return Nodes.Use.Compile( node as AST.IUseStatement, env )
+
+                case 'TryCatchStatement':
+                    return Nodes.TryCatch.Compile( node as AST.ITryCatchStatement, env )
 
                 case 'LineTerminator':
                 case 'Empty':
