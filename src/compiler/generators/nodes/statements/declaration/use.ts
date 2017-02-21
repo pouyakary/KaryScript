@@ -10,6 +10,7 @@
 
 /// <reference path="../../../switcher.ts" />
 /// <reference path="../../../../tools/concat.ts" />
+/// <reference path="../../../../tools/reporter.ts" />
 
 namespace KaryScript.Compiler.Nodes.Use {
 
@@ -31,6 +32,8 @@ namespace KaryScript.Compiler.Nodes.Use {
 
         function CompileSimpleUse ( node: AST.IUseStatementSimpleImport,
                                      env: IEnvInfo ) {
+            if ( !CheckSimpleUseIdentifierNames( node, env ) ) return ''
+
             let results = new Array<SourceMap.SourceNode>( )
             for ( const arg of node.args ) {
                 const compiledIdentifier = Nodes.CompileSingleNode( arg, env )
@@ -38,7 +41,29 @@ namespace KaryScript.Compiler.Nodes.Use {
                     'const ', compiledIdentifier, ' = require("', compiledIdentifier, '")'
                 ]))
             }
+
             return env.GenerateSourceNode( node, Join('; ', results ) )
+        }
+
+    //
+    // ─── CHECK SIMPLE USE IDENTIFIER NAMES ──────────────────────────────────────────
+    //
+
+        function CheckSimpleUseIdentifierNames ( node: AST.IUseStatementSimpleImport,
+                                                  env: IEnvInfo ) {
+            let state = true
+            for ( const arg of node.args ) {
+                if ( !/^[a-bA-B_0-9]+$/.test( arg.name ) ) {
+                    state = false
+                    Reporter.Report(
+                        env,
+                        '"' + arg.name + '" cant be used with shortcut use statement.'+
+                        ' Names must be simple (only containing [a-bA-B_0-9])',
+                        arg
+                    )
+                }
+            }
+            return state
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
