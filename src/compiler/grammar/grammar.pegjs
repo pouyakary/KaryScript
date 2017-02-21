@@ -263,19 +263,28 @@
 //
 
     Selector 'selector expression'
-        = "[" __* searchable:AddressIdentifier __* "|" __* query:QueryBody __* "]" {
+        = "[" __* searchable:AddressIdentifier __* queries:SelectorQueries __* "]" {
             return {
                 type:       "Selector",
                 id:         id( ),
                 location:   location( ),
                 searchable: searchable,
-                query:      query,
+                queries:    queries,
             }
         }
 
-    QueryBody
-        = LambdaBody
-        / Expression
+    SelectorQueries
+        = query:SelectorQueryPart __* more:SelectorQueries {
+            return [ query ].concat( more )
+        }
+        / query:SelectorQueryPart {
+            return [ query ]
+        }
+        
+    SelectorQueryPart
+        = "|" __* query:( LambdaBody / Expression ) {
+            return query
+        }
 
 //
 // ─── LOOPS ──────────────────────────────────────────────────────────────────────

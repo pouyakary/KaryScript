@@ -21,17 +21,29 @@ namespace KaryScript.Compiler.Nodes.Selector {
                                    env: IEnvInfo ): SourceMap.SourceNode {
 
             const name = Nodes.Address.Compile( node.searchable, env )
-            const query = Nodes.CompileSingleNode( node.query, env )
+            let queries:CompiledCode[ ] = [ name ]
 
-            let result: CompiledCode[ ]
-            if ( node.query.type === "LambdaExpression" )
-                result = [ name, '.filter(', query, ')' ]
-            else
-                result = [ name, "[", query, "]" ]
-            
-            return env.GenerateSourceNode( node, result )
+            for ( const query of node.queries )
+                queries = queries.concat(
+                    CompileSingleQuery( query, env ))
+
+            return env.GenerateSourceNode( node, queries )
         }
-    
+
+    //
+    // ─── COMPILE SINGLE QUERY ───────────────────────────────────────────────────────
+    //
+
+        function CompileSingleQuery ( node: AST.IBase, env: IEnvInfo ) {
+            const query = Nodes.CompileSingleNode( node, env )
+            let result: CompiledCode[ ]
+            if ( node.type === "LambdaExpression" )
+                result = [ '.filter(', query, ')' ]
+            else
+                result = [ "[", query, "]" ]
+            return result
+        }
+
     // ────────────────────────────────────────────────────────────────────────────────
 
 }
