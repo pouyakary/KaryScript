@@ -38,11 +38,11 @@
   },
   "homepage": "https://github.com/karyfoundation/karyscript#readme",
   "devDependencies": {
-    "pegjs": "^0.10.0",
-    "source-map": "^0.5.6",
-    "js-yaml": "^3.8.1"
+    "pegjs": "^0.10.0"
   },
   "dependencies": {
+    "source-map": "^0.5.6",
+    "js-yaml": "^3.8.1",
     "colors": "^1.1.2"
   }
 }
