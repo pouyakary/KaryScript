@@ -192,7 +192,7 @@ namespace KaryScript.Compiler.Nodes.For {
     // ─── GENERATE RANDOM NAME ───────────────────────────────────────────────────────
     //
 
-        function GenerateRandomId ( ) {
+        export function GenerateRandomId ( ) {
             return  "__$KK" +
                     Math.floor( Math.random( ) * Date.now( ) )
                         .toString( )

@@ -359,7 +359,18 @@ namespace KaryScript.Compiler.AST {
         export interface ISelector extends IBase {
             type:           "Selector"
             searchable:     IAddressIdentifier
+            kind:           "query" | "range"
+        }
+
+        export interface IQuerySelector extends ISelector {
+            kind:           "query",
             queries:        IBase[ ]
+        }
+
+        export interface IRangeSelector extends ISelector {
+            kind:           "range"
+            start:          IBase
+            end:            IBase
         }
 
     //

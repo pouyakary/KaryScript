@@ -10,6 +10,7 @@
 
 /// <reference path="../../switcher.ts" />
 /// <reference path="address.ts" />
+/// <reference path="../statements/loops/for.ts" />
 
 namespace KaryScript.Compiler.Nodes.Selector {
 
@@ -19,6 +20,22 @@ namespace KaryScript.Compiler.Nodes.Selector {
 
         export function Compile ( node: AST.ISelector,
                                    env: IEnvInfo ): SourceMap.SourceNode {
+
+            switch ( node.kind ) {
+                case 'query':
+                    return CompileQuerySelector( node as AST.IQuerySelector, env )
+                
+                case 'range':
+                    return CompileRangeSelector( node as AST.IRangeSelector, env )
+            }
+        }
+
+    //
+    // ─── COMPILE QUERY SELECTOR ─────────────────────────────────────────────────────
+    //
+
+        function CompileQuerySelector ( node: AST.IQuerySelector,
+                                         env: IEnvInfo) {
 
             const name = Nodes.Address.Compile( node.searchable, env )
             let queries:CompiledCode[ ] = [ name ]
@@ -35,13 +52,71 @@ namespace KaryScript.Compiler.Nodes.Selector {
     //
 
         function CompileSingleQuery ( node: AST.IBase, env: IEnvInfo ) {
+
             const query = Nodes.CompileSingleNode( node, env )
             let result: CompiledCode[ ]
+
             if ( node.type === "LambdaExpression" )
                 result = [ '.filter(', query, ')' ]
             else
                 result = [ "[", query, "]" ]
+
             return result
+        }
+
+    //
+    // ─── COMPILE RANGE NODE ─────────────────────────────────────────────────────────
+    //
+
+        function CompileRangeSelector ( node: AST.IRangeSelector,
+                                         env: IEnvInfo ) {
+
+            if ( node.start.type === 'NumericLiteral' &&
+                 node.end.type === 'NumericLiteral' )
+
+                return CompileNumberLiteralRangeSelector( node, env )
+
+            else
+                return CompileVarRangeSelector( node, env )
+
+        }
+
+    //
+    // ─── COMPILE SIMPLE NODE ────────────────────────────────────────────────────────
+    //
+
+        function CompileNumberLiteralRangeSelector ( node: AST.IRangeSelector,
+                                                      env: IEnvInfo ) {
+
+            const name = Nodes.Address.Compile( node.searchable, env )
+
+            const start = ( node.start as AST.INumericLiteral ).value
+            const end   = ( node.end as AST.INumericLiteral ).value
+
+            const identifier = For.GenerateRandomId( )
+
+            return env.GenerateSourceNode( node, [
+                name, '.slice(', Math.min( start, end ).toString( ), ', ',
+                    (Math.max( start, end ) + 1 ).toString( ), ')'
+            ])
+        }
+
+    //
+    // ─── COMPILE VAR BASED RANGE SELECTOR ───────────────────────────────────────────
+    //
+
+        function CompileVarRangeSelector ( node: AST.IRangeSelector,
+                                            env: IEnvInfo ) {
+
+            const name = Nodes.Address.Compile( node.searchable, env )
+
+            const start = Nodes.CompileSingleNode( node.start, env )
+            const end   = Nodes.CompileSingleNode( node.end, env )
+
+            return env.GenerateSourceNode( node, [
+                name, '.slice(Math.min(', start, ', ', end, '), Math.max(',
+                    start, ', ', end, ') + 1)'
+            ])
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

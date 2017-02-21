@@ -268,10 +268,23 @@
                 type:       "Selector",
                 id:         id( ),
                 location:   location( ),
+                kind:       'query',
                 searchable: searchable,
                 queries:    queries,
             }
         }
+        / "[" __* searchable:AddressIdentifier __* "|" __* start:Returnable __+ "to"
+          __+ end:Returnable __* "]" {
+            return {
+                type:       "Selector",
+                id:         id( ),
+                location:   location( ),
+                kind:       'range',
+                searchable: searchable,
+                start:      start,
+                end:        end
+            }
+          }
 
     SelectorQueries
         = query:SelectorQueryPart __* more:SelectorQueries {
