@@ -91,6 +91,24 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── ZONE DECLARATION ───────────────────────────────────────────────────────────
+    //
+
+        export interface IZoneDeclaration extends IBase {
+            body:       IBody
+            kind:       'named' | 'not-named'
+        }
+
+        export interface INamedZone extends IZoneDeclaration {
+            kind:       'named'
+            name:       IAddressIdentifier
+        }
+
+        export interface ISimpleZone extends IZoneDeclaration {
+            kind:       'not-named'
+        }
+
+    //
     // ─── TRY CATCH STATEMENT ────────────────────────────────────────────────────────
     //
 

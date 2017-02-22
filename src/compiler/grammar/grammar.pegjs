@@ -117,6 +117,7 @@
         / ObjectDeclaration
         / DeclarationStatement
         / HolderDeclarationStatement
+        / NamespaceDeclaration
         / SingleAssignmentStatement
         / TryCatchStatement
         / IfStatement
@@ -193,6 +194,32 @@
     FunctionCall 'function call'
         = PipeExpression
         / SExpression
+
+//
+// ─── NAMESPACE ──────────────────────────────────────────────────────────────────
+//
+
+    NamespaceDeclaration
+        = 'zone' __+ name:AddressIdentifier __* EndStructureSign
+          body:Body END {
+            return {
+                type:       'NamespaceDeclaration',
+                id:         id( ),
+                location:   location( ),
+                kind:       'named',
+                name:       name,
+                body:       body
+            }
+        }
+        / 'zone' __+ body:Body END {
+            return {
+                type:       'NamespaceDeclaration',
+                id:         id( ),
+                location:   location( ),
+                kind:       'not-named',
+                body:       body
+            }
+        }
 
 //
 // ─── TRY CATCH STATEMENT ────────────────────────────────────────────────────────
@@ -1319,6 +1346,7 @@
             / "hold"            !IdentifierName
             / "clone"           !IdentifierName
             / "eq"              !IdentifierName
+            / "zone"            !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
