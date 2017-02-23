@@ -11,7 +11,7 @@
 /// <reference path="version.ts" />
 /// <reference path="generators/switcher.ts" />
 /// <reference path="tools/reporter.ts" />
-/// <reference path="./interfaces/source-map.ts" />
+/// <reference path="../typings/source-map.ts" />
 
 namespace KaryScript.Compiler {
 
