@@ -96,10 +96,28 @@ namespace KaryScript.Compiler.Nodes.For {
 
         function CompileForeachForLoop ( node: AST.IForeachForLoop,
                                           env: IEnvInfo ): SourceMap.SourceNode {
-            return env.GenerateSourceNode( node,
-                [ 'for (let ', Nodes.Address.CompileIdentifier( node.iterator, env ),
-                  ' ', node.key, ' ', Nodes.CompileSingleNode( node.iterable, env ),
-                  ') {', Nodes.CompileSingleNode( node.body, env ), '}' ])
+
+            let chunk: CompiledCode[ ] = [
+                'for (let ',
+                Nodes.Address.CompileIdentifier( node.iterator, env ),
+                ' ', node.key, ' ',
+                Nodes.CompileSingleNode( node.iterable, env ),
+                ') {',
+            ]
+
+            if ( node.predicate )
+                chunk = chunk.concat([
+                    'if (', Nodes.CompileSingleNode( node.predicate, env ), ') {'
+                ])
+
+            chunk.push( Nodes.CompileSingleNode( node.body, env ) )
+
+            if ( node.predicate )
+                chunk.push('}}')
+            else
+                chunk.push('}')
+
+            return env.GenerateSourceNode( node, chunk )
         }
 
     //
