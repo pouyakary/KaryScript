@@ -278,7 +278,7 @@
         }
 
     ComparisonKey
-        = __* op:( '==' / '<=' / '>=' / '!=' / '<' / '>' ) __* {
+        = __* op:( '==' / '<=' / '>=' / '!=' / '<' / '>' / 'is' / 'isnt' ) __* {
             return op
         }
         / __+ key:( 'and' / 'or' ) __+ {
@@ -1352,6 +1352,8 @@
             / "clone"           !IdentifierName
             / "zone"            !IdentifierName
             / "when"            !IdentifierName
+            / "is"              !IdentifierName
+            / "isnt"            !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────

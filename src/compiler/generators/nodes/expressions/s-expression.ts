@@ -198,9 +198,13 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                 case 'mod':
                     return '%'
 
-                case 'eq':
+                case 'is':
                 case '=':
                     return '==='
+
+                case 'isnt':
+                case '!=':
+                    return '!==='
 
                 case '>':
                     return '>'
