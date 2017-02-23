@@ -207,6 +207,7 @@ namespace KaryScript.Compiler.AST {
             key:            "in" | "of"
             iterator:       IIdentifier,
             iterable:       TExpression,
+            Predicate:      IBase | null,
             body:           IBody
         }
 

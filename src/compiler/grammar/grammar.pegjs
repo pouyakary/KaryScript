@@ -366,7 +366,8 @@
             }
         }
         / "for" __+ iterator:Identifier __+ key:ForIterationTypeKey __+
-          iterable:Returnable __* EndStructureSign body:Body END {
+          iterable:Returnable __* predicate:ForIterationWhen? EndStructureSign
+          body:Body END {
             return {
                 type:       "ForStatement",
                 id:         id( ),
@@ -375,8 +376,14 @@
                 key:        key,
                 iterator:   iterator,
                 iterable:   iterable,
+                predicate:  predicate,
                 body:       body
             }
+        }
+
+    ForIterationWhen
+        = "when" __+ predicate:Predicate __* {
+            return predicate
         }
 
     ForIterationTypeKey
@@ -1331,8 +1338,6 @@
             / "false"           !IdentifierName
             / "yes"             !IdentifierName
             / "no"              !IdentifierName
-            / "right"           !IdentifierName
-            / "wrong"           !IdentifierName
             / "not"             !IdentifierName
             / "cat"             !IdentifierName
             / "print"           !IdentifierName
@@ -1345,8 +1350,8 @@
             / "via"             !IdentifierName
             / "hold"            !IdentifierName
             / "clone"           !IdentifierName
-            / "eq"              !IdentifierName
             / "zone"            !IdentifierName
+            / "when"            !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
@@ -1520,7 +1525,7 @@
 //
 
     BooleanLiteral 'boolean literal'
-        = key:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' / 'right' / 'wrong' ) {
+        = key:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
             let result = true
             switch ( key ) {
                 case 'off':
