@@ -49,6 +49,11 @@ namespace KaryScript.Compiler {
             Format: Formatter
 
             /**
+             * Zone Stack
+             */
+            ZoneStack: string[ ]
+
+            /**
              * SourceMap Generator
              */
             GenerateSourceNode: ( node: AST.IBase,

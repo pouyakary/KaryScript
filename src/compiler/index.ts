@@ -72,6 +72,7 @@ namespace KaryScript.Compiler {
                         filename,
                         chunk,
                         name ),
+                ZoneStack: [ ],
                 Format: {
                     PrintComments: true
                 }
