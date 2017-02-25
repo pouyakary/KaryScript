@@ -1,0 +1,4 @@
+---
+srcDir: tests/test-drive/src
+outDir: tests/test-drive/bin
+sourceMap: false
