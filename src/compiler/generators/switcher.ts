@@ -30,6 +30,7 @@
 /// <reference path="nodes/statements/declaration/object.ts" />
 /// <reference path="nodes/statements/declaration/holder.ts" />
 /// <reference path="nodes/statements/declaration/use.ts" />
+/// <reference path="nodes/statements/declaration/zone.ts" />
 /// <reference path="nodes/statements/assignment.ts" />
 /// <reference path="nodes/statements/if.ts" />
 /// <reference path="nodes/statements/loops/while.ts" />
@@ -64,105 +65,133 @@ namespace KaryScript.Compiler.Nodes {
                                          env: IEnvInfo ): CompiledCode {
             switch ( node.type ) {
                 case 'Body':
-                    return Nodes.Body.Compile( node as AST.IBody, env )
+                    return Nodes.Body.Compile(
+                        node as AST.IBody, env )
 
                 case 'NumericLiteral':
-                    return Nodes.Numeric.Compile( node as AST.INumericLiteral, env )
+                    return Nodes.Numeric.Compile(
+                        node as AST.INumericLiteral, env )
                 
                 case 'BooleanLiteral':
-                    return Nodes.Boolean.Compile( node as AST.IBooleanLiteral, env )
+                    return Nodes.Boolean.Compile(
+                        node as AST.IBooleanLiteral, env )
 
                 case 'StringLiteral':
-                    return Nodes.String.Compile( node as AST.IStringLiteral, env )
+                    return Nodes.String.Compile(
+                        node as AST.IStringLiteral, env )
 
                 case 'DeclarationStatement':
                     return Nodes.Declaration.Compile(
-                        node as AST.DeclarationStatementBase, env
-                    )
+                        node as AST.DeclarationStatementBase, env )
 
                 case 'FunctionDeclaration':
                     return Nodes.FunctionDeclaration.Compile(
-                        node as AST.IFunctionDeclaration, env
-                    )
+                        node as AST.IFunctionDeclaration, env )
 
                 case 'ClassDeclaration':
-                    return Nodes.ClassDeclaration.Compile( node as AST.IClassDeclaration, env )
+                    return Nodes.ClassDeclaration.Compile(
+                        node as AST.IClassDeclaration, env )
 
                 case 'ObjectDeclaration':
-                    return Nodes.ObjectDeclaration.Compile( node as AST.IObjectDeclaration, env )
+                    return Nodes.ObjectDeclaration.Compile(
+                        node as AST.IObjectDeclaration, env )
+
+                case 'ZoneDeclaration':
+                    return Nodes.ZoneDeclaration.Compile(
+                        node as AST.IZoneDeclaration, env )
 
                 case 'SingleAssignmentStatement':
                     return Nodes.SingleAssignment.Compile(
-                        node as AST.ISingleAssignmentStatement, env
-                    )
+                        node as AST.ISingleAssignmentStatement, env )
 
                 case 'SExpression':
-                    return Nodes.SExpression.Compile( node as AST.ISExpression, env )
+                    return Nodes.SExpression.Compile(
+                        node as AST.ISExpression, env )
 
                 case 'LambdaExpression':
-                    return Nodes.Lambda.Compile( node as AST.ILambdaExpression, env )
+                    return Nodes.Lambda.Compile(
+                        node as AST.ILambdaExpression, env )
 
                 case 'ReturnStatement':
-                    return Nodes.Return.Compile( node as AST.IReturnStatement, env )
+                    return Nodes.Return.Compile(
+                        node as AST.IReturnStatement, env )
 
                 case 'PipeExpression':
-                    return Nodes.Pipe.Compile( node as AST.IPipeExpression, env )
+                    return Nodes.Pipe.Compile(
+                        node as AST.IPipeExpression, env )
 
                 case 'Comparison':
-                    return Nodes.Comparison.Compile( node as AST.IComparison, env )
+                    return Nodes.Comparison.Compile(
+                        node as AST.IComparison, env )
 
                 case 'Identifier':
                 case 'AddressIdentifier':
-                    return Nodes.Address.Compile( node, env )
+                    return Nodes.Address.Compile(
+                        node, env )
 
                 case 'ArrayLiteral':
-                    return Nodes.ArrayLiteral.Compile( node as AST.IArrayLiteral, env )
+                    return Nodes.ArrayLiteral.Compile(
+                        node as AST.IArrayLiteral, env )
 
                 case 'SetLiteral':
-                    return Nodes.Set.Compile( node as AST.ISetLiteral, env )
+                    return Nodes.Set.Compile(
+                        node as AST.ISetLiteral, env )
 
                 case 'ObjectLiteral':
-                    return Nodes.ObjectLiteral.Compile( node as AST.IObjectLiteral, env )
+                    return Nodes.ObjectLiteral.Compile(
+                        node as AST.IObjectLiteral, env )
 
                 case 'MapLiteral':
-                    return Nodes.Map.Compile( node as AST.IMapLiteral, env )
+                    return Nodes.Map.Compile(
+                        node as AST.IMapLiteral, env )
 
                 case 'TableLiteral':
-                    return Nodes.Table.Compile( node as AST.ITableLiteral, env )
+                    return Nodes.Table.Compile(
+                        node as AST.ITableLiteral, env )
 
                 case 'IfStatement':
-                    return Nodes.If.Compile( node as AST.IIfStatement, env )
+                    return Nodes.If.Compile(
+                        node as AST.IIfStatement, env )
 
                 case 'SwitchStatement':
-                    return Nodes.Switch.Compile( node as AST.ISwitchStatement, env )
+                    return Nodes.Switch.Compile(
+                        node as AST.ISwitchStatement, env )
 
                 case 'WhileStatement':
-                    return Nodes.While.Compile( node as AST.IWhileStatement, env )
+                    return Nodes.While.Compile(
+                        node as AST.IWhileStatement, env )
 
                 case 'ForStatement':
-                    return Nodes.For.Compile( node as AST.IForStatement, env )
+                    return Nodes.For.Compile(
+                        node as AST.IForStatement, env )
 
                 case 'ShorthandIfExpression':
-                    return Nodes.ShorthandIf.Compile( node as AST.IShorthandIfExpression, env )
+                    return Nodes.ShorthandIf.Compile(
+                        node as AST.IShorthandIfExpression, env )
 
                 case 'ExpressionMember':
-                    return Nodes.ExpressionMember.Compile( node as AST.IExpressionMember, env )
+                    return Nodes.ExpressionMember.Compile(
+                        node as AST.IExpressionMember, env )
 
                 case 'Selector':
-                    return Nodes.Selector.Compile( node as AST.ISelector, env )
+                    return Nodes.Selector.Compile(
+                        node as AST.ISelector, env )
 
                 case 'HolderDeclarationStatement':
                     return Nodes.Holder.Declare(
                         node as AST.IHolderDeclarationStatement, env )
 
                 case 'HolderIdentifier':
-                    return Nodes.Holder.Use( node as AST.IHolderIdentifier, env )
+                    return Nodes.Holder.Use(
+                        node as AST.IHolderIdentifier, env )
 
                 case 'UseStatement':
-                    return Nodes.Use.Compile( node as AST.IUseStatement, env )
+                    return Nodes.Use.Compile(
+                        node as AST.IUseStatement, env )
 
                 case 'TryCatchStatement':
-                    return Nodes.TryCatch.Compile( node as AST.ITryCatchStatement, env )
+                    return Nodes.TryCatch.Compile(
+                        node as AST.ITryCatchStatement, env )
 
                 case 'LineTerminator':
                 case 'Empty':

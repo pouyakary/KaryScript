@@ -84,6 +84,7 @@ namespace KaryScript.Compiler.AST {
                 | "ExpressionMember"
                 | "UseStatement"
                 | "TryCatchStatement"
+                | "ZoneDeclaration"
 
             location: ILocation
 
@@ -101,7 +102,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface INamedZone extends IZoneDeclaration {
             kind:       'named'
-            name:       IAddressIdentifier
+            name:       IAddressIdentifier | IIdentifier
         }
 
         export interface ISimpleZone extends IZoneDeclaration {
