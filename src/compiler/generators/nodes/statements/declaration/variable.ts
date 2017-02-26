@@ -31,6 +31,30 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
                                            env: IEnvInfo ): SourceMap.SourceNode {
+            if ( env.ZoneStack.length > 0 && node.exported )
+                return CompileExportedAlloc( node, env )
+            else
+                return CompileSingleAllocForGeneralScope( node, env )
+        }
+
+    //
+    // ─── MULTI ALLOC DECLARATION ───────────────────────────────────────────────────
+    //
+
+        function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
+                                      env: IEnvInfo ): SourceMap.SourceNode {
+            if ( env.ZoneStack.length === 0 )
+                return CompileNotExportedMultiAlloc( node, env )
+            else
+                return CompileExportedMultiAlloc( node, env )
+        }
+
+    //
+    // ─── COMPILE SINGLE ALLOCATION IN CASE OF BEING IN THE GENERAL SCOPE ────────────
+    //
+
+        function CompileSingleAllocForGeneralScope ( node: AST.SingleAllocInitDeclaration,
+                                                      env: IEnvInfo ): SourceMap.SourceNode {
             let key: string
             if ( node.modifier === 'con' )
                 key = 'const'
@@ -44,17 +68,65 @@ namespace KaryScript.Compiler.Nodes.Declaration {
         }
 
     //
-    // ─── MULTI ALLOC DECLARATION ───────────────────────────────────────────────────
+    // ─── COMPILE EXPORTED ALLOC ─────────────────────────────────────────────────────
     //
 
-        function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
-                                      env: IEnvInfo ): SourceMap.SourceNode {
+        function CompileExportedAlloc ( node: AST.SingleAllocInitDeclaration,
+                                         env: IEnvInfo ): SourceMap.SourceNode {
+            const base  = GetBaseName( node.assignment.name, env )
+            const expr  = CompileSingleNode( node.assignment.value, env )
 
+            return env.GenerateSourceNode( node, base.concat([ ' = ', expr ]))
+        }
+
+    //
+    // ─── COMPILE SINGLE ALLOCATION EXPORTED IN ZONE ─────────────────────────────────
+    //
+
+        /**
+         * When you declare something and you export it (say `export def x = 4`), 
+         * Based on what ever environment you're doing it, result must be compiled
+         * differently:
+         * - on global zone &rightarrow; `export var x = 4`
+         * - on a zone called _"something_" &rightarrow; `something.x = 4`
+         * So this functions provides the base naming point:
+         * - `var` __name__
+         * - __zone name__ `.` __name__
+         */
+        function GetBaseName ( name: AST.IIdentifier,
+                                env: IEnvInfo ): CompiledCode[ ] {
+
+            const identifier = Address.CompileIdentifier( name, env )
+
+            if ( env.ZoneStack.length === 0 )
+                return [ GetDeclarationKey( env ), ' ', identifier ]
+            else
+                return [ env.ZoneStack[ env.ZoneStack.length - 1 ], '.', identifier ]
+        }
+
+    //
+    // ─── COMPILE NOT EXPORTED MULTI ALLOC ───────────────────────────────────────────
+    //
+
+        function CompileNotExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
+                                                 env: IEnvInfo ): SourceMap.SourceNode {
             const key   = GetDeclarationKey( env )
             const names = Join( ', ',
-                 node.names.map( x => Address.CompileIdentifier( x, env ) ))
+                node.names.map( x => Address.CompileIdentifier( x, env ) ) )
 
-            return env.GenerateSourceNode( node, Concat([ key, " ", names ]))
+            return env.GenerateSourceNode( node, Concat([ key, " ", names ]) )
+        }
+
+    //
+    // ─── COMPILE EXPORTED MULTI ALLOC ───────────────────────────────────────────────
+    //
+
+        function CompileExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
+                                              env: IEnvInfo ): SourceMap.SourceNode {
+            return env.GenerateSourceNode( node, 
+                Join( '; ',
+                    node.names.map( x =>
+                        env.GenerateSourceNode( x, GetBaseName( x, env )))))
         }
 
     //
