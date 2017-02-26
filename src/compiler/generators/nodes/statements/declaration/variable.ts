@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         export function Compile ( node: AST.DeclarationStatementBase,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             if ( node.kind === "SingleAllocInit" )
                 return CompileSingleAllocInit( node as AST.SingleAllocInitDeclaration , env )
@@ -31,7 +31,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
-                                           env: IEnvInfo ): SourceMap.SourceNode {
+                                           env: IEnv ): SourceMap.SourceNode {
 
             if ( env.ZoneStack.length > 0 && node.exported )
                 return CompileExportedAlloc( node, env )
@@ -44,7 +44,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
-                                      env: IEnvInfo ): SourceMap.SourceNode {
+                                      env: IEnv ): SourceMap.SourceNode {
 
             if ( env.ZoneStack.length === 0 )
                 return CompileNotExportedMultiAlloc( node, env )
@@ -57,7 +57,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function CompileSingleAllocForGeneralScope ( node: AST.SingleAllocInitDeclaration,
-                                                      env: IEnvInfo ): SourceMap.SourceNode {
+                                                      env: IEnv ): SourceMap.SourceNode {
             let key: string
             if ( node.modifier === 'con' )
                 key = 'const'
@@ -75,7 +75,9 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function CompileExportedAlloc ( node: AST.SingleAllocInitDeclaration,
-                                         env: IEnvInfo ): SourceMap.SourceNode {
+                                         env: IEnv ): SourceMap.SourceNode {
+
+            env.PushZoneIdentifier( env, node.assignment.name )
 
             const base  = GetBaseName( node.assignment.name, env )
             const expr  = CompileSingleNode( node.assignment.value, env )
@@ -98,7 +100,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
          * - __zone name__ `.` __name__
          */
         function GetBaseName ( name: AST.IIdentifier,
-                                env: IEnvInfo ): CompiledCode[ ] {
+                                env: IEnv ): CompiledCode[ ] {
 
             const identifier = Address.CompileIdentifier( name, env )
 
@@ -113,7 +115,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         function CompileNotExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
-                                                 env: IEnvInfo ): SourceMap.SourceNode {
+                                                 env: IEnv ): SourceMap.SourceNode {
 
             const key   = GetDeclarationKey( env )
             const names = Join( ', ',
@@ -127,20 +129,23 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     // 
 
         function CompileExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
-                                              env: IEnvInfo ): SourceMap.SourceNode {
+                                              env: IEnv ): SourceMap.SourceNode {
+
+            const zoneId = env.ZoneStack.join('/')
 
             return env.GenerateSourceNode( node, 
                 Join( '; ',
-                    node.names.map( x =>
-                        env.GenerateSourceNode( x,
-                            GetBaseName( x, env )))))
+                    node.names.map( x => {
+                        env.PushZoneIdentifier( env, x )
+                        return env.GenerateSourceNode( x, GetBaseName( x, env ) ) 
+                    })))
         }
 
     //
     // ─── GET DECLARATION KEY ───────────────────────────────────────────────────────
     //
 
-        export function GetDeclarationKey ( env: IEnvInfo ) {
+        export function GetDeclarationKey ( env: IEnv ) {
             return ( env.ParentNode.length === 3 )? 'var' : 'let'
         }
 

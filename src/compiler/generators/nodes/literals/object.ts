@@ -20,7 +20,7 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
     //
 
         export function Compile ( node: AST.IObjectLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             if ( node.value.length === 0 )
                 return env.GenerateSourceNode( node, '{}' )
@@ -34,7 +34,7 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
     //
 
         export function CompileObjectBody ( node: AST.IObjectLiteral,
-                                             env: IEnvInfo ): SourceMap.SourceNode[ ] {
+                                             env: IEnv ): SourceMap.SourceNode[ ] {
 
             return <SourceMap.SourceNode[ ]>
                 Join( ", ",
@@ -48,7 +48,7 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
     //
 
         export function CompileObjectPair ( pair: AST.IObjectMemberPair,
-                                             env: IEnvInfo ): CompiledCode[ ] {
+                                             env: IEnv ): CompiledCode[ ] {
             return [
                 Nodes.CompileSingleNode( pair.key, env ),
                 ": ",

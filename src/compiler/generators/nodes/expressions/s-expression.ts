@@ -25,7 +25,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         export function Compile ( node: AST.ISExpression,
-                                   env: IEnvInfo, 
+                                   env: IEnv, 
                           placeholder?: TPlaceholder ): SourceMap.SourceNode {
 
             switch ( node.kind ) {
@@ -56,7 +56,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompilePlaceholder ( placeholder: TPlaceholder,
-                                              env: IEnvInfo ): CompiledCode {
+                                              env: IEnv ): CompiledCode {
             if ( placeholder['$$$isSourceNode$$$'] )
                 return <SourceMap.SourceNode> placeholder
             else
@@ -68,7 +68,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileFunctionCallWithArgs ( node: AST.IFunctionCallWithArgsSExpression, 
-                                                env: IEnvInfo, 
+                                                env: IEnv, 
                                        placeholder?: TPlaceholder ): SourceMap.SourceNode {
             // checks
             if ( !CheckPlaceholderInFunctionCallWithArgsSExpression( node, env ) )
@@ -100,7 +100,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileBinaryOperator ( node: AST.IBinaryOperatorSExpression, 
-                                          env: IEnvInfo,
+                                          env: IEnv,
                                   placeholder?: TPlaceholder ): SourceMap.SourceNode {
             // checks
             if ( !CheckPlaceholderInCompileBinaryOperator( node, env ) )
@@ -125,7 +125,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
-                                        env: IEnvInfo,
+                                        env: IEnv,
                                 placeholder?: TPlaceholder ): SourceMap.SourceNode {
 
             const ph = <AST.ISExpression> ( placeholder? placeholder : node.arg )
@@ -161,7 +161,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CompileFunctionCallOnly ( node: AST.IFunctionCallOnlySExpression,
-                                            env: IEnvInfo,
+                                            env: IEnv,
                                    placeholder?: TPlaceholder ): SourceMap.SourceNode {
             const ph = placeholder? CompilePlaceholder( placeholder, env ) : ''
             return env.GenerateSourceNode( node,
@@ -225,7 +225,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CheckPlaceholderInFunctionCallWithArgsSExpression
-            ( node: AST.IFunctionCallWithArgsSExpression, env: IEnvInfo, ) {
+            ( node: AST.IFunctionCallWithArgsSExpression, env: IEnv, ) {
             const count = node.params.filter( x => x.type === 'PipePlaceholder' ).length
             return ReportPlaceholderError( count, env, node )
         }
@@ -235,7 +235,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CheckPlaceholderInCompileBinaryOperator
-            ( node: AST.IBinaryOperatorSExpression, env: IEnvInfo ) {
+            ( node: AST.IBinaryOperatorSExpression, env: IEnv ) {
             let count = 0
             if ( node.right.type === 'PipePlaceholder' )
                 count++
@@ -248,7 +248,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── REPORT PLACEHOLDER ERROR ───────────────────────────────────────────────────
     //
 
-        function ReportPlaceholderError ( count: number, env: IEnvInfo, node: AST.IBase ) {
+        function ReportPlaceholderError ( count: number, env: IEnv, node: AST.IBase ) {
             const countLimit = GetPlaceholderCountLimit( env )
             const state = countLimit >= count
             if ( !state ) {
@@ -267,7 +267,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── GET PLACEHOLDER COUNT LIMIT ────────────────────────────────────────────────
     //
 
-        function GetPlaceholderCountLimit ( env: IEnvInfo ) {
+        function GetPlaceholderCountLimit ( env: IEnv ) {
             return ( Env.GetParentType( env ) === 'PipeExpression' )? 1 : 0
         }
 

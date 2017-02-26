@@ -16,14 +16,14 @@ namespace KaryScript.Compiler.Nodes.Address {
     // ─── ADDRESS ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IBase, env: IEnvInfo ): SourceMap.SourceNode {
+        export function Compile ( node: AST.IBase, env: IEnv ): SourceMap.SourceNode {
             let result: CompiledCode
             if ( node.type === 'AddressIdentifier' )
                 result = env.GenerateSourceNode( node, 
                     Join('.', ( node as AST.IAddressIdentifier ).address
                         .map( x => CompileIdentifier( x, env ))))
             else
-                result = CompileIdentifier( node as AST.IIdentifier, env )
+                result = CompileFullIdentifer( node as AST.IIdentifier, env )
 
             return env.GenerateSourceNode( node, result )
         }
@@ -32,8 +32,44 @@ namespace KaryScript.Compiler.Nodes.Address {
     // ─── COMPILE IDENTIFIER NAME ────────────────────────────────────────────────────
     //
 
-        export function CompileIdentifier ( node: AST.IIdentifier, env: IEnvInfo ) {
-            return env.GenerateSourceNode( node, node.name.replace( /-/g, '_' ), node.name )
+        export function CompileIdentifier ( node: AST.IIdentifier, env: IEnv ) {
+            return env.GenerateSourceNode( node,
+                node.name.replace( /-/g, '_' ), node.name )
+        }
+
+    //
+    // ─── GET FULL IDENTIFER ─────────────────────────────────────────────────────────
+    //
+
+        export function CompileFullIdentifer ( node: AST.IIdentifier, env: IEnv ) {
+            let base = ''
+            if ( env.ZoneStack.length > 0 ) {
+                const baseResult = SearchZoneBaseForIdentifier( node.name, env )
+                base = baseResult? baseResult + '.' : ''
+            }
+
+            const resultingName = base + node.name.replace( /-/g, '_' )
+
+            return env.GenerateSourceNode( node, resultingName, node.name )
+        }
+
+    //
+    // ─── SEARCH IN ZONE ─────────────────────────────────────────────────────────────
+    //
+
+        export function SearchZoneBaseForIdentifier ( name: string, env: IEnv ) {
+            function search ( name: string, zone: string, env: IEnv ) {
+                const data = env.ZoneIdentifiers[ zone ]
+                const query = data.zoneIdentifiers.find( x => x === name )
+                if ( query != null && query != undefined )
+                    return zone
+                else
+                    if ( data.parentZoneId != null )
+                        return search( name, data.parentZoneId, env )
+                    else
+                        return null
+            }
+            return search( name, <string> env.GetZoneId( env ), env )
         }
     
     // ────────────────────────────────────────────────────────────────────────────────

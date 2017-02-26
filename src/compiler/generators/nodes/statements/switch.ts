@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.Switch {
     //
 
         export function Compile ( node: AST.ISwitchStatement,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             // header
             const parts = [
                 "switch (", Nodes.CompileSingleNode( node.switchable, env ), ") {"

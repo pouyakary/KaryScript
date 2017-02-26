@@ -20,7 +20,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         export function Compile ( node: AST.ITableLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             // checks
             if ( !CheckTableSize( node, env ) )
                 return env.GenerateSourceNode( node, '' )
@@ -39,7 +39,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         function CompileArrayTable ( node: AST.ITableLiteral,
-                                      env: IEnvInfo ): SourceMap.SourceNode {
+                                      env: IEnv ): SourceMap.SourceNode {
 
             let rows = new Array<CompiledCode>( )
 
@@ -56,7 +56,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     //
 
         function CompileObjectTable ( node: AST.ITableLiteral,
-                                       env: IEnvInfo ): SourceMap.SourceNode {
+                                       env: IEnv ): SourceMap.SourceNode {
             // checks
             if ( !CheckObjectTable( node, env ) )
                 return env.GenerateSourceNode( node, '' )
@@ -82,7 +82,7 @@ namespace KaryScript.Compiler.Nodes.Table {
 
         function CompileRow ( keys: AST.THeaderable[ ],
                                row: AST.ITableRow,
-                               env: IEnvInfo,
+                               env: IEnv,
                              slice: boolean ): SourceMap.SourceNode {
             // defs
             const   cells           = ( slice? row.cells.slice( 1 ) : row.cells )
@@ -111,7 +111,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     // ─── CHECK TABLE SIZE ───────────────────────────────────────────────────────────
     //
 
-        function CheckTableSize ( node: AST.ITableLiteral, env: IEnvInfo ) {
+        function CheckTableSize ( node: AST.ITableLiteral, env: IEnv ) {
             const tableSize = node.header.length
             let result = true, line = 1
 
@@ -134,7 +134,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     // ─── CHECK OBJECT TABLE ─────────────────────────────────────────────────────────
     //
 
-        function CheckObjectTable ( node: AST.ITableLiteral, env: IEnvInfo ) {
+        function CheckObjectTable ( node: AST.ITableLiteral, env: IEnv ) {
             let isOkay = true
             const possibleIdentifiers = [
                 "Identifier", "StringLiteral", "AddressIdentifier"
@@ -153,7 +153,7 @@ namespace KaryScript.Compiler.Nodes.Table {
     // ─── HEADER PLACE HOLDER CHECKER ────────────────────────────────────────────────
     //
 
-        function CheckHeaderPlaceholder ( node: AST.ITableLiteral, env: IEnvInfo ) {
+        function CheckHeaderPlaceholder ( node: AST.ITableLiteral, env: IEnv ) {
             let locationSum = 0
 
             for ( let index = 0; index < node.header.length; index++ )

@@ -17,7 +17,7 @@ namespace KaryScript.Compiler.Nodes.Comparison {
     //
 
         export function Compile ( node: AST.IComparison,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             const operator = GetOperator( node )
             return env.GenerateSourceNode( node, Concat([

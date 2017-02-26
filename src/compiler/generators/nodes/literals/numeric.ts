@@ -15,7 +15,7 @@ namespace KaryScript.Compiler.Nodes.Numeric {
     //
 
         export function Compile ( node: AST.INumericLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode{
+                                   env: IEnv ): SourceMap.SourceNode{
 
             return env.GenerateSourceNode( node, node.value.toString( ) )
         }

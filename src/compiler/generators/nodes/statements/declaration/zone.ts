@@ -14,7 +14,7 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IZoneDeclaration, env: IEnvInfo ) {
+        export function Compile ( node: AST.IZoneDeclaration, env: IEnv ) {
             if ( node.kind === "named" )
                 return CompileNamedZoneNode( node as AST.INamedZone, env )
             else
@@ -25,7 +25,7 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
     // ─── COMPILE SIMPLE NODE ZONE ───────────────────────────────────────────────────
     //
 
-        function CompileSimpleZoneNode ( node: AST.ISimpleZone, env: IEnvInfo ) {
+        function CompileSimpleZoneNode ( node: AST.ISimpleZone, env: IEnv ) {
             return env.GenerateSourceNode( node, [
                 '(function() {', Nodes.CompileSingleNode( node, env ), '})()'])
         }
@@ -34,7 +34,7 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
     // ─── COMPILE NAMED ZONE ─────────────────────────────────────────────────────────
     //
 
-        function CompileNamedZoneNode ( node: AST.INamedZone, env: IEnvInfo ) {
+        function CompileNamedZoneNode ( node: AST.INamedZone, env: IEnv ) {
             const address = (( node.name.type === 'Identifier' )?
                                 [ node.name as AST.IIdentifier ] :  node.name.address )
             return env.GenerateSourceNode( node,
@@ -47,7 +47,7 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
 
         export function RecursiveZoneCompiler ( address: AST.IIdentifier[ ],
                                                    body: AST.IBody,
-                                                    env: IEnvInfo ) {
+                                                    env: IEnv ) {
             // zone name
             const name = GetRightName( address[ 0 ] )
 
@@ -57,7 +57,7 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
             ]
 
             // body
-            env.ZoneStack.push( name )
+            UpdateEnvWithZone( env, name )
             if ( address.length === 1 ) {
                 chunk.push(
                     Nodes.CompileSingleNode( body, env ) )
@@ -82,6 +82,25 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
 
             // done
             return chunk
+        }
+
+    //
+    // ─── UPDATE ENV WITH ZONE ───────────────────────────────────────────────────────
+    //
+
+        function UpdateEnvWithZone ( env: IEnv, name: string ) {
+            // getting the parent
+            const parentZoneId = env.GetZoneId( env )
+
+            // pushing self
+            env.ZoneStack.push( name )
+
+            // pushing zone into zone identifier listing 
+            env.ZoneIdentifiers[ <string> env.GetZoneId( env ) ] = {
+                zoneId: <string> env.GetZoneId( env ),
+                parentZoneId: parentZoneId,
+                zoneIdentifiers: [ ]
+            }
         }
 
     //

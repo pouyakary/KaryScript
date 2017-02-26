@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.ArrayLiteral {
     //
 
         export function Compile ( node: AST.IArrayLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             const body = Join( ", ",
                 node.value.map( i =>

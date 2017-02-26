@@ -17,7 +17,7 @@ namespace KaryScript.Compiler.Nodes.Set {
     //
 
         export function Compile ( node: AST.ISetLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             return env.GenerateSourceNode( node, [
                 "new Set(",

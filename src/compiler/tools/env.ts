@@ -22,7 +22,7 @@ namespace KaryScript.Compiler.Env {
     // ─── GET PARENT TYPE ────────────────────────────────────────────────────────────
     //
 
-        export function GetParentType( env: IEnvInfo ) {
+        export function GetParentType( env: IEnv ) {
             return env.ParentNode[ env.ParentNode.length - 2 ].type;
         }
 

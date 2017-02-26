@@ -14,7 +14,7 @@ namespace KaryScript.Compiler.Nodes.TryCatch {
     // ─── COMPILE BODY ───────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ITryCatchStatement, env: IEnvInfo ) {
+        export function Compile ( node: AST.ITryCatchStatement, env: IEnv ) {
             // result
             let results = new Array<CompiledCode>( )
 

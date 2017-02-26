@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.Pipe {
     //
 
         export function Compile ( node: AST.IPipeExpression,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             env.ParentNode.push( node )
             const code = env.GenerateSourceNode( node,
                 CompileLevelsArray( node.levels.reverse( ), env ))
@@ -32,7 +32,7 @@ namespace KaryScript.Compiler.Nodes.Pipe {
     //
 
         function CompileLevelsArray ( levels: AST.IBase[ ],
-                                         env: IEnvInfo ): SourceMap.SourceNode {
+                                         env: IEnv ): SourceMap.SourceNode {
             if ( levels.length === 2 )
                 return SExpression.Compile(
                     <AST.ISExpression> levels[ 0 ], env, levels[ 1 ] )

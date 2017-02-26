@@ -57,14 +57,17 @@ namespace KaryScript.Compiler {
             const sourceMap = require( 'source-map' )
 
             // base env info
-            let baseEnvInfo: IEnvInfo = {
+            let baseEnvInfo: IEnv = {
+                
                 ParentNode: [
                     Object.assign({ }, BaseNodeObject )
                 ],
+
                 ScopeLevel: 0,
                 Holders: new Map<string, CompiledCode>( ),
                 DeclaredIdentifiers: new Set<string>( ),
                 Errors: new Set( ),
+
                 GenerateSourceNode: ( node, chunk, name = undefined ) => 
                     <SourceMap.SourceNode> new sourceMap.SourceNode(
                         node.location.start.line,
@@ -72,7 +75,22 @@ namespace KaryScript.Compiler {
                         filename,
                         chunk,
                         name ),
+
                 ZoneStack: [ ],
+                ZoneIdentifiers: { },
+
+                PushZoneIdentifier: ( env: IEnv, name: AST.IIdentifier ) => {
+                    const zoneId = env.ZoneStack.join('/')
+                    const nameId = name.name.replace(/-/g, '_')
+                    env.ZoneIdentifiers[ zoneId ].zoneIdentifiers.push( nameId )
+                },
+
+                GetZoneId: ( env: IEnv ) => {
+                    if ( env.ZoneStack.length === 0 )
+                        return null
+                    return env.ZoneStack.join('/')
+                },
+
                 Format: {
                     PrintComments: true
                 }

@@ -18,12 +18,12 @@ namespace KaryScript.Compiler.Nodes.Body {
     // ─── GENERATE FOR BODY ──────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IBody, env: IEnvInfo ): CompiledCode {
+        export function Compile ( node: AST.IBody, env: IEnv ): CompiledCode {
             // if the body is empty we should return nothing
             if ( ( node.branch as AST.IEmpty ).type === "Empty" ) return ''
 
             // making the env info
-            let bodyENV: IEnvInfo = Object.assign({ }, env )
+            let bodyENV: IEnv = Object.assign({ }, env )
             bodyENV.ScopeLevel++
 
             // if not. we have to compile each statement and add them together

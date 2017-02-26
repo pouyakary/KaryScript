@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.Use {
     // ─── COMPILER ───────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IUseStatement, env: IEnvInfo ) {
+        export function Compile ( node: AST.IUseStatement, env: IEnv ) {
             switch ( node.kind ) {
                 case 'simple':
                     return CompileSimpleUse( node as AST.IUseStatementSimpleImport, env )
@@ -31,7 +31,7 @@ namespace KaryScript.Compiler.Nodes.Use {
     //
 
         function CompileSimpleUse ( node: AST.IUseStatementSimpleImport,
-                                     env: IEnvInfo ) {
+                                     env: IEnv ) {
 
             if ( !CheckSimpleUseIdentifierNames( node, env ) ) return ''
 
@@ -51,7 +51,7 @@ namespace KaryScript.Compiler.Nodes.Use {
     //
 
         function CheckSimpleUseIdentifierNames ( node: AST.IUseStatementSimpleImport,
-                                                  env: IEnvInfo ) {
+                                                  env: IEnv ) {
             let state = true
             for ( const arg of node.args ) {
                 if ( !/^[a-bA-B0-9]+$/.test( arg.name ) ) {

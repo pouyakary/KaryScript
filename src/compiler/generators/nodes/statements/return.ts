@@ -17,7 +17,7 @@ namespace KaryScript.Compiler.Nodes.Return {
     //
 
         export function Compile ( node: AST.IReturnStatement,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             if ( node.value)
                 return env.GenerateSourceNode( node,
                     [ node.kind, ' ', Nodes.CompileSingleNode( node.value, env ),

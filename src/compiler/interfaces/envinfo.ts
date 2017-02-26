@@ -18,7 +18,7 @@ namespace KaryScript.Compiler {
          * The information object that is passed to the __child branches__ for a Body
          * node to have information about it's _parent object_ as well as _environment_
          */
-        export interface IEnvInfo {
+        export interface IEnv {
             /** Shows the level of scope depth */
             ScopeLevel: number
 
@@ -54,11 +54,34 @@ namespace KaryScript.Compiler {
             ZoneStack: string[ ]
 
             /**
+             * Zone
+             */
+            ZoneIdentifiers: ZoneIdentifiers
+
+            /**
              * SourceMap Generator
              */
             GenerateSourceNode: ( node: AST.IBase,
                                  chunk: Array<CompiledCode> | CompiledCode,
                                  name?: string ) => SourceMap.SourceNode
+
+            PushZoneIdentifier: ( env: IEnv, name: AST.IIdentifier ) => void
+
+            GetZoneId: ( env: IEnv ) => string | null
+        }
+
+    //
+    // ─── ZONE IDENTIFIERS ───────────────────────────────────────────────────────────
+    //
+
+        interface ZoneIdentifiers {
+            [ zoneId: string ]: IZoneInfoContainer
+        }
+
+        interface IZoneInfoContainer {
+            zoneId:             string
+            parentZoneId:       string | null
+            zoneIdentifiers:    string[ ]
         }
 
     //

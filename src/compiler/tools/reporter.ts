@@ -23,7 +23,7 @@ namespace KaryScript.Compiler.Reporter {
     // ─── REPORTER ───────────────────────────────────────────────────────────────────
     //
 
-        export function Report ( env: IEnvInfo,
+        export function Report ( env: IEnv,
                              message: string,
                                 node: AST.IBase ) {
             env.Errors.add({
@@ -72,7 +72,7 @@ namespace KaryScript.Compiler.Reporter {
     // ─── CONCAT ERRORS ──────────────────────────────────────────────────────────────
     //
 
-        export function ConcatEnvErrors ( origin: IEnvInfo, additions: IEnvInfo ) {
+        export function ConcatEnvErrors ( origin: IEnv, additions: IEnv ) {
             for ( let err of additions.Errors )
                 if ( !origin.Errors.has( err ) )
                     origin.Errors.add( err )

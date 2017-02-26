@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     //
 
         export function Compile ( node: AST.ILambdaExpression,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             if ( node.code.type === 'Body' )
                 return env.GenerateSourceNode( node, '' )
             else
@@ -29,7 +29,7 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     // ─── COMPILE SIMPLE LAMBDA ──────────────────────────────────────────────────────
     //
 
-        function CompileSimpleLambda ( node: AST.ILambdaExpression, env: IEnvInfo ) {
+        function CompileSimpleLambda ( node: AST.ILambdaExpression, env: IEnv ) {
             const args = Join(', ',
                 node.args.map( x =>
                     Address.CompileIdentifier( x, env ) ) )

@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
     //
 
         export function Compile ( node: AST.IFunctionDeclaration,
-                                   env: IEnvInfo,
+                                   env: IEnv,
                                classDef = false ) {
 
             const functionName  = env.GenerateSourceNode( node.name, 

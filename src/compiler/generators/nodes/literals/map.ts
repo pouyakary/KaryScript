@@ -17,7 +17,7 @@ namespace KaryScript.Compiler.Nodes.Map {
     //
 
         export function Compile ( node: AST.IMapLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             if ( node.value.length === 0 )
                 return env.GenerateSourceNode( node, 'new Map( )' )
@@ -31,7 +31,7 @@ namespace KaryScript.Compiler.Nodes.Map {
     // ─── COMPILE PAIR ───────────────────────────────────────────────────────────────
     //
 
-        function CompileMapPair ( node: AST.IMapMemberPair, env: IEnvInfo ) {
+        function CompileMapPair ( node: AST.IMapMemberPair, env: IEnv ) {
             return env.GenerateSourceNode( node, [
                 ".set(", 
                 Nodes.CompileSingleNode( node.key, env ),

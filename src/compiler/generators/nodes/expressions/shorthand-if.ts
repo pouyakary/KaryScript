@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.ShorthandIf {
     //
 
         export function Compile ( node: AST.IShorthandIfExpression,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             return env.GenerateSourceNode( node, [
                 '(', Nodes.CompileSingleNode( node.predicate, env ), ")? ",

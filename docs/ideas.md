@@ -11,7 +11,7 @@ end
 #### Identifier Interpolation
 
 ```
-"hello {{hello}}!"
+"hello #{hello}!"
 ```
 #### Imports
 Simple imports can be in KaryScript as:
@@ -119,3 +119,16 @@ Compiles to:
 
 #### RegExp
 "Exactly like JS"
+
+#### `this` keyword
+
+
+
+
+
+<br>
+
+| # | a | b |
+|---|---|---|
+| c | 1 | 2 |
+| d | 3 | 4 |

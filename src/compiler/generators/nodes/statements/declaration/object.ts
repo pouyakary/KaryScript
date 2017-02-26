@@ -20,7 +20,7 @@ namespace KaryScript.Compiler.Nodes.ObjectDeclaration {
     //
 
         export function Compile ( node: AST.IObjectDeclaration,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             return env.GenerateSourceNode( node, Concat([
                 HandleExportedKey( node ),
                 (( node.kind === 'object' )?

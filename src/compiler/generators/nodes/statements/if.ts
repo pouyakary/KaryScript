@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.If {
     //
 
         export function Compile ( node: AST.IIfStatement,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             switch ( node.kind ) {
                 case 'if':
@@ -37,7 +37,7 @@ namespace KaryScript.Compiler.Nodes.If {
     //
 
         function CompileSimpleIf ( node: AST.ISimpleIf,
-                                    env: IEnvInfo ): SourceMap.SourceNode {
+                                    env: IEnv ): SourceMap.SourceNode {
             const predicate = Nodes.CompileSingleNode( node.predicate, env )
             const sign      = ( node.key === 'unless' )? '!' : ''
             const body      = Nodes.CompileSingleNode( node.trueBranch, env )
@@ -50,7 +50,7 @@ namespace KaryScript.Compiler.Nodes.If {
     //
 
         function CompileIfWithELse ( node: AST.IIfWithElse,
-                                      env: IEnvInfo ): SourceMap.SourceNode {
+                                      env: IEnv ): SourceMap.SourceNode {
             const mainPart    = CompileSimpleIf( node, env )
             const falseBranch = Nodes.CompileSingleNode( node.falseBranch, env )
             return env.GenerateSourceNode( node,
@@ -62,7 +62,7 @@ namespace KaryScript.Compiler.Nodes.If {
     //
 
         function CompileIfWithElseIfWithElse ( node: AST.IIfWithElseIfAndElse,
-                                                env: IEnvInfo ): SourceMap.SourceNode {
+                                                env: IEnv ): SourceMap.SourceNode {
             // main if (...)
             let parts: CompiledCode[ ] = [ CompileSimpleIf( node, env ) ]
 

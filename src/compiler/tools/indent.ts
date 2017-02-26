@@ -14,7 +14,7 @@ namespace KaryScript.Compiler.Indentation {
     // ─── INDENT STRING ──────────────────────────────────────────────────────────────
     //
 
-        export function GenerateIndentation ( env: IEnvInfo ) {
+        export function GenerateIndentation ( env: IEnv ) {
 
         }
 

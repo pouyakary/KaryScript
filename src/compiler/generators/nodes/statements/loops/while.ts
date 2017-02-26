@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.While {
     //
 
         export function Compile ( node: AST.IWhileStatement,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
             return env.GenerateSourceNode( node,
                 [ 'while (', Nodes.CompileSingleNode( node.predicate, env ), ') {',
                   Nodes.CompileSingleNode( node.body, env ), '}' ])

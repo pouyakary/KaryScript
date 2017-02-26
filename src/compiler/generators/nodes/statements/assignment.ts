@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
     //
 
         export function Compile ( node: AST.ISingleAssignmentStatement,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             const name  = Nodes.CompileSingleNode( node.name, env )
             const value = Nodes.CompileSingleNode( node.value, env )
@@ -48,7 +48,7 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
 
         function CompileSingleAssignment ( name: CompiledCode,
                                           value: CompiledCode,
-                                            env: IEnvInfo ) {
+                                            env: IEnv ) {
             return [
                 name, ' = ', value
             ]
@@ -60,7 +60,7 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
 
         function CompileSlashAssignment ( name: CompiledCode,
                                          value: CompiledCode,
-                                           env: IEnvInfo ) {
+                                           env: IEnv ) {
             return [
                 name, ' = ', name, '.', value
             ]
@@ -72,7 +72,7 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
 
         function CompileNullCheckAssignment ( name: CompiledCode,
                                              value: CompiledCode,
-                                               env: IEnvInfo ) {
+                                               env: IEnv ) {
             return [
                 'if (', name , ' == null) {', name , ' = ', value, '}'
             ]

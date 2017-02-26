@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Nodes.Holder {
     //
 
         export function Declare ( node: AST.IHolderDeclarationStatement,
-                                   env: IEnvInfo ): CompiledCode {
+                                   env: IEnv ): CompiledCode {
 
             env.Holders.set( node.holder.name,
                 Nodes.CompileSingleNode( node.value, env ))
@@ -31,7 +31,7 @@ namespace KaryScript.Compiler.Nodes.Holder {
     //
 
         export function Use ( node: AST.IHolderIdentifier,
-                               env: IEnvInfo ): CompiledCode {
+                               env: IEnv ): CompiledCode {
 
             if ( env.Holders.has( node.name ) ) {
                 const result = <CompiledCode> env.Holders.get( node.name )

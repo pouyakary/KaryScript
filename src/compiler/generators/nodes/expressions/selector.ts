@@ -19,7 +19,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
     //
 
         export function Compile ( node: AST.ISelector,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             switch ( node.kind ) {
                 case 'query':
@@ -35,14 +35,14 @@ namespace KaryScript.Compiler.Nodes.Selector {
     //
 
         function CompileQuerySelector ( node: AST.IQuerySelector,
-                                         env: IEnvInfo) {
+                                         env: IEnv) {
 
             const name = Nodes.Address.Compile( node.searchable, env )
-            let queries:CompiledCode[ ] = [ name ]
+            let queries: CompiledCode[ ] = [ name ]
 
             for ( const query of node.queries )
                 queries = queries.concat(
-                    CompileSingleQuery( query, env ))
+                    CompileSingleQuery( query, env ) )
 
             return env.GenerateSourceNode( node, queries )
         }
@@ -51,7 +51,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
     // ─── COMPILE SINGLE QUERY ───────────────────────────────────────────────────────
     //
 
-        function CompileSingleQuery ( node: AST.IBase, env: IEnvInfo ) {
+        function CompileSingleQuery ( node: AST.IBase, env: IEnv ) {
 
             const query = Nodes.CompileSingleNode( node, env )
             let result: CompiledCode[ ]
@@ -69,7 +69,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
     //
 
         function CompileRangeSelector ( node: AST.IRangeSelector,
-                                         env: IEnvInfo ) {
+                                         env: IEnv ) {
 
             if ( node.start.type === 'NumericLiteral' &&
                  node.end.type === 'NumericLiteral' )
@@ -86,7 +86,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
     //
 
         function CompileNumberLiteralRangeSelector ( node: AST.IRangeSelector,
-                                                      env: IEnvInfo ) {
+                                                      env: IEnv ) {
 
             const name = Nodes.Address.Compile( node.searchable, env )
 
@@ -106,7 +106,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
     //
 
         function CompileVarRangeSelector ( node: AST.IRangeSelector,
-                                            env: IEnvInfo ) {
+                                            env: IEnv ) {
 
             const name = Nodes.Address.Compile( node.searchable, env )
 

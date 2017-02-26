@@ -1,10 +1,10 @@
-zone a:
-    def x = 3
-    export def y = 4
-    zone b/c/d:
-        (foo)
-    end
-    (bar)
-end
 
-def n = 3 
+zone a:
+    export def x = 2
+    zone b:
+        zone c:
+            def y = 2
+            (foo x y)
+        end
+    end
+end

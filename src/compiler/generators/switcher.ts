@@ -47,7 +47,7 @@ namespace KaryScript.Compiler.Nodes {
 
         /** Compiles a simple given node */
         export function CompileSingleNode ( node: AST.IBase | string,
-                                             env: IEnvInfo ): CompiledCode {
+                                             env: IEnv ): CompiledCode {
             if ( typeof node === 'string' )
                 return node
 
@@ -62,7 +62,7 @@ namespace KaryScript.Compiler.Nodes {
     //
 
         function SwitchAndCompileNode ( node: AST.IBase,
-                                         env: IEnvInfo ): CompiledCode {
+                                         env: IEnv ): CompiledCode {
             switch ( node.type ) {
                 case 'Body':
                     return Nodes.Body.Compile(

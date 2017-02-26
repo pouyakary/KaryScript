@@ -17,7 +17,7 @@ namespace KaryScript.Compiler.Nodes.For {
     //
 
         export function Compile ( node: AST.IForStatement,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             if ( node.kind === 'repeat' )
                 return CompileRepeatFor( node as AST.IRepeatForLoop, env )
@@ -30,7 +30,7 @@ namespace KaryScript.Compiler.Nodes.For {
     //
 
         function CompileRepeatFor ( node: AST.IRepeatForLoop,
-                                     env: IEnvInfo ): SourceMap.SourceNode {
+                                     env: IEnv ): SourceMap.SourceNode {
 
             //
             // ─── SUPPORTING DATA ─────────────────────────────────────────────
@@ -95,7 +95,7 @@ namespace KaryScript.Compiler.Nodes.For {
     //
 
         function CompileForeachForLoop ( node: AST.IForeachForLoop,
-                                          env: IEnvInfo ): SourceMap.SourceNode {
+                                          env: IEnv ): SourceMap.SourceNode {
 
             let chunk: CompiledCode[ ] = [
                 'for (let ',
@@ -131,7 +131,7 @@ namespace KaryScript.Compiler.Nodes.For {
         }
 
         function HandleForChangeableExpressions ( parent: AST.IRepeatForLoop,
-                                                     env: IEnvInfo,
+                                                     env: IEnv,
                                                    start: boolean ): IForDefs {
 
             //

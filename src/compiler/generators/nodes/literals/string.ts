@@ -17,7 +17,7 @@ namespace KaryScript.Compiler.Nodes.String {
     //
 
         export function Compile ( node: AST.IStringLiteral,
-                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                   env: IEnv ): SourceMap.SourceNode {
 
             if ( node.parts.length === 1 )
                 if ( node.parts[ 0 ].type === 'StringPart' )
@@ -44,7 +44,7 @@ namespace KaryScript.Compiler.Nodes.String {
     //
 
         function CompileNormalString ( node: AST.IStringPart,
-                                        env: IEnvInfo):SourceMap.SourceNode {
+                                        env: IEnv):SourceMap.SourceNode {
             return env.GenerateSourceNode( node, '"' +
                 HandleEscapedSequences( node.part ) + '"' )
         }
@@ -54,7 +54,7 @@ namespace KaryScript.Compiler.Nodes.String {
     //
 
         function CompileStringWithInterpolation ( node: AST.IStringLiteral,
-                                                   env: IEnvInfo ): SourceMap.SourceNode {
+                                                   env: IEnv ): SourceMap.SourceNode {
         
             let parts = new Array<CompiledCode>( )
             for ( let part of node.parts ) {
