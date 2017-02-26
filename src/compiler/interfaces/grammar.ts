@@ -296,12 +296,12 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IBody extends IBase {
-            type: "Body"
+            type:   "Body"
             branch: TStatements[ ] | IEmpty
         }
 
         export interface IEmpty extends IBase {
-            type: "Empty"
+            type:   "Empty"
         }
 
     //
@@ -430,8 +430,8 @@ namespace KaryScript.Compiler.AST {
         }
         
         export interface SingleAllocInitDeclaration extends DeclarationStatementBase {
-            kind: "SingleAllocInit"
-            modifier: "con" | "def"
+            kind:       "SingleAllocInit"
+            modifier:   "con" | "def"
             assignment: DeclarationAssignment
         }
 
@@ -483,8 +483,8 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IReturnKeyword extends IBase {
-            type: "ReturnKeyword"
-            keyword: string
+            type:       "ReturnKeyword"
+            keyword:    string
         }
 
     //
