@@ -19,6 +19,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         export function Compile ( node: AST.DeclarationStatementBase,
                                    env: IEnvInfo ): SourceMap.SourceNode {
+
             if ( node.kind === "SingleAllocInit" )
                 return CompileSingleAllocInit( node as AST.SingleAllocInitDeclaration , env )
             else
@@ -31,6 +32,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
                                            env: IEnvInfo ): SourceMap.SourceNode {
+
             if ( env.ZoneStack.length > 0 && node.exported )
                 return CompileExportedAlloc( node, env )
             else
@@ -43,6 +45,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
                                       env: IEnvInfo ): SourceMap.SourceNode {
+
             if ( env.ZoneStack.length === 0 )
                 return CompileNotExportedMultiAlloc( node, env )
             else
@@ -73,6 +76,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileExportedAlloc ( node: AST.SingleAllocInitDeclaration,
                                          env: IEnvInfo ): SourceMap.SourceNode {
+
             const base  = GetBaseName( node.assignment.name, env )
             const expr  = CompileSingleNode( node.assignment.value, env )
 
@@ -110,6 +114,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
         function CompileNotExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
                                                  env: IEnvInfo ): SourceMap.SourceNode {
+
             const key   = GetDeclarationKey( env )
             const names = Join( ', ',
                 node.names.map( x => Address.CompileIdentifier( x, env ) ) )
@@ -119,14 +124,16 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
     //
     // ─── COMPILE EXPORTED MULTI ALLOC ───────────────────────────────────────────────
-    //
+    // 
 
         function CompileExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
                                               env: IEnvInfo ): SourceMap.SourceNode {
+
             return env.GenerateSourceNode( node, 
                 Join( '; ',
                     node.names.map( x =>
-                        env.GenerateSourceNode( x, GetBaseName( x, env )))))
+                        env.GenerateSourceNode( x,
+                            GetBaseName( x, env )))))
         }
 
     //
