@@ -930,7 +930,7 @@
 //
 
     ExportKey
-        = key:("export" _)? _* {
+        = key:("out" _)? _* {
             return key? true : false
         }
 
@@ -1354,6 +1354,7 @@
             / "when"            !IdentifierName
             / "is"              !IdentifierName
             / "isnt"            !IdentifierName
+            / "out"             !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────

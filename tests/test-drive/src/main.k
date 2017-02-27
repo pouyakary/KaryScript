@@ -1,6 +1,6 @@
 
 zone a:
-    export def x = 3
+    out def x = 3
 end
 
 zone a:
