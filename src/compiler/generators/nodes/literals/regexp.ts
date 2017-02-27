@@ -31,7 +31,7 @@ namespace KaryScript.Compiler.Nodes.RegExpLiteral {
                 new RegExp( node.pattern, node.flags )
                 return true
             } catch ( e ) {
-                Reporter.Report( env, node, `Problem with node`)
+                Reporter.Report( env, node, e.toString( ) )
                 return false   
             }
         }
