@@ -87,6 +87,7 @@ namespace KaryScript.Compiler.AST {
                 | "ZoneDeclaration"
                 | "RegExpLiteral"
                 | "ReservedIdentifiers"
+                | "FunctionDeclaration"
 
             location: ILocation
 
@@ -306,8 +307,12 @@ namespace KaryScript.Compiler.AST {
         export interface IFunctionDeclaration extends IExportable {
             name:   IIdentifier
             key:    "def" | "async"
-            args:   IIdentifier[ ] | null
+            args:   IFunctionIdentifier[ ] | null
             code:   IBody
+        }
+
+        export interface IFunctionIdentifier extends IIdentifier {
+            rest:   boolean
         }
 
     //

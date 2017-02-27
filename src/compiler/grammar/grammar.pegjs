@@ -644,7 +644,7 @@
         = arg:Identifier SeparatorMultiline more:IdentifierList {
             return [ arg ].concat( more )
         }
-        / subArg:Returnable {
+        / subArg:Identifier {
             return [ subArg ]
         }
 
@@ -807,7 +807,7 @@
 
     FunctionDeclaration 'function declaration'
         = exported:ExportKey key:FunctionDefKind _+ name:Identifier _*
-          args:IdentifierList __* EndStructureSign code:Body END {
+          args:FunctionIdentifierList __* EndStructureSign code:Body END {
             return {
                 type:       "FunctionDeclaration",
                 location:   location( ),
@@ -836,6 +836,34 @@
     FunctionDefKind
         = type:( 'def' / 'async' ) {
             return type
+        }
+
+    FunctionIdentifierList
+        = param:FunctionIdentifier SeparatorMultiline more:FunctionIdentifierList {
+            return [ param ].concat( more )
+        }
+        / param:FunctionIdentifier {
+            return [ param ]
+        }
+
+    FunctionIdentifier
+        = name: Identifier {
+            return {
+                type:       "FunctionIdentifier",
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                rested:     false
+            }
+        }
+        / '[' __* name: Identifier __* ']' {
+            return {
+                type:       "FunctionIdentifier",
+                location:   location( ),
+                id:         id( ),
+                name:       name.name,
+                rested:     true
+            }
         }
 
 //
