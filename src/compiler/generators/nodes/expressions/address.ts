@@ -71,6 +71,14 @@ namespace KaryScript.Compiler.Nodes.Address {
             }
             return search( name, <string> env.GetZoneId( env ), env )
         }
+
+    //
+    // ─── NORMALIZE NAME ─────────────────────────────────────────────────────────────
+    //
+
+        export function NormalizeName ( node: AST.IIdentifier ) {
+            return node.name.replace( /-/g, '_' )
+        }
     
     // ────────────────────────────────────────────────────────────────────────────────
 
