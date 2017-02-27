@@ -100,11 +100,15 @@ namespace KaryScript.Compiler {
             let code: null | SourceMap.SourceNode = null
             try {
                 // compiling stuff
-                return <SourceMap.SourceNode> Nodes.CompileSingleNode( src, baseEnvInfo )
-            } catch ( error ) {
+                const result = <SourceMap.SourceNode> Nodes.CompileSingleNode( src, baseEnvInfo )
+
+                // handling errors
                 if ( baseEnvInfo.Errors.size > 0 )
                     throw baseEnvInfo.Errors
 
+                return result
+
+            } catch ( error ) {
                 throw error
             }
         }
