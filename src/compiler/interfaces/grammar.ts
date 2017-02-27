@@ -312,7 +312,7 @@ namespace KaryScript.Compiler.AST {
         }
 
         export interface IFunctionIdentifier extends IIdentifier {
-            rest:   boolean
+            rested: boolean
         }
 
     //

@@ -1,2 +1,6 @@
 
-this/x = 2
+def foo x [y] z:
+    (console.log y/length)
+end
+
+

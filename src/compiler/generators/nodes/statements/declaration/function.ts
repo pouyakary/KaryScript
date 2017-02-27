@@ -23,9 +23,9 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
                                classDef = false ) {
 
             // name
-            const normalizedName = Address.NormalizeName( node.name )
-            const functionName  = env.GenerateSourceNode(
-                                    node.name, normalizedName, node.name.name )
+            const normalizedName    = Address.NormalizeName( node.name )
+            const functionName      = env.GenerateSourceNode(
+                                        node.name, normalizedName, node.name.name )
 
             // key
             const functionKey   = (( node.key === 'def' )? '' : 'async ')
@@ -34,9 +34,12 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
             // args
             let args = new Array<CompiledCode>( )
             if ( node.args !== null )
-                args = Join(', ', node.args.map( arg =>
-                    env.GenerateSourceNode( arg,
-                        Nodes.CompileSingleNode( arg, env ))))
+                args = Join(', ', node.args.map( arg => {
+                    return env.GenerateSourceNode( arg, [
+                        arg.rested? '...' : '',
+                        Address.NormalizeName( arg )
+                    ])
+                }))
     
             // body
             const body = Nodes.CompileSingleNode( node.code, env )
