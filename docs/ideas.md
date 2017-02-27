@@ -58,6 +58,8 @@ use "fs" as fileSystem
 
 ## Needs Thinking
 
+#### Decision Table
+
 #### Shorthand Assigns:
 
 ````
@@ -93,42 +95,7 @@ This needs to be implemented
 ```
 
 
-#### closure namespaces
-
-```
-space main:
-  space sub:
-    def foo:
-      (bar)
-    end
-  end
-end
-```
-
-Compiles to:
-
-```
-(function (main) {
-  (function (sub) {
-    function foo {
-      bar( )
-    }
-  })(sum = main.sub || (main.sub = {}))
-})(main || (main = {}))
-```
-
 #### RegExp
 "Exactly like JS"
 
 #### `this` keyword
-
-
-
-
-
-<br>
-
-| # | a | b |
-|---|---|---|
-| c | 1 | 2 |
-| d | 3 | 4 |
