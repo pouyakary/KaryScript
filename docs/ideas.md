@@ -60,13 +60,6 @@ use "fs" as fileSystem
 
 #### Decision Table
 
-#### Shorthand Assigns:
-
-````
-x += 4
-y -= 3
-````
-
 #### Object/Array returns
 JavaScript Has this
 
