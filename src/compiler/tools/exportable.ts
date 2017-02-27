@@ -14,8 +14,45 @@ namespace KaryScript.Compiler {
     // ─── EXPORTABLE ─────────────────────────────────────────────────────────────────
     //
 
-        export function HandleExportedKey ( node: AST.IExportable ) {
-            return ( node.exported )? 'export ' : ''
+        export function HandleExportedKey ( node: AST.IExportable,
+                                             env: IEnv,
+                                            name: string,
+                                            code: CompiledCode[ ] ): SourceMap.SourceNode {
+            // if needs no export
+            if ( !node.exported )
+                return env.GenerateSourceNode( node, code )
+
+            // if needs to be exported in zone
+            let result: IExportPart
+            if ( env.ZoneStack.length > 0 )
+                result =  {
+                    type: 'end',
+                    value: `; ${ env.ZoneStack[ env.ZoneStack.length - 1 ]}.${ name } = ${ name }`
+                }
+            else
+                result = {
+                    type: 'start',
+                    value: 'export '
+                }
+        
+            // done
+            if ( result.type === 'start')
+                return env.GenerateSourceNode( node,
+                    ( [ result.value ] as CompiledCode[ ] ).concat( code )
+                )
+            else 
+                return env.GenerateSourceNode( node,
+                    code.concat([ result.value ])
+                )
+        }
+
+    //
+    // ─── INTERFACES ─────────────────────────────────────────────────────────────────
+    //
+
+        interface IExportPart {
+            type: 'end' | 'start'
+            value: string
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
