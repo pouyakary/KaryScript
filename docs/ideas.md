@@ -60,7 +60,7 @@ use "fs" as fileSystem
 
 #### Decision Table
 
-#### Object/Array returns
+#### Object/Array Destruction
 JavaScript Has this
 
 ```
@@ -70,13 +70,12 @@ let {a, b, c} = g( );
 
 No clean grammar is present for this one.
 
-#### Rest Parameters
+Also there's a need for rest destruction
 ```
-def foo x [y] z:
-	
-end
+function f(...[a, b, c]) {
+  return a + b + c;
+}
 ```
-
 
 ## To Be Implemented 
 
