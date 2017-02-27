@@ -96,11 +96,12 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
             env.ZoneStack.push( name )
 
             // pushing zone into zone identifier listing 
-            env.ZoneIdentifiers[ <string> env.GetZoneId( env ) ] = {
-                zoneId: <string> env.GetZoneId( env ),
-                parentZoneId: parentZoneId,
-                zoneIdentifiers: [ ]
-            }
+            if ( env.ZoneIdentifiers[ name ] === undefined )
+                env.ZoneIdentifiers[ <string> env.GetZoneId( env ) ] = {
+                    zoneId: <string> env.GetZoneId( env ),
+                    parentZoneId: parentZoneId,
+                    zoneIdentifiers: [ ]
+                }
         }
 
     //

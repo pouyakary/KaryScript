@@ -1,10 +1,8 @@
 
 zone a:
-    export def x = 2
-    zone b:
-        zone c:
-            def y = 2
-            (foo x y)
-        end
-    end
+    export def x = 3
+end
+
+zone a:
+    (foo x)
 end

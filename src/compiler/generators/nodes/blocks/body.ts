@@ -50,6 +50,7 @@ namespace KaryScript.Compiler.Nodes.Body {
 
             // updating the env info
             Reporter.ConcatEnvErrors( env, bodyENV )
+            env.ZoneIdentifiers = bodyENV.ZoneIdentifiers
     
             // done
             return env.GenerateSourceNode( node, compiledStatements )
