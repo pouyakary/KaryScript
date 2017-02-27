@@ -35,10 +35,10 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
             let args = new Array<CompiledCode>( )
             if ( node.args !== null )
                 args = Join(', ', node.args.map( arg => {
-                    return env.GenerateSourceNode( arg, [
+                    return env.GenerateSourceNode( arg, Concat([
                         arg.rested? '...' : '',
-                        Address.NormalizeName( arg )
-                    ])
+                        Address.CompileIdentifier( arg, env )
+                    ]))
                 }))
     
             // body
