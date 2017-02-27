@@ -74,8 +74,7 @@ namespace KaryScript.Compiler.Reporter {
 
         export function ConcatEnvErrors ( origin: IEnv, additions: IEnv ) {
             for ( let err of additions.Errors )
-                if ( !origin.Errors.has( err ) )
-                    origin.Errors.add( err )
+                origin.Errors.add( err )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
