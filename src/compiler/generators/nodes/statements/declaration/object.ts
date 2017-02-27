@@ -21,15 +21,16 @@ namespace KaryScript.Compiler.Nodes.ObjectDeclaration {
 
         export function Compile ( node: AST.IObjectDeclaration,
                                    env: IEnv ): SourceMap.SourceNode {
-            return env.GenerateSourceNode( node, Concat([
-                HandleExportedKey( node ),
-                (( node.kind === 'object' )?
-                    Nodes.Declaration.GetDeclarationKey( env ) : 'const'),
-                " ",
-                Nodes.Address.CompileIdentifier( node.name, env ),
-                " = ",
-                Nodes.ObjectLiteral.Compile( node, env )
-            ]))
+            return HandleExportedKey( node, env, Address.NormalizeName( node.name ),
+                Concat([
+                    (( node.kind === 'object' )?
+                        Nodes.Declaration.GetDeclarationKey( env ) : 'const'),
+                    " ",
+                    Nodes.Address.CompileIdentifier( node.name, env ),
+                    " = ",
+                    Nodes.ObjectLiteral.Compile( node, env )
+                ])
+            )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

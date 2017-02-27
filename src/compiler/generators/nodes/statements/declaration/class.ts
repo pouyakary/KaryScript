@@ -22,14 +22,17 @@ namespace KaryScript.Compiler.Nodes.ClassDeclaration {
 
         export function Compile ( node: AST.IClassDeclaration,
                                    env: IEnv ): SourceMap.SourceNode {
-            const header = GenerateHeader( node, env )
 
-            let defBody = new Array<SourceMap.SourceNode>( )
+            const header = GenerateHeader( node, env )
+            const name = Nodes.Address.NormalizeName( node.name )
+
+            let defBody = new Array<CompiledCode>( )
             for ( let def of node.defs )
                 defBody.push( env.GenerateSourceNode( def, 
                     Nodes.FunctionDeclaration.Compile( def, env, true ) ) )
 
-            return env.GenerateSourceNode( node, Concat([ header, defBody, '}' ]))
+            return HandleExportedKey( node, env, name,
+                Concat([ header, defBody, '}' ]) )
         }
 
     //
@@ -39,7 +42,6 @@ namespace KaryScript.Compiler.Nodes.ClassDeclaration {
         function GenerateHeader ( node: AST.IClassDeclaration,
                                    env: IEnv ): SourceMap.SourceNode {
             return env.GenerateSourceNode( node, [
-                HandleExportedKey( node ),
                 "class ",
                 Nodes.Address.CompileIdentifier( node.name, env ),
                 (( node.origin !== null )?

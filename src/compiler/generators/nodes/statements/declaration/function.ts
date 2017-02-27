@@ -22,23 +22,28 @@ namespace KaryScript.Compiler.Nodes.FunctionDeclaration {
                                    env: IEnv,
                                classDef = false ) {
 
-            const functionName  = env.GenerateSourceNode( node.name, 
-                                    Address.CompileIdentifier( node.name, env ))
-            const functionKey   = HandleExportedKey( node )
-                                + (( node.key === 'def' )? '' : 'async ')
+            // name
+            const normalizedName = Address.NormalizeName( node.name )
+            const functionName  = env.GenerateSourceNode(
+                                    node.name, normalizedName, node.name.name )
+
+            // key
+            const functionKey   = (( node.key === 'def' )? '' : 'async ')
                                 + (( classDef )? '' : 'function ')
 
+            // args
             let args = new Array<CompiledCode>( )
             if ( node.args !== null )
                 args = Join(', ', node.args.map( arg =>
                     env.GenerateSourceNode( arg,
                         Nodes.CompileSingleNode( arg, env ))))
     
+            // body
             const body = Nodes.CompileSingleNode( node.code, env )
 
-            return env.GenerateSourceNode( node, Concat([
-                functionKey, functionName, "(", args, ") {", body, "}"
-            ]))
+            // done
+            return HandleExportedKey( node, env, normalizedName,
+                Concat([ functionKey, functionName, "(", args, ") {", body, "}" ]))
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
