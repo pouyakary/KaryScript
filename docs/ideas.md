@@ -86,6 +86,3 @@ This needs to be implemented
 ```
 #! /usr/local/bin/node
 ```
-
-
-#### `this` keyword
