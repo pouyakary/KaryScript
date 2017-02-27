@@ -25,6 +25,7 @@
 /// <reference path="nodes/literals/map.ts" />
 /// <reference path="nodes/literals/table.ts" />
 /// <reference path="nodes/literals/regexp.ts" />
+/// <reference path="nodes/literals/reserved-identifiers.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/declaration/class.ts" />
@@ -197,6 +198,10 @@ namespace KaryScript.Compiler.Nodes {
                 case 'TryCatchStatement':
                     return Nodes.TryCatch.Compile(
                         node as AST.ITryCatchStatement, env )
+
+                case 'ReservedIdentifiers':
+                    return Nodes.ReservedIdentifiers.Compile(
+                        node as AST.IReservedIdentifiers )
 
                 case 'LineTerminator':
                 case 'Empty':

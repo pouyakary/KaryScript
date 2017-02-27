@@ -186,6 +186,7 @@
         / BooleanLiteral
         / TableLiteral
         / RegExpLiteral
+        / ReservedIdentifiers
 
 //
 // ─── FUNCTION CALLS ─────────────────────────────────────────────────────────────
@@ -1307,6 +1308,20 @@
     SeparatorInline
         = _* ',' _*
         / _+
+
+//
+// ─── RESERVED IDENTIFIERS ───────────────────────────────────────────────────────
+//
+
+    ReservedIdentifiers
+        = name:( 'this' ) {
+            return {
+                type:       'ReservedIdentifiers',
+                location:   location( ),
+                id:         id( ),
+                name:       name
+            }
+        }
 
 //
 // ─── RESERVED WORDS ─────────────────────────────────────────────────────────────

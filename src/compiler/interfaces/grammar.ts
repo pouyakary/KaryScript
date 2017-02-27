@@ -86,10 +86,19 @@ namespace KaryScript.Compiler.AST {
                 | "TryCatchStatement"
                 | "ZoneDeclaration"
                 | "RegExpLiteral"
+                | "ReservedIdentifiers"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── RESERVED IDENTIFIERS ───────────────────────────────────────────────────────
+    //
+
+        export interface IReservedIdentifiers extends IBase {
+            name:       string
         }
 
     //

@@ -1,2 +1,2 @@
 
-def x = /hello/g
+this/x = 2
