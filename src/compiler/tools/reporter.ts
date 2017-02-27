@@ -24,8 +24,8 @@ namespace KaryScript.Compiler.Reporter {
     //
 
         export function Report ( env: IEnv,
-                             message: string,
-                                node: AST.IBase ) {
+                                node: AST.IBase,
+                             message: string ) {
             env.Errors.add({
                 message: message,
                 location: Object.assign({ }, node.location )

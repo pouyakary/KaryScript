@@ -170,11 +170,8 @@ namespace KaryScript.Compiler.Nodes.For {
 
                     // on stuff that are not supported in here
                     default:
-                        throw Reporter.Report(
-                            env,
-                            `${ node.type } can't be used as an expression in for loop.`,
-                            node
-                        )
+                        throw Reporter.Report( env, node,
+                            `${ node.type } can't be used as an expression in for loop.` )
                 }
 
             //

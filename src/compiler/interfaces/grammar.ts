@@ -85,10 +85,20 @@ namespace KaryScript.Compiler.AST {
                 | "UseStatement"
                 | "TryCatchStatement"
                 | "ZoneDeclaration"
+                | "RegExpLiteral"
 
             location: ILocation
 
             id: string
+        }
+
+    //
+    // ─── REGEXP LITERAL ─────────────────────────────────────────────────────────────
+    //
+
+        export interface IRegExpLiteral extends IBase {
+            pattern:    string
+            flags:      string
         }
 
     //

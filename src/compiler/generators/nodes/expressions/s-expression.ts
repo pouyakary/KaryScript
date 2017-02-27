@@ -253,12 +253,12 @@ namespace KaryScript.Compiler.Nodes.SExpression {
             const state = countLimit >= count
             if ( !state ) {
                 if ( countLimit === 0 )
-                    Reporter.Report( env,
+                    Reporter.Report( env, node,
                         "S-Expression can contain a Placeholder only if they are" +
-                        " used within the root of a Pipe Expression.", node )
+                        " used within the root of a Pipe Expression." )
                 else
-                    Reporter.Report( env,
-                        "Pipe S-Expressions can only contain one Placeholder.", node )
+                    Reporter.Report( env, node,
+                        "Pipe S-Expressions can only contain one Placeholder." )
             }
             return state
         }

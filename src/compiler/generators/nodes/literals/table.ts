@@ -119,8 +119,8 @@ namespace KaryScript.Compiler.Nodes.Table {
                 if ( row.cells.length !== tableSize ) {
                     let word = (( row.cells.length > tableSize )? "more" : "less" )
 
-                    Reporter.Report( env,
-                        `Row ${ line } has ${ word } cells than original table size`, node )
+                    Reporter.Report( env, node,
+                        `Row ${ line } has ${ word } cells than original table size` )
 
                     result = false
                 }
@@ -142,9 +142,8 @@ namespace KaryScript.Compiler.Nodes.Table {
 
             for ( const key of node.data.map( x => x.cells[ 0 ] ) )
                 if ( possibleIdentifiers.indexOf( key.type ) === -1 )
-                    Reporter.Report( env,
-                        `Object of type ${ key.type } can't be used as object table key`,
-                        key )
+                    Reporter.Report( env, key,
+                        `Object of type ${ key.type } can't be used as object table key` )
 
             return isOkay
         }
@@ -161,8 +160,8 @@ namespace KaryScript.Compiler.Nodes.Table {
                     locationSum += index
 
             if ( locationSum > 1 )
-                Reporter.Report( env,
-                    "'#' Can only be used at the first cell of table's header", node)
+                Reporter.Report( env, node,
+                    "'#' Can only be used at the first cell of table's header")
 
             return ( locationSum > 1 )? false : true
         }

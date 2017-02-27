@@ -1449,19 +1449,13 @@
 
     RegExpLiteral "regular expression"
         = "/" pattern:$RegularExpressionBody "/" flags:$RegularExpressionFlags {
-            var value;
-
-            try {
-                value = new RegExp(pattern, flags);
-            } catch ( e ) {
-                error( e.message );
-            }
 
             return {
                 type:       "RegExpLiteral",
                 id:         id(),
                 location:   location( ),
-                value:      value
+                pattern:    pattern,
+                flags:      flags
             };
         }
 
