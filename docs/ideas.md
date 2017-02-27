@@ -88,7 +88,4 @@ This needs to be implemented
 ```
 
 
-#### RegExp
-"Exactly like JS"
-
 #### `this` keyword
