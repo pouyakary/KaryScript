@@ -26,7 +26,6 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 // dam dasharray! this is the very big moment!
                 let compiledCode = (<SourceMap.SourceNode>
                      KaryScript.Compiler.Compile( fileString, file ))
-                     .toStringWithSourceMap( )
 
                 // applying source map
                 const codeAfterHandlingSourceMap =

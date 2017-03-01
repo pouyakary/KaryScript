@@ -52,7 +52,7 @@ namespace KaryScript.Compiler {
 
         /** Gets the parsed AST and compiles it into JavaScript String */
         export function CompileAST ( src: AST.IBody,
-                                filename: string ): SourceMap.SourceNode {
+                                filename: string ) {
             // imports
             const sourceMap = require( 'source-map' )
 
@@ -106,7 +106,7 @@ namespace KaryScript.Compiler {
                 if ( baseEnvInfo.Errors.size > 0 )
                     throw baseEnvInfo.Errors
 
-                return result
+                return result.toStringWithSourceMap( )
 
             } catch ( error ) {
                 throw error
