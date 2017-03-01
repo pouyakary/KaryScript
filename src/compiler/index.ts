@@ -25,7 +25,7 @@ namespace KaryScript.Compiler {
          * and compiles it to a JavaScript String or throws CompilerErrors
          */
         export function Compile ( src: string,
-                             filename: string ): SourceMap.SourceNode | null {
+                             filename: string ): SourceMap.CodeWithSourceMap {
             try {
                 // imports
                 const parser = require( './parser.js' )
@@ -52,7 +52,7 @@ namespace KaryScript.Compiler {
 
         /** Gets the parsed AST and compiles it into JavaScript String */
         export function CompileAST ( src: AST.IBody,
-                                filename: string ) {
+                                filename: string ): SourceMap.CodeWithSourceMap {
             // imports
             const sourceMap = require( 'source-map' )
 

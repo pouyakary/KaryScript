@@ -23,9 +23,8 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 // out file GetNewAddress
                 const outFileAddress = GetNewAddress( settings, file )
 
-                // dam dasharray! this is the very big moment!
-                let compiledCode = (<SourceMap.SourceNode>
-                     KaryScript.Compiler.Compile( fileString, file ))
+                // dam darararam! this is the very big moment!
+                let compiledCode = KaryScript.Compiler.Compile( fileString, file )
 
                 // applying source map
                 const codeAfterHandlingSourceMap =
