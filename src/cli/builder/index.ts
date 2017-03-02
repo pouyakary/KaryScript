@@ -10,6 +10,7 @@
 
 /// <reference path="../imports.ts" />
 /// <reference path="runner/main.ts" />
+/// <reference path="./settings/index.ts" />
 
 namespace KaryScript.CLI.Builder {
 
