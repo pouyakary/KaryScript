@@ -100,11 +100,15 @@ namespace KaryScript.Compiler {
             let code: null | SourceMap.SourceNode = null
             try {
                 // compiling stuff
-                const result = <SourceMap.SourceNode> Nodes.CompileSingleNode( src, baseEnvInfo )
+                let result = <SourceMap.SourceNode> Nodes.CompileSingleNode( src, baseEnvInfo )
 
                 // handling errors
                 if ( baseEnvInfo.Errors.size > 0 )
                     throw baseEnvInfo.Errors
+
+                // a big problem that can happen
+                if ( typeof result === "string" )
+                    result = new sourceMap.SourceNode( 0, 0, filename, result )
 
                 return result.toStringWithSourceMap( )
 
