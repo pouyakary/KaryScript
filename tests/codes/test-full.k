@@ -40,8 +40,8 @@
 // ─── OPERATIONS ─────────────────────────────────────────────────────────────────
 //
 
-    con f = (and on off)
-    con number255 = 0xff
+    fix f = (and on off)
+    fix number255 = 0xff
 
     (console/log (x) -> (div % 2))
     (foo-bar)
@@ -92,7 +92,7 @@
 //
 
 
-    con norah-jones-best =
+    fix norah-jones-best =
         | name                  | album                 | stars     |
         |-----------------------|-----------------------|-----------|
         | "Those Sweet Words"   | "Feels like home"     |     5     |
@@ -101,7 +101,7 @@
         | "Sunrise"             | "Feels like home"     |     3     |
 
 
-    con languages =
+    fix languages =
         | #         | name          | format                        |
         |-----------|---------------|-------------------------------|
         | kk        | "KaryScript"  | ".kk"                         |

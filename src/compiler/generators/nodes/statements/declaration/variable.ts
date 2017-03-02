@@ -59,7 +59,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
         function CompileSingleAllocForGeneralScope ( node: AST.SingleAllocInitDeclaration,
                                                       env: IEnv ): SourceMap.SourceNode {
             let key: string
-            if ( node.modifier === 'con' )
+            if ( node.modifier === 'fix' )
                 key = 'const'
             else
                 key = GetDeclarationKey( env )

@@ -455,7 +455,7 @@ namespace KaryScript.Compiler.AST {
         
         export interface SingleAllocInitDeclaration extends DeclarationStatementBase {
             kind:       "SingleAllocInit"
-            modifier:   "con" | "def"
+            modifier:   "fix" | "def"
             assignment: DeclarationAssignment
         }
 

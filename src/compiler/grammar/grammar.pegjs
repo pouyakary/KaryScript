@@ -993,7 +993,7 @@
 //
 
     DeclarationStatement 'declaration statement'
-        = exported:ExportKey modifier:( "con" / "def" ) _+
+        = exported:ExportKey modifier:( "fix" / "def" ) _+
           assignment:DeclarationAssignment {
             return {
                 type:       'DeclarationStatement',
@@ -1385,7 +1385,7 @@
             / "cat"             !IdentifierName
             / "print"           !IdentifierName
             / "nan"             !IdentifierName
-            / "con"             !IdentifierName
+            / "fix"             !IdentifierName
             / "use"             !IdentifierName
             / "up"              !IdentifierName
             / "down"            !IdentifierName
