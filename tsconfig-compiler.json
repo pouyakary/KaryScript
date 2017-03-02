@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "target": "es6",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "outFile": "bin/karyscript-core.js"
+    },
+    "exclude": [
+        "node_modules",
+        "bin",
+        "src/cli"
+    ]
+}

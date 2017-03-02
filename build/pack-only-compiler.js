@@ -19,11 +19,11 @@
 //
 
     module.exports = {
-        target: 'node',
-        entry: "./bin/compiler.js",
+        target: 'web',
+        entry: "./bin/karyscript-core.js",
         output: {
             path: path.resolve( __dirname, "../bin" ),
-            filename: "kc.js"
+            filename: "karyscript.js"
         }
     }
 

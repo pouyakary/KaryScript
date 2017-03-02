@@ -6,7 +6,7 @@
         "sourceMap": true,
         "strictNullChecks": true,
         "removeComments": true,
-        "outFile": "bin/compiler.js"
+        "outFile": "bin/cli.js"
     },
     "exclude": [
         "node_modules",
