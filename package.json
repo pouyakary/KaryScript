@@ -20,7 +20,7 @@
     
     "build": "npm run build-cli",
     "build-cli": "npm run compile-cli; npm run compile-pegs; npm run pack-cli; npm run after-pack; npm link",
-    "build-core": "npm run compile-compiler; npm run compile-pegs; npm run pack-core",
+    "build-core": "npm run compile-compiler; npm run compile-pegs; npm run pack-core; npm run after-core-pack",
 
     "compile-pegs": "npm run compile-parser && npm run compile-cli-parser",
 
@@ -30,7 +30,8 @@
 
     "pack-cli": "webpack --config ./build/pack-full-cli.js",
     "pack-core": "webpack --config ./build/pack-only-compiler.js",
-    "after-pack": "node ./build/after-pack.js"
+    "after-pack": "node ./build/after-pack.js",
+    "after-core-pack": "node ./build/after-pack-for-web.js"
   },
   "repository": {
     "type": "git",
