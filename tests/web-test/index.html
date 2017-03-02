@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>KaryScript Playground on Web</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="../../bin/karyscript.js"></script>
+</head>
+<body>
+    <h1>KaryScript Playground</h1>
+    <textarea id="input" class="view">con data =
+   | name    | family    |
+   |---------|-----------|
+   | "Phil"  | "Dunphy"  |
+   | "Clair" | "Dunphy"  |
+
+@phil = [ data | x => x/name == "Phil" ]
+
+(console/log @phil)</textarea>
+    <pre id="output" class="view"></pre>
+    <script src="page.js"></script>
+</body>
+</html>
