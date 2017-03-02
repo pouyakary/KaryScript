@@ -23,7 +23,9 @@
     x = [ y | 1 ]
     x = [ y | "hello" ]
     x = [ y | hello/world ]
-    x = [ y | z => (div z 3) -> (> 3 %) ]
+    x = [ y | z => 3 > (div z 3) ]
+    x = [ y | m to n ]
+    x = [ y | 1 to 10 ]
 
 //
 // ─── ASSIGNS ────────────────────────────────────────────────────────────────────
@@ -220,6 +222,10 @@
     end
 
     for x of (xs):
+        (foo x)
+    end
+
+    for x of [1 2 3 4 5 6] when x > 2:
         (foo x)
     end
 
