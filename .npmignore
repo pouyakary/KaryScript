@@ -1,7 +1,6 @@
 .vscode/**
 build/**
 designs/**
-docs/**
 src/**
 tests/**
 .gitignore
