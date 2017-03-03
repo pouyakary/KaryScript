@@ -6,6 +6,7 @@
         "sourceMap": true,
         "strictNullChecks": true,
         "removeComments": true,
+        "declaration": true,
         "outFile": "bin/karyscript-core.js"
     },
     "exclude": [

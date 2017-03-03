@@ -74,11 +74,11 @@ namespace KaryScript.Compiler {
     // ─── ZONE IDENTIFIERS ───────────────────────────────────────────────────────────
     //
 
-        interface ZoneIdentifiers {
+        export interface ZoneIdentifiers {
             [ zoneId: string ]: IZoneInfoContainer
         }
 
-        interface IZoneInfoContainer {
+        export interface IZoneInfoContainer {
             zoneId:             string
             parentZoneId:       string | null
             zoneIdentifiers:    string[ ]
@@ -88,7 +88,7 @@ namespace KaryScript.Compiler {
     // ─── FORMATTER ──────────────────────────────────────────────────────────────────
     //
 
-        interface Formatter {
+        export interface Formatter {
             PrintComments: boolean
         }
 

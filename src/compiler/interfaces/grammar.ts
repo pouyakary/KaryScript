@@ -218,7 +218,7 @@ namespace KaryScript.Compiler.AST {
             range:          ForRange
         }
 
-        interface ForRange {
+        export interface ForRange {
             start:          TExpression | null
             end:            TExpression
         }
