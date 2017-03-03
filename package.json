@@ -2,7 +2,7 @@
   "name": "karyscript",
   "version": "0.0.1",
   "description": "KaryScript Language Compiler and infrastructures",
-  "main": "bin/index.js",
+  "main": "bin/karyscript.js",
   "bin": {
     "kc": "./bin/kc.js"
   },
