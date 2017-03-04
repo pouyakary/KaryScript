@@ -27,8 +27,10 @@ namespace KaryScript.Compiler.Nodes.Use {
 
                 case 'use-as':
                     return CompileUseAs( node as AST.IUseStatementUseAs, env )
+
+                case 'from-origin':
+                    return CompileDestructionFromOrigin( node as AST.IUseStatementFromOrigin, env )
             }
-            return ''
         }
 
     //
@@ -81,6 +83,23 @@ namespace KaryScript.Compiler.Nodes.Use {
 
             return env.GenerateSourceNode( node, Concat([
                 'import * as ', name, ' from ', origin
+            ]))
+        }
+
+    //
+    // ─── COMPILE DESTRUCTION FORM ORIGIN ────────────────────────────────────────────
+    //
+
+        function CompileDestructionFromOrigin ( node: AST.IUseStatementFromOrigin,
+                                                 env: IEnv ) {
+
+            const origin = Nodes.String.Compile( node.origin, env )
+            const args = Join(', ',
+                            node.args.map( x =>
+                                Nodes.Address.CompileIdentifier( x, env ) ) )
+
+            return env.GenerateSourceNode( node, Concat([
+                'import {', args, '} from ', origin
             ]))
         }
 
