@@ -411,7 +411,7 @@
 //
 
     UseStatement 'use statement'
-        = "use" __+ args:IdentifierList __+ 'from' __+ origin:UseOrigin {
+        = "use" __+ args:IdentifierList __+ 'from' __+ origin:StringLiteral {
             return {
                 type:       'UseStatement',
                 id:         id( ),
@@ -419,6 +419,16 @@
                 kind:       'from-origin',
                 origin:     origin,
                 args:       args
+            }
+        }
+        / "use" __+ originId:StringLiteral __+ "as" __+ name:Identifier {
+            return {
+                type:       'UseStatement',
+                id:         id( ),
+                location:   location( ),
+                kind:       'use-as',
+                originId:   originId,
+                name:       name,
             }
         }
         / "use" _+ args:UseImportsArgs {
@@ -438,10 +448,6 @@
         / subArg:Identifier {
             return [ subArg ]
         }
-
-    UseOrigin
-        = Identifier
-        / StringLiteral
 
 //
 // ─── PREDICATES ─────────────────────────────────────────────────────────────────

@@ -145,12 +145,23 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IUseStatement extends IBase {
-            kind:           'from-origin' | 'simple'
+            kind:           'from-origin' | 'simple' | 'use-as'
         }
 
         export interface IUseStatementSimpleImport extends IUseStatement {
             kind:           'simple'
             args:           IIdentifier[ ]
+        }
+
+        export interface IUseStatementFromOrigin extends IUseStatement {
+            origin:         IIdentifier
+            args:           IIdentifier[ ]
+        }
+
+        export interface IUseStatementUseAs extends IUseStatement {
+            kind:           'use-as'
+            originId:       IStringLiteral
+            name:           IIdentifier
         }
 
     //
