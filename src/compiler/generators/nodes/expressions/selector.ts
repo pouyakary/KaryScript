@@ -37,8 +37,9 @@ namespace KaryScript.Compiler.Nodes.Selector {
         function CompileQuerySelector ( node: AST.IQuerySelector,
                                          env: IEnv) {
 
-            const name = Nodes.Address.Compile( node.searchable, env )
-            let queries: CompiledCode[ ] = [ name ]
+            let queries: CompiledCode[ ] = [
+                Nodes.CompileSingleNode( node.searchable, env )
+            ]
 
             for ( const query of node.queries )
                 queries = queries.concat(
@@ -88,7 +89,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
         function CompileNumberLiteralRangeSelector ( node: AST.IRangeSelector,
                                                       env: IEnv ) {
 
-            const name = Nodes.Address.Compile( node.searchable, env )
+            const searchable = Nodes.CompileSingleNode( node.searchable, env )
 
             const start = ( node.start as AST.INumericLiteral ).value
             const end   = ( node.end as AST.INumericLiteral ).value
@@ -96,7 +97,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
             const identifier = For.GenerateRandomId( )
 
             return env.GenerateSourceNode( node, [
-                name, '.slice(', Math.min( start, end ).toString( ), ', ',
+                searchable, '.slice(', Math.min( start, end ).toString( ), ', ',
                     (Math.max( start, end ) + 1 ).toString( ), ')'
             ])
         }
@@ -108,13 +109,13 @@ namespace KaryScript.Compiler.Nodes.Selector {
         function CompileVarRangeSelector ( node: AST.IRangeSelector,
                                             env: IEnv ) {
 
-            const name = Nodes.Address.Compile( node.searchable, env )
+            const searchable = Nodes.CompileSingleNode( node.searchable, env )
 
             const start = Nodes.CompileSingleNode( node.start, env )
             const end   = Nodes.CompileSingleNode( node.end, env )
 
             return env.GenerateSourceNode( node, [
-                name, '.slice(Math.min(', start, ', ', end, '), Math.max(',
+                searchable, '.slice(Math.min(', start, ', ', end, '), Math.max(',
                     start, ', ', end, ') + 1)'
             ])
         }

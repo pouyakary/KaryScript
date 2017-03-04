@@ -291,7 +291,7 @@
 //
 
     Selector 'selector expression'
-        = "[" __* searchable:AddressIdentifier __* queries:SelectorQueries __* "]" {
+        = "[" __* searchable:Expression __* queries:SelectorQueries __* "]" {
             return {
                 type:       "Selector",
                 id:         id( ),
@@ -301,7 +301,7 @@
                 queries:    queries,
             }
         }
-        / "[" __* searchable:AddressIdentifier __* "|" __* start:Returnable __+ "to"
+        / "[" __* searchable:Expression __* "|" __* start:Returnable __+ "to"
           __+ end:Returnable __* "]" {
             return {
                 type:       "Selector",
