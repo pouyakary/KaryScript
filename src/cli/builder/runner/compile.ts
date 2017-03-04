@@ -28,6 +28,9 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 // dam darararam! this is the very big moment!
                 let compiledCode = KaryScript.Compiler.Compile( fileString, file )
 
+                // a simple directory existence check
+                EnsureDirExists( path.dirname( outFileAddress ) )
+
                 // applying source map
                 const codeAfterHandlingSourceMap =
                     HandleSourceMap( outFileAddress, settings, compiledCode )
@@ -59,7 +62,8 @@ namespace KaryScript.CLI.Builder.TaskRunner {
             mapObject['sources'][ 0 ] = path.relative(
                 mapPath, mapObject['sources'][ 0 ] ).substring( 3 )
 
-            // applying the map
+
+            // applying the mapß
             fs.writeFileSync( mapPath, JSON.stringify( mapObject) )
 
 
@@ -76,6 +80,17 @@ namespace KaryScript.CLI.Builder.TaskRunner {
             return fileName
                     .replace( settings.sourceRoot, settings.binRoot )
                     .replace( /\.k$/, '.js' )
+        }
+
+    //
+    // ─── MAKE DIR P ─────────────────────────────────────────────────────────────────
+    //
+
+        function EnsureDirExists ( address ) {
+            const dirname = path.dirname( address )
+            if ( !fs.existsSync( dirname ) )
+                    EnsureDirExists( dirname )
+            fs.mkdirSync( address )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
