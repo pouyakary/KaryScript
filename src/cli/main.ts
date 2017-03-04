@@ -11,6 +11,8 @@
 /// <reference path="../compiler/index.ts" />
 /// <reference path="configs/index.ts" />
 /// <reference path="builder/index.ts" />
+/// <reference path="commands/init.ts" />
+/// <reference path="commands/help.ts" />
 
 namespace KaryScript.CLI {
 
@@ -40,9 +42,12 @@ namespace KaryScript.CLI {
 
                 case '--init':
                 case '-i':
+                    Commands.Init( )
+                    break
+
                 case '--version':
                 case '-v':
-                    console.log('not implemented yet')
+                    console.log(`→ KaryScript ${ KaryScript.Compiler.Version.Name } - Release #${ KaryScript.Compiler.Version.Release} `)
                     break
 
                 default:
