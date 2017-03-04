@@ -154,7 +154,7 @@ namespace KaryScript.Compiler.AST {
         }
 
         export interface IUseStatementFromOrigin extends IUseStatement {
-            origin:         IIdentifier
+            origin:         IStringLiteral
             args:           IIdentifier[ ]
         }
 
