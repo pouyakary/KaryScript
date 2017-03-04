@@ -41,7 +41,7 @@ namespace KaryScript.Compiler {
             /**
              * Errors
              */
-            Errors: Set<Reporter.CompilerError>
+            Errors: Set<Reporter.ICompilerError>
 
             /**
              * Formatting defs

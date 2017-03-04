@@ -8,6 +8,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+/// <reference path="../../printer/error.ts" />
+
 namespace KaryScript.CLI.Builder.TaskRunner {
 
     //
@@ -34,7 +36,7 @@ namespace KaryScript.CLI.Builder.TaskRunner {
                 fs.writeFileSync( outFileAddress, codeAfterHandlingSourceMap )
 
             } catch ( e ) {
-                console.log( e )
+                Printer.PrintErrors( e )
             }
         }
     

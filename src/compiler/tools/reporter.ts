@@ -14,7 +14,7 @@ namespace KaryScript.Compiler.Reporter {
     // ─── ERROR INTERFACE ────────────────────────────────────────────────────────────
     //
 
-        export interface CompilerError {
+        export interface ICompilerError {
             message:    string
             location:   AST.ILocation
         }
@@ -44,28 +44,28 @@ namespace KaryScript.Compiler.Reporter {
         }
 
     //
-    // ─── WRAP ERRORS ────────────────────────────────────────────────────────────────
-    //
-
-        function WrapErrors ( errors: CompilerError[ ] ) {
-            if ( typeof errors === "object" )
-                return errors
-            else
-                return Array.from( new Set( errors ) )
-        }
-
-    //
     // ─── RETURN ERRORS AT FINALE ────────────────────────────────────────────────────
     //
 
-        export function WrapReturnErrorsAtTheEnd ( error: any ) {
-            if ( error.from === 'user' )
-                return WrapErrors( error )
+        export function WrapReturnErrorsAtTheEnd ( error: IErrorBox ) {
+            if ( error.from === 'user' || error.from === 'parser' )
+                return error
             else
                 return {
                     from: 'compiler',
                     errors: [ error ]
                 }
+        }
+
+    //
+    // ─── WRAP PARSER ERRORS ─────────────────────────────────────────────────────────
+    //
+
+        export function WrapParserError ( env: IEnv, error: ICompilerError ) {
+            return {
+                location: error.location,
+                message: error.message
+            }
         }
     
     //
@@ -75,6 +75,15 @@ namespace KaryScript.Compiler.Reporter {
         export function ConcatEnvErrors ( origin: IEnv, additions: IEnv ) {
             for ( let err of additions.Errors )
                 origin.Errors.add( err )
+        }
+
+    //
+    // ─── ERROR TYPE ─────────────────────────────────────────────────────────────────
+    //
+
+        export interface IErrorBox {
+            from: 'user' | 'compiler' | 'parser'
+            errors: ICompilerError[ ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

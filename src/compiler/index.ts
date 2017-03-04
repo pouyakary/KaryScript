@@ -30,14 +30,22 @@ namespace KaryScript.Compiler {
             try {
                 // imports
                 const parser = require( './parser.js' )
+                const sourceMap = require( 'source-map' )
 
-                // parsing
-                const ast = parser.parse( src ) as AST.IBody
-                
-                // generating the code
+                // base env info
+                let baseEnvInfo = GetBaseEnvObjectClone( filename, sourceMap )
+
+                // parsing code
+                let ast
                 try {
-                    return CompileAST( ast, filename )
-
+                    ast = parser.parse( src ) as AST.IBody
+                } catch ( parserError ) {
+                    throw Reporter.WrapParserError( baseEnvInfo, parserError as Reporter.ICompilerError )
+                }
+                
+                // generating code
+                try {
+                    return CompileAST( ast, filename, sourceMap, baseEnvInfo )
                 } catch ( codeErrors ) {
                     throw Reporter.HandleCodeErrorsAtCompileEnd( codeErrors )
                 }
@@ -53,12 +61,9 @@ namespace KaryScript.Compiler {
 
         /** Gets the parsed AST and compiles it into JavaScript String */
         export function CompileAST ( src: AST.IBody,
-                                filename: string ): SourceMap.CodeWithSourceMap {
-            // imports
-            const sourceMap = require( 'source-map' )
-
-            // base env info
-            let baseEnvInfo = GetBaseEnvObjectClone( filename, sourceMap )
+                                filename: string,
+                               sourceMap: any,
+                             baseEnvInfo: IEnv ): SourceMap.CodeWithSourceMap {
 
             // compiling
             let code: null | SourceMap.SourceNode = null

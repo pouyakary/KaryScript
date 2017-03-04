@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "module": "amd",
+        "module": "system",
         "target": "es6",
         "noImplicitAny": false,
         "sourceMap": true,
         "strictNullChecks": true,
-        "declaration": true
+        "removeComments": true,
+        "outFile": "bin/cli.js"
     },
     "exclude": [
         "node_modules",
