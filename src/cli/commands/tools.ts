@@ -29,6 +29,10 @@ namespace KaryScript.CLI {
             return '  ' + repeat( '─', (<any>process.stdout).columns - 5 )
         }
 
+        export function fullTermLine ( ) {
+            return repeat( '─', (<any>process.stdout).columns )
+        }
+
     //
     // ─── TITLE ──────────────────────────────────────────────────────────────────────
     //

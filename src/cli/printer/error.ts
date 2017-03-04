@@ -8,6 +8,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+/// <reference path="../commands/tools.ts" />
+/// <reference path="../imports.ts" />
+
 namespace KaryScript.CLI.Printer {
 
     //
@@ -18,6 +21,7 @@ namespace KaryScript.CLI.Printer {
             for ( const error of errors.errors ) {
                 PrintErrorWithLocation( error )
             }
+            console.log( fullTermLine( ) )
         }
     
     //
@@ -25,8 +29,9 @@ namespace KaryScript.CLI.Printer {
     //
 
         function PrintErrorWithLocation ( error: KaryScript.Compiler.Reporter.ICompilerError ) {
-            console.log(`→ Error at (line: ${ error.location.start.line }, column: ${ error.location.start.column }): `)
-            console.log(`      ${ error.message }`)
+            console.log( fullTermLine( ) )
+            console.log(`  → Error @(line: ${ error.location.start.line }, column: ${ error.location.start.column }): `)
+            console.log(`      ${ colors.red.bold( error.message ) }`)
         }
     
     // ────────────────────────────────────────────────────────────────────────────────
