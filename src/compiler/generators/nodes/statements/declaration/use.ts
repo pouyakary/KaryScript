@@ -11,6 +11,8 @@
 /// <reference path="../../../switcher.ts" />
 /// <reference path="../../../../tools/concat.ts" />
 /// <reference path="../../../../tools/reporter.ts" />
+/// <reference path="../../literals/string.ts" />
+/// <reference path="../../expressions/address.ts" />
 
 namespace KaryScript.Compiler.Nodes.Use {
 
@@ -22,6 +24,9 @@ namespace KaryScript.Compiler.Nodes.Use {
             switch ( node.kind ) {
                 case 'simple':
                     return CompileSimpleUse( node as AST.IUseStatementSimpleImport, env )
+
+                case 'use-as':
+                    return CompileUseAs( node as AST.IUseStatementUseAs, env )
             }
             return ''
         }
@@ -62,6 +67,21 @@ namespace KaryScript.Compiler.Nodes.Use {
                 }
             }
             return state
+        }
+
+    //
+    // ─── COMPILE USE AS USE STATEMENT ───────────────────────────────────────────────
+    //
+
+        function CompileUseAs ( node: AST.IUseStatementUseAs,
+                                 env: IEnv ) {
+
+            const origin    = Nodes.String.Compile( node.originId, env )
+            const name      = Nodes.Address.NormalizeName( node.name )
+
+            return env.GenerateSourceNode( node, Concat([
+                'import * as ', name, ' from ', origin
+            ]))
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
