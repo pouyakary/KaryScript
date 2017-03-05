@@ -202,7 +202,7 @@
 //
 
     RangeLiteral
-        = start:RangeExpr _* connector:('...' / '..') _* end:RangeExpr {
+        = "[" __* start:RangeExpr __* connector:('...' / '..') __* end:RangeExpr __* "]" {
             return {
                 type:       'RangeLiteral',
                 location:   location( ),
