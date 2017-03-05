@@ -49,20 +49,21 @@ namespace KaryScript.Compiler.Nodes.Range {
                                                         end: number,
                                                   connector: string ) {
             let range = new Array<number> ( )
-            if ( start < end )
+            if ( start < end ) {
                 if ( connector === '..' )
                     for ( let counter = start; counter < end; counter++ )
                         range.push( counter )
                 else
                     for ( let counter = start; counter <= end; counter++ )
                         range.push( counter )
-            else
+            } else {
                 if ( connector === '..' )
-                    for ( let counter = end; counter > start; counter-- )
+                    for ( let counter = start; counter > end; counter-- )
                         range.push( counter )
                 else
-                    for ( let counter = end; counter >= start; counter-- )
+                    for ( let counter = start; counter >= end; counter-- )
                         range.push( counter )
+            }
 
             return '[' + range.join(', ') + ']'
         }
