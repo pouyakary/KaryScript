@@ -9,34 +9,35 @@
 //
 
 /// <reference path="nodes/blocks/body.ts" />
-/// <reference path="nodes/expressions/s-expression.ts" />
-/// <reference path="nodes/expressions/lambda.ts" />
-/// <reference path="nodes/expressions/pipe.ts" />
-/// <reference path="nodes/expressions/shorthand-if.ts" />
-/// <reference path="nodes/expressions/selector.ts" />
 /// <reference path="nodes/expressions/comparison.ts" />
 /// <reference path="nodes/expressions/exprmember.ts" />
-/// <reference path="nodes/literals/boolean.ts" />
-/// <reference path="nodes/literals/numeric.ts" />
-/// <reference path="nodes/literals/string.ts" />
+/// <reference path="nodes/expressions/lambda.ts" />
+/// <reference path="nodes/expressions/pipe.ts" />
+/// <reference path="nodes/expressions/s-expression.ts" />
+/// <reference path="nodes/expressions/selector.ts" />
+/// <reference path="nodes/expressions/shorthand-if.ts" />
 /// <reference path="nodes/literals/array.ts" />
-/// <reference path="nodes/literals/set.ts" />
-/// <reference path="nodes/literals/object.ts" />
+/// <reference path="nodes/literals/boolean.ts" />
 /// <reference path="nodes/literals/map.ts" />
-/// <reference path="nodes/literals/table.ts" />
+/// <reference path="nodes/literals/numeric.ts" />
+/// <reference path="nodes/literals/object.ts" />
+/// <reference path="nodes/literals/range.ts" />
 /// <reference path="nodes/literals/regexp.ts" />
 /// <reference path="nodes/literals/reserved-identifiers.ts" />
-/// <reference path="nodes/statements/declaration/variable.ts" />
-/// <reference path="nodes/statements/declaration/function.ts" />
-/// <reference path="nodes/statements/declaration/class.ts" />
-/// <reference path="nodes/statements/declaration/object.ts" />
-/// <reference path="nodes/statements/declaration/holder.ts" />
-/// <reference path="nodes/statements/declaration/use.ts" />
-/// <reference path="nodes/statements/declaration/zone.ts" />
+/// <reference path="nodes/literals/set.ts" />
+/// <reference path="nodes/literals/string.ts" />
+/// <reference path="nodes/literals/table.ts" />
 /// <reference path="nodes/statements/assignment.ts" />
+/// <reference path="nodes/statements/declaration/class.ts" />
+/// <reference path="nodes/statements/declaration/function.ts" />
+/// <reference path="nodes/statements/declaration/holder.ts" />
+/// <reference path="nodes/statements/declaration/object.ts" />
+/// <reference path="nodes/statements/declaration/use.ts" />
+/// <reference path="nodes/statements/declaration/variable.ts" />
+/// <reference path="nodes/statements/declaration/zone.ts" />
 /// <reference path="nodes/statements/if.ts" />
-/// <reference path="nodes/statements/loops/while.ts" />
 /// <reference path="nodes/statements/loops/for.ts" />
+/// <reference path="nodes/statements/loops/while.ts" />
 /// <reference path="nodes/statements/return.ts" />
 /// <reference path="nodes/statements/switch.ts" />
 /// <reference path="nodes/statements/try.ts" />
@@ -190,6 +191,10 @@ namespace KaryScript.Compiler.Nodes {
                 case 'HolderIdentifier':
                     return Nodes.Holder.Use(
                         node as AST.IHolderIdentifier, env )
+
+                case 'RangeLiteral':
+                    return Nodes.Range.Compile(
+                        node as AST.IRangeLiteral, env )
 
                 case 'UseStatement':
                     return Nodes.Use.Compile(
