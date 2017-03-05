@@ -15,7 +15,7 @@ namespace KaryScript.Compiler.Nodes.Range {
     //
 
         export function Compile ( node: AST.IRangeLiteral, env: IEnv ) {
-            if ( node.start.type === 'Identifier' && node.end.type === 'Identifier' )
+            if ( node.start.type === 'NumericLiteral' && node.end.type === 'NumericLiteral' )
                 return CompileWithExactStartEnd( node, env )
 
             return ''
@@ -85,10 +85,10 @@ namespace KaryScript.Compiler.Nodes.Range {
     
             // result container
             let results = [
-                '(function (){let ', resultsArrayIdentifier, ' = []; for(let',
+                '(function (){let ', resultsArrayIdentifier, ' = []; for(let ',
                 counterIdentifier, ' = ', start.toString( ), '; ', counterIdentifier,
                 check, end.toString( ), '; ', counterIdentifier, incOperator, '){ ',
-                resultsArrayIdentifier, '.push(', counterIdentifier, '); }).apply(this);'
+                resultsArrayIdentifier, '.push(', counterIdentifier, ') }}).apply(this)'
             ]
 
             // done
