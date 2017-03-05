@@ -82,14 +82,16 @@ namespace KaryScript.Compiler.Nodes.Range {
             const start         = ( node.start as AST.INumericLiteral ).value
             const end           = ( node.end as AST.INumericLiteral ).value
             const incOperator   = ( start > end )? '--' : '++'
-            const check         = ( start > end )? ' > '  : ' < '
+            const check         = ( start > end )? ' >'  : ' <'
+            const checkTail     = ( node.connector === '...' )? '= ' : ' '
     
             // result container
             let results = [
                 '(function (){let ', resultsArrayIdentifier, ' = []; for(let ',
-                counterIdentifier, ' = ', start.toString( ), '; ', counterIdentifier,
-                check, end.toString( ), '; ', counterIdentifier, incOperator, '){ ',
-                resultsArrayIdentifier, '.push(', counterIdentifier, ') }}).apply(this)'
+                counterIdentifier, ' = ', start.toString( ), '; ',
+                counterIdentifier, check, checkTail, end.toString( ), '; ',
+                counterIdentifier, incOperator, '){ ', resultsArrayIdentifier,
+                '.push(', counterIdentifier, ') }}).apply(this)'
             ]
 
             // done
