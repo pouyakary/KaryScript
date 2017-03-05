@@ -88,6 +88,7 @@ namespace KaryScript.Compiler.AST {
                 | "RegExpLiteral"
                 | "ReservedIdentifiers"
                 | "FunctionDeclaration"
+                | "RangeLiteral"
 
             location: ILocation
 
@@ -390,6 +391,17 @@ namespace KaryScript.Compiler.AST {
 
         export interface IOctothorpe extends IBase {
             type:       "Octothorpe"
+        }
+
+    //
+    // ─── RANGE LITERAL ──────────────────────────────────────────────────────────────
+    //
+
+        export interface IRangeLiteral extends IBase {
+            type:       'RangeLiteral'
+            start:      IBase
+            connector:  '..' | '...'
+            end:        IBase
         }
 
     //

@@ -180,6 +180,7 @@
         / MapLiteral
         / ArrayLiteral
         / SetLiteral
+        / RangeLiteral
         / StringLiteral
         / NumericLiteral
         / ReservedValueLiterals
@@ -195,6 +196,31 @@
     FunctionCall 'function call'
         = PipeExpression
         / SExpression
+
+//
+// ─── RANGE LITERAL ──────────────────────────────────────────────────────────────
+//
+
+    RangeLiteral
+        = start:RangeExpr _* connector:('...' / '..') _* end:RangeExpr {
+            return {
+                type:       'RangeLiteral',
+                location:   location( ),
+                id:         id( ),
+                start:      start,
+                connector:  connector,
+                end:        end
+            }
+        }
+
+    RangeExpr
+        = AddressIdentifier
+        / IdentifierName
+        / HolderIdentifier
+        / NumericLiteral
+        / PipeExpression
+        / SExpression
+        / Selector
 
 //
 // ─── NAMESPACE ──────────────────────────────────────────────────────────────────
