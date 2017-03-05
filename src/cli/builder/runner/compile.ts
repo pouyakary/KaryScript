@@ -88,9 +88,10 @@ namespace KaryScript.CLI.Builder.TaskRunner {
 
         function EnsureDirExists ( address ) {
             const dirname = path.dirname( address )
-            if ( !fs.existsSync( dirname ) )
-                    EnsureDirExists( dirname )
-            fs.mkdirSync( address )
+            if ( !fs.existsSync( dirname ) ) {
+                fs.mkdirSync( address )
+                EnsureDirExists( dirname )
+            }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
