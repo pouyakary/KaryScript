@@ -18,11 +18,32 @@ namespace KaryScript.CLI.Printer {
     //
 
         export function PrintErrors ( errors: KaryScript.Compiler.Reporter.IErrorBox ) {
+            if ( errors.from === 'compiler' )
+                PrintNormalErrors( errors )
+            else if ( errors.from === 'parser' || errors.from === 'user' )
+                PrintLocationBoxErrors( errors )
+            else
+                console.log( errors )
+        }
+
+    //
+    // ─── PRINT NORMAL ERRORS ────────────────────────────────────────────────────────
+    //
+
+        function PrintNormalErrors ( errors: KaryScript.Compiler.Reporter.IErrorBox ) {
+            console.log( errors )
+        }
+
+    //
+    // ─── PRINT LOCATION BOX ERRORS ──────────────────────────────────────────────────
+    //
+
+        function PrintLocationBoxErrors ( errors: KaryScript.Compiler.Reporter.IErrorBox ) {
             for ( const error of errors.errors ) {
                 PrintErrorWithLocation( error )
             }
             console.log( fullTermLine( ) )
-        }
+        }    
     
     //
     // ─── PRINT ERRORS WITH LOCATION ─────────────────────────────────────────────────
@@ -31,7 +52,7 @@ namespace KaryScript.CLI.Printer {
         function PrintErrorWithLocation ( error: KaryScript.Compiler.Reporter.ICompilerError ) {
             console.log( fullTermLine( ) )
             console.log(`  → Error @(line: ${ error.location.start.line }, column: ${ error.location.start.column }): `)
-            console.log(`      ${ colors.red.bold( error.message ) }`)
+            console.log(`      ${ chalk.red.bold( error.message ) }`)
         }
     
     // ────────────────────────────────────────────────────────────────────────────────
