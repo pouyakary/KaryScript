@@ -17,7 +17,7 @@ namespace KaryScript.CLI {
         export const fs         = require('fs')
         export const path       = require('path')
         export const util       = require('util')
-        export const colors     = require('colors/safe')
+        export const chalk      = require('chalk')
         export const yaml       = require('js-yaml')
 
     // ────────────────────────────────────────────────────────────────────────────────

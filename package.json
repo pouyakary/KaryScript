@@ -12,22 +12,16 @@
   "scripts": {
     "compile-compiler": "tsc -p tsconfig-compiler.json",
     "compile-cli": "tsc -p tsconfig-cli.json",
-
     "tsc": "npm run compile-compiler; npm run compile-cli",
-
     "compile-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/parser.js ./src/compiler/grammar/grammar.pegjs",
     "compile-cli-parser": "node ./node_modules/pegjs/bin/pegjs -o ./bin/arglang-parser.js ./src/cli/configs/arglang/arg-lang.pegjs",
-    
     "build": "npm run build-cli",
     "build-cli": "npm run compile-cli; npm run compile-pegs; npm run pack-cli; npm run after-pack; npm link",
     "build-core": "npm run compile-compiler; npm run compile-pegs; npm run pack-core; npm run after-core-pack",
-
     "compile-pegs": "npm run compile-parser && npm run compile-cli-parser",
-
     "test": "node ./tests/test.js",
     "parser-test-drive": "node ./tests/tools/parse.js",
     "tset-drive-compile": "node bin/compiler.js",
-
     "pack-cli": "webpack --config ./build/pack-full-cli.js",
     "pack-core": "webpack --config ./build/pack-only-compiler.js",
     "after-pack": "node ./build/after-pack.js",
@@ -56,8 +50,8 @@
     "webpack": "*"
   },
   "dependencies": {
-    "source-map": "^0.5.6",
+    "chalk": "^1.1.3",
     "js-yaml": "^3.8.1",
-    "colors": "^1.1.2"
+    "source-map": "^0.5.6"
   }
 }

@@ -23,7 +23,7 @@ namespace KaryScript.CLI.Commands {
                     '---\nsourceMap: true' )
                 console.log('→ Config file generated')
             } catch ( e ) {
-                console.log( colors.red.bold("→ Couldn't generate the config file") )
+                console.log( chalk.red.bold("→ Couldn't generate the config file") )
             }
         }
 

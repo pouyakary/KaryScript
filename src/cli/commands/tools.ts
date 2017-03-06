@@ -39,7 +39,7 @@ namespace KaryScript.CLI {
 
         export function makeTitleLine ( title: string ) {
             return '\n  ' + title.toUpperCase( ) + '\n' +
-                colors.bold( termLine( ) ) + '\n'
+                chalk.bold( termLine( ) ) + '\n'
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

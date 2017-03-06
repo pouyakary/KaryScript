@@ -81,23 +81,23 @@ namespace KaryScript.CLI.ArgLang {
             const length = location.end.offset - location.start.offset
             const restLength = code.length - location.end.offset
  
-            //console.log( colors.red( 'Failed to parse command line args:') )
+            //console.log( chalk.red( 'Failed to parse command line args:') )
             console.log( )
 
-            console.log( colors.grey.bold(
+            console.log( chalk.grey.bold(
                             "  ┌" +
                             repeat( '─', location.start.offset ) + " " +
-                            colors.red.bold( repeat( '↓', length ) ) +
+                            chalk.red.bold( repeat( '↓', length ) ) +
                             " " + repeat( '─', restLength ) +
                             "┐"))
 
-            console.log( colors.grey.bold("  │ ") +
-                            code + colors.grey.bold(" │"))
+            console.log( chalk.grey.bold("  │ ") +
+                            code + chalk.grey.bold(" │"))
 
-            console.log( colors.grey.bold(
+            console.log( chalk.grey.bold(
                             "  └" +
                             repeat( '─', location.start.offset) + " " +
-                            colors.red.bold( repeat( '↑', length ) ) +
+                            chalk.red.bold( repeat( '↑', length ) ) +
                             " " + repeat( '─', restLength ) +
                             "┘"
                             ))
