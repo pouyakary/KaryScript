@@ -16,9 +16,9 @@ namespace KaryScript.Compiler {
 
         export const Version = {
             /** Version's name */
-            Name: '0.0.1 Alpha',
+            Name: '0.0.1001 Alpha',
             /** Release number */
-            Release: 1,
+            Release: 2,
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
