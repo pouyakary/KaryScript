@@ -120,13 +120,13 @@ namespace KaryScript.Compiler.Nodes.Range {
             // result array
             let result = [
                 '(function (){let ', resultsArrayIdentifier, ' = []; for(let ',
-                counterIdentifier, ' = ', assignment, '; ', start.reference, ' <= ',
-                end.reference, '? ', counterIdentifier, ' <', checkTail, end.reference,
-                ' : ', counterIdentifier, ' >', checkTail, end.reference, '; ',
-                start.reference, ' <= ', end.reference, '? ', counterIdentifier,'++ : ',
-                counterIdentifier, '-- ){ ', resultsArrayIdentifier, '.push(',
-                counterIdentifier, ')} return ', resultsArrayIdentifier,
-                '; }).apply(this)'
+                counterIdentifier, ' = ', assignment, '; ', start.reference,
+                ' <= ', end.reference, '? ', counterIdentifier, ' <', checkTail,
+                end.reference, ' : ', counterIdentifier, ' >', checkTail,
+                end.reference, '; ', start.reference, ' <= ', end.reference, '? ',
+                counterIdentifier, '++ : ', counterIdentifier, '-- ){ ',
+                resultsArrayIdentifier, '.push(', counterIdentifier, ')} return ',
+                resultsArrayIdentifier, '; }).apply(this)'
             ]
 
             // done
