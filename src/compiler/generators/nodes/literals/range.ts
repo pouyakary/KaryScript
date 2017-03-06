@@ -17,8 +17,8 @@ namespace KaryScript.Compiler.Nodes.Range {
         export function Compile ( node: AST.IRangeLiteral, env: IEnv ) {
             if ( node.start.type === 'NumericLiteral' && node.end.type === 'NumericLiteral' )
                 return CompileWithExactStartEnd( node, env )
-
-            return ''
+            else
+                return CompileUnkownRange( node, env )
         }
 
     //
@@ -49,21 +49,20 @@ namespace KaryScript.Compiler.Nodes.Range {
                                                         end: number,
                                                   connector: string ) {
             let range = new Array<number> ( )
-            if ( start < end ) {
+            if ( start < end )
                 if ( connector === '..' )
                     for ( let counter = start; counter < end; counter++ )
                         range.push( counter )
                 else
                     for ( let counter = start; counter <= end; counter++ )
                         range.push( counter )
-            } else {
+            else
                 if ( connector === '..' )
                     for ( let counter = start; counter > end; counter-- )
                         range.push( counter )
                 else
                     for ( let counter = start; counter >= end; counter-- )
                         range.push( counter )
-            }
 
             return '[' + range.join(', ') + ']'
         }
@@ -91,11 +90,88 @@ namespace KaryScript.Compiler.Nodes.Range {
                 counterIdentifier, ' = ', start.toString( ), '; ',
                 counterIdentifier, check, checkTail, end.toString( ), '; ',
                 counterIdentifier, incOperator, '){ ', resultsArrayIdentifier,
-                '.push(', counterIdentifier, ') }}).apply(this)'
+                '.push(', counterIdentifier, ') } return ', resultsArrayIdentifier,
+                '; }).apply(this)'
             ]
 
             // done
             return results.join('')
+        }
+
+    //
+    // ─── COMPILE UNKOWN RANGE ───────────────────────────────────────────────────────
+    //
+
+        function CompileUnkownRange ( node: AST.IRangeLiteral, env: IEnv ) {
+            // info
+            const resultsArrayIdentifier    = Nodes.For.GenerateRandomId( )
+            const counterIdentifier         = Nodes.For.GenerateRandomId( )
+            const start                     = GenerateUnknownReference(
+                                                node.start, env )
+            const end                       = GenerateUnknownReference(
+                                                node.end, env )
+            const startAssignment           = (( start.assignment )?
+                                                start.assignment : start.reference )
+            const assignment                = AssembleAssignments([
+                                                startAssignment, end.assignment
+                                            ])
+            const checkTail                 = ( node.connector === '...' )? '= ' : ' '
+
+            // result array
+            let result = [
+                '(function (){let ', resultsArrayIdentifier, ' = []; for(let ',
+                counterIdentifier, ' = ', assignment, '; ', start.reference, ' <= ',
+                end.reference, '? ', counterIdentifier, ' <', checkTail, end.reference,
+                ' : ', counterIdentifier, ' >', checkTail, end.reference, '; ',
+                start.reference, ' <= ', end.reference, '? ', counterIdentifier,'++ : ',
+                counterIdentifier, '-- ){ ', resultsArrayIdentifier, '.push(',
+                counterIdentifier, ')} return ', resultsArrayIdentifier,
+                '; }).apply(this)'
+            ]
+
+            // done
+            return result.join('')
+        }
+
+    //
+    // ─── GENERATE UNKOWN REFERENCE ──────────────────────────────────────────────────
+    //
+
+        interface IUnknownReferenceResult {
+            assignment: string | null
+            reference:  string
+        }
+
+        function GenerateUnknownReference ( node: AST.IBase,
+                                             env: IEnv ): IUnknownReferenceResult {
+
+            if ( node.type === 'PipeExpression' || node.type === 'SExpression' ) {
+                const supportRef = Nodes.For.GenerateRandomId( )
+                return {
+                    assignment: `${ supportRef } = ${
+                        Nodes.CompileSingleNode( node, env ).toString( ) }`,
+                    reference: supportRef
+                }
+
+            } else {
+                const ref = Nodes.CompileSingleNode( node, env ).toString( )
+                return {
+                    assignment: null,
+                    reference: ref
+                }
+            }
+        }
+
+    //
+    // ─── JOIN ASSIGNMENT ────────────────────────────────────────────────────────────
+    //
+
+        function AssembleAssignments ( parts: ( string | null )[ ] ): string {
+            console.log( parts )
+            if ( parts[ 1 ] !== null )
+                return parts.join(', ')
+            else
+                return <string> parts[ 0 ]
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
