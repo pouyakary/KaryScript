@@ -6,6 +6,9 @@
   "bin": {
     "kc": "./bin/kc.js"
   },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "directories": {
     "doc": "docs"
   },
