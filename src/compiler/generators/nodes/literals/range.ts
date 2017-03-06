@@ -167,7 +167,6 @@ namespace KaryScript.Compiler.Nodes.Range {
     //
 
         function AssembleAssignments ( parts: ( string | null )[ ] ): string {
-            console.log( parts )
             if ( parts[ 1 ] !== null )
                 return parts.join(', ')
             else
