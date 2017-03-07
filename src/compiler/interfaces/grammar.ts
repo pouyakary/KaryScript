@@ -33,63 +33,64 @@ namespace KaryScript.Compiler.AST {
             type: "Root"
                 | "Body"
                 | "Empty"
-                | "NumericLiteral"
-                | "StringInterpolation"
-                | "StringLiteral"
-                | "BooleanLiteral"
-                | "LineTerminator"
-                | "ReservedValueLiterals"
-                | "SingleAssignmentStatement"
-                | "ShorthandIfExpression"
-                | "ArrayLiteral"
-                | "ObjectLiteral"
-                | "Identifier"
-                | "UnaryOperator"
                 | "AddressIdentifier"
-                | "Assignment"
-                | "ReturnStatement"
-                | "ClassDeclaration"
-                | "FunctionDeclaration"
-                | "DeclarationStatement"
-                | "ArrayObjectIndexLoader"
-                | "SpecialCommand"
-                | "SExpression"
-                | "ReturnKeyword"
-                | "PipeExpression"
-                | "LambdaExpression"
-                | "WhileStatement"
-                | "ForStatement"
-                | "ElseIfStatement"
-                | "SwitchStatement"
-                | "IfStatement"
-                | "PipePlaceholder"
                 | "ArrayDeclaration"
+                | "ArrayLiteral"
+                | "ArrayObjectIndexLoader"
+                | "Assignment"
                 | "AwaitStatement"
-                | "ObjectDeclaration"
-                | "Predicate"
-                | "DeclarationAssignment"
-                | "StringPart"
-                | "InlineComment"
+                | "BinaryOperator"
+                | "BooleanLiteral"
                 | "CaseStatement"
-                | "Selector"
+                | "ClassDeclaration"
+                | "Comparison"
+                | "DeclarationAssignment"
+                | "DeclarationStatement"
+                | "ElseIfStatement"
                 | "EmptyCell"
-                | "TableLiteral"
-                | "SetLiteral"
-                | "MapLiteral"
-                | "TableRow"
-                | "Octothorpe"
+                | "ExpressionMember"
+                | "ForStatement"
+                | "FunctionDeclaration"
+                | "FunctionDeclaration"
                 | "HolderDeclarationStatement"
                 | "HolderIdentifier"
-                | "Comparison"
-                | "ExpressionMember"
-                | "UseStatement"
-                | "TryCatchStatement"
-                | "ZoneDeclaration"
+                | "Identifier"
+                | "IfStatement"
+                | "InlineComment"
+                | "LambdaExpression"
+                | "LineTerminator"
+                | "MapLiteral"
+                | "NumericLiteral"
+                | "ObjectDeclaration"
+                | "ObjectLiteral"
+                | "Octothorpe"
+                | "PipeExpression"
+                | "PipePlaceholder"
+                | "Predicate"
+                | "RangeLiteral"
                 | "RegExpLiteral"
                 | "ReservedIdentifiers"
-                | "FunctionDeclaration"
-                | "RangeLiteral"
+                | "ReservedValueLiterals"
+                | "ReturnKeyword"
+                | "ReturnStatement"
+                | "Selector"
+                | "SetLiteral"
+                | "SExpression"
+                | "ShorthandIfExpression"
+                | "SingleAssignmentStatement"
+                | "SpecialCommand"
+                | "StringInterpolation"
+                | "StringLiteral"
+                | "StringPart"
+                | "SwitchStatement"
+                | "TableLiteral"
+                | "TableRow"
+                | "TryCatchStatement"
+                | "UnaryOperator"
                 | "UNIXReference"
+                | "UseStatement"
+                | "WhileStatement"
+                | "ZoneDeclaration"
 
             location: ILocation
 
@@ -658,9 +659,13 @@ namespace KaryScript.Compiler.AST {
 
         export type TSExpressionType
             = "FunctionCallWithArgs"
-            | "BinaryOperator"
-            | "UnaryOperator"
             | "FunctionCallOnly"
+            | "UnaryOperator"
+
+        export type TSExpressionCommand
+            = TAddressOrIdentifier
+            | IBinaryOperator
+            | IUnaryOperator
 
         export interface IFunctionCallWithArgsSExpression extends ISExpression {
             kind:       "FunctionCallWithArgs"
@@ -668,22 +673,26 @@ namespace KaryScript.Compiler.AST {
             params:     TReturnables[ ]
         }
 
-        export interface IBinaryOperatorSExpression extends ISExpression {
-            kind:       "BinaryOperator"
-            operator:   string
-            left:       TExpression
-            right:      TExpression
+        export interface IFunctionCallOnlySExpression extends ISExpression {
+            kind:       "FunctionCallOnly"
+            command:    TAddressOrIdentifier
         }
 
         export interface IUnaryOperatorSExpression extends ISExpression {
             kind:       "UnaryOperator"
-            operator:   string
+            operator:   IUnaryOperator
             arg:        TExpression
         }
 
-        export interface IFunctionCallOnlySExpression extends ISExpression {
-            kind:       "FunctionCallOnly"
-            command:    TAddressOrIdentifier
+        export interface IBinaryOperator extends IBase {
+            type:       "BinaryOperator"
+            operator:   'div' | 'sub' | 'sum' | 'mul' | 'pow' | 'mod'
+        }
+
+        export interface IUnaryOperator extends IBase {
+            type:       "UnaryOperator"
+            operator:   "not" | "async" | "await" | "new" | "delete" |
+                        "typeof" | "void" | "clone"
         }
 
     //

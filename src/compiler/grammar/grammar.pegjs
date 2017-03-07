@@ -765,7 +765,7 @@
 //
 
     SExpression
-        = "(" __* body:( SExpressionBody  / UnaryExpressionBody ) __* ")" {
+        = "(" __* body: SExpressionBody __* ")" {
             return body
         }
         / UnaryExpressionBody
@@ -793,18 +793,6 @@
                 params:     params,
             }
         }
-        / operator:BinaryOperator __+ left:ArgumentReturnable __+
-          right:ArgumentReturnable {
-            return {
-                type:       "SExpression",
-                location:   location( ),
-                id:         id( ),
-                kind:       "BinaryOperator",       
-                operator:   operator.operator,
-                left:       left,
-                right:      right 
-            }
-        }
         / command:SExpressionCommand {
             return {
                 type:       "SExpression",
@@ -830,6 +818,29 @@
     SExpressionCommand
         = AddressIdentifier
         / ExpressionMember
+        / BinaryOperator
+        / UnaryOperator
+
+    BinaryOperator 'binary operator'
+        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' ) {
+            return {
+                type:       "BinaryOperator",
+                location:   location( ),
+                id:         id( ),
+                operator:   op
+            }
+        }
+
+    UnaryOperator 'unary operator'
+        = op: ( "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone" ) {
+            return {
+                type:       "UnaryOperator",
+                location:   location( ),
+                id:         id( ),
+                operator:   op
+            }
+        }
+
 
 //
 // ─── CLASS DECLARATION ──────────────────────────────────────────────────────────
@@ -1211,27 +1222,6 @@
                 name:       identiferStart + tail.join('')
             }
         }
-
-//
-// ─── BINARY OPERATORS ───────────────────────────────────────────────────────────
-//
-
-    BinaryOperator 'binary operator'
-        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' ) {
-            return {
-                type:       'BinaryOperator',
-                location:   location( ),
-                id:         id( ),
-                operator:   op
-            }
-        }
-
-//
-// ─── UNARY OPERATORS ────────────────────────────────────────────────────────────
-//
-
-    UnaryOperator 'unary operator'
-        = "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone"
 
 //
 // ─── MAP LITERAL ────────────────────────────────────────────────────────────────

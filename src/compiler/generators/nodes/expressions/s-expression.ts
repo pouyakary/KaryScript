@@ -34,11 +34,6 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                         node as AST.IFunctionCallWithArgsSExpression, env, placeholder
                     )
 
-                case 'BinaryOperator':
-                    return CompileBinaryOperator(
-                        node as AST.IBinaryOperatorSExpression, env, placeholder
-                    )
-
                 case 'UnaryOperator':
                     return CompileUnaryOperator(
                         node as AST.IUnaryOperatorSExpression, env, placeholder
