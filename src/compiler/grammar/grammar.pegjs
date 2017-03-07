@@ -156,7 +156,6 @@
         / Identifier
         / HolderIdentifier
         / LambdaExpression
-        / AnonymousFunctionExpression
         / PipeExpression
         / ShorthandIfExpression
         / SExpression
@@ -644,30 +643,6 @@
         }
 
 //
-// ─── ANONYMOUS FUNCTION ─────────────────────────────────────────────────────────
-//
-
-    AnonymousFunctionExpression 'anonymous function'
-        = "to" __+ params:FunctionIdentifierList __+ "do" body:Body END {
-            return {
-                type:       "AnonymousFunctionExpression",
-                location:   location( ),
-                id:         id( ),
-                params:     params,
-                body:       body
-            }
-        }
-        / "do" __+ body:Body END {
-            return {
-                type:       "AnonymousFunctionExpression",
-                location:   location( ),
-                id:         id( ),
-                params:     [],
-                body:       body
-            }
-        }
-
-//
 // ─── LAMBDA EXPRESSIONS ─────────────────────────────────────────────────────────
 //
 
@@ -679,6 +654,24 @@
                 id:         id( ),
                 args:       args,
                 code:       code
+            }
+        }
+        / "to" __+ params:FunctionIdentifierList __+ "do" body:Body END {
+            return {
+                type:       "LambdaExpression",
+                location:   location( ),
+                id:         id( ),
+                params:     params,
+                code:       body
+            }
+        }
+        / "do" __+ body:Body END {
+            return {
+                type:       "LambdaExpression",
+                location:   location( ),
+                id:         id( ),
+                args:       [],
+                code:       body
             }
         }
 
