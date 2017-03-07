@@ -657,25 +657,32 @@ namespace KaryScript.Compiler.AST {
             kind: TSExpressionType
         }
 
+
         export type TSExpressionType
             = "FunctionCallWithArgs"
             | "FunctionCallOnly"
             | "UnaryOperator"
 
-        export type TSExpressionCommand
+        export type TFullSExpressionCommand
             = TAddressOrIdentifier
+            | IExpressionMember
             | IBinaryOperator
             | IUnaryOperator
 
+        export type ISExpressionCommand
+            = TAddressOrIdentifier
+            | IExpressionMember
+
+
         export interface IFunctionCallWithArgsSExpression extends ISExpression {
             kind:       "FunctionCallWithArgs"
-            command:    TAddressOrIdentifier | IExpressionMember
+            command:    TFullSExpressionCommand
             params:     TReturnables[ ]
         }
 
         export interface IFunctionCallOnlySExpression extends ISExpression {
             kind:       "FunctionCallOnly"
-            command:    TAddressOrIdentifier
+            command:    ISExpressionCommand
         }
 
         export interface IUnaryOperatorSExpression extends ISExpression {
@@ -683,6 +690,7 @@ namespace KaryScript.Compiler.AST {
             operator:   IUnaryOperator
             arg:        TExpression
         }
+
 
         export interface IBinaryOperator extends IBase {
             type:       "BinaryOperator"

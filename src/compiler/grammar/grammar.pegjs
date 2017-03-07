@@ -770,6 +770,7 @@
         }
         / UnaryExpressionBody
 
+
     UnaryExpressionBody 's-expression'
         = operator:UnaryOperator __+ arg:Returnable {
             return {
@@ -783,7 +784,7 @@
         }
 
     SExpressionBody
-        = command:SExpressionCommand __+ params:SExpressionArgumentArray {
+        = command:FullSExpressionCommand __+ params:SExpressionArgumentArray {
             return {
                 type:       "SExpression",
                 location:   location( ),
@@ -803,6 +804,7 @@
             }
         }
     
+
     SExpressionArgumentArray
         = arg:SExpressionArgument SeparatorMultiline more:SExpressionArgumentArray {
             return [ arg ].concat( more )
@@ -810,6 +812,7 @@
         / subArg:SExpressionArgument {
             return [ subArg ]
         }
+
 
     SExpressionArgument
         = PipePlaceholder
@@ -820,6 +823,11 @@
         / ExpressionMember
         / BinaryOperator
         / UnaryOperator
+
+    FullSExpressionCommand
+        = AddressIdentifier
+        / ExpressionMember
+
 
     BinaryOperator 'binary operator'
         = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' ) {
@@ -840,7 +848,6 @@
                 operator:   op
             }
         }
-
 
 //
 // ─── CLASS DECLARATION ──────────────────────────────────────────────────────────
