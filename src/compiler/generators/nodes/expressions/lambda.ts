@@ -60,6 +60,9 @@ namespace KaryScript.Compiler.Nodes.Lambda {
             if ( node.args.length === 1 ) {
                 parts = parts.concat( args )
             } else {
+                if ( args[ 0 ] === undefined )
+                    args[ 0 ] = ''
+
                 parts.push("(")
                 parts = parts.concat( args )
                 parts.push(")")
