@@ -1456,7 +1456,6 @@
             / "no"              !IdentifierName
             / "not"             !IdentifierName
             / "cat"             !IdentifierName
-            / "print"           !IdentifierName
             / "nan"             !IdentifierName
             / "fix"             !IdentifierName
             / "use"             !IdentifierName
