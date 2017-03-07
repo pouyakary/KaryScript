@@ -187,6 +187,7 @@
         / BooleanLiteral
         / TableLiteral
         / RegExpLiteral
+        / AnonymousFunctionLiteral
         / ReservedIdentifiers
 
 //
@@ -640,6 +641,30 @@
                   predicate:    predicate,
                   body:         body
               }
+        }
+
+//
+// ─── ANONYMOUS FUNCTION ─────────────────────────────────────────────────────────
+//
+
+    AnonymousFunctionLiteral 'anonymous function'
+        = "to" __+ params:FunctionIdentifierList __+ "do" body:Body END {
+            return {
+                type:       "AnonymousFunctionLiteral",
+                location:   location( ),
+                id:         id( ),
+                params:     params,
+                body:       body
+            }
+        }
+        / "do" __+ body:Body END {
+            return {
+                type:       "AnonymousFunctionLiteral",
+                location:   location( ),
+                id:         id( ),
+                params:     [],
+                body:       body
+            }
         }
 
 //
@@ -1430,6 +1455,7 @@
             / "is"              !IdentifierName
             / "isnt"            !IdentifierName
             / "out"             !IdentifierName
+            / "do"              !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────

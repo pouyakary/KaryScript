@@ -96,6 +96,15 @@ namespace KaryScript.Compiler.AST {
         }
 
     //
+    // ─── ANONYMOUS FUNCTION ─────────────────────────────────────────────────────────
+    //
+
+        export interface AnonymousFunctionLiteral extends IBase {
+            params:     IIdentifier[ ]
+            body:       IBody
+        }
+
+    //
     // ─── RESERVED IDENTIFIERS ───────────────────────────────────────────────────────
     //
 
