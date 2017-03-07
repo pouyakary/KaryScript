@@ -20,7 +20,7 @@ namespace KaryScript.Compiler.Nodes.Lambda {
         export function Compile ( node: AST.ILambdaExpression,
                                    env: IEnv ): SourceMap.SourceNode {
             if ( node.code.type === 'Body' )
-                return env.GenerateSourceNode( node, '' )
+                return CompileComplexLambda( node, env )
             else
                 return CompileSimpleLambda( node, env )
         }
@@ -30,6 +30,28 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     //
 
         function CompileSimpleLambda ( node: AST.ILambdaExpression, env: IEnv ) {
+            const chunk = GetLambdaHeaderParts( node, env )
+            chunk.push( Nodes.CompileSingleNode( node.code, env ) )
+            return env.GenerateSourceNode( node, chunk )
+        }
+
+    //
+    // ─── COMPILE BODY LAMBDA ────────────────────────────────────────────────────────
+    //
+
+        function CompileComplexLambda ( node: AST.ILambdaExpression, env: IEnv ) {
+            const chunk = GetLambdaHeaderParts( node, env )
+            chunk.push('{ ')
+            chunk.push( Nodes.CompileSingleNode( node.code, env ) )
+            chunk.push(' }')
+            return env.GenerateSourceNode( node, chunk )
+        }
+
+    //
+    // ─── GET LAMBDA HEADER ──────────────────────────────────────────────────────────
+    //
+
+        function GetLambdaHeaderParts ( node: AST.ILambdaExpression, env: IEnv ) {
             const args = Join(', ',
                 node.args.map( x =>
                     Address.CompileIdentifier( x, env ) ) )
@@ -44,9 +66,8 @@ namespace KaryScript.Compiler.Nodes.Lambda {
             }
 
             parts.push( ' => ' )
-            parts.push( Nodes.CompileSingleNode( node.code, env ) )
 
-            return env.GenerateSourceNode( node, parts )
+            return parts
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -661,7 +661,7 @@
                 type:       "LambdaExpression",
                 location:   location( ),
                 id:         id( ),
-                params:     params,
+                args:       params,
                 code:       body
             }
         }
