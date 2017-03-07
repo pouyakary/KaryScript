@@ -1,4 +1,5 @@
+#! /usr/local/bin/node
 
-def add = to a b do
-    return (sum a b)
+def foo:
+    return (sum 2 2)
 end

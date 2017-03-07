@@ -60,7 +60,30 @@
 // ─── ROOT ───────────────────────────────────────────────────────────────────────
 //
 
-    Root = Body / Empty
+    Root
+        = ref:UNIXReference? body:( Body / Empty ) {
+            return {
+                type:       "Root",
+                location:   location( ),
+                id:         id( ),
+                ref:        ref,
+                body:       body
+            }
+        }
+
+//
+// ─── UNIX REFERENCE ─────────────────────────────────────────────────────────────
+//
+
+    UNIXReference
+        = "#!" info:[a-zA-Z0-9_\-/ ]+ EOL {
+            return {
+                type:       "UNIXReference",
+                location:   location( ),
+                id:         id( ),
+                value:       "#!" + info.join('')
+            }
+        }
 
 //
 // ─── BODY ───────────────────────────────────────────────────────────────────────

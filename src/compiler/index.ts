@@ -9,7 +9,7 @@
 //
 
 /// <reference path="version.ts" />
-/// <reference path="generators/switcher.ts" />
+/// <reference path="generators/nodes/blocks/root.ts" />
 /// <reference path="tools/reporter.ts" />
 /// <reference path="../typings/source-map.ts" />
 /// <reference path="tools/base-env.ts" />
@@ -34,9 +34,6 @@ namespace KaryScript.Compiler {
 
                 // base env info
                 let baseEnvInfo = GetBaseEnvObjectClone( filename, sourceMap )
-
-                // handling the first line
-                src = HandleUnixFirstLine( src )
 
                 // parsing code
                 let ast
@@ -63,7 +60,7 @@ namespace KaryScript.Compiler {
     //
 
         /** Gets the parsed AST and compiles it into JavaScript String */
-        export function CompileAST ( src: AST.IBody,
+        export function CompileAST ( src: AST.IRoot,
                                 filename: string,
                                sourceMap: any,
                              baseEnvInfo: IEnv ): SourceMap.CodeWithSourceMap {
@@ -72,7 +69,8 @@ namespace KaryScript.Compiler {
             let code: null | SourceMap.SourceNode = null
             try {
                 // compiling stuff
-                let result = <SourceMap.SourceNode> Nodes.CompileSingleNode( src, baseEnvInfo )
+                let result = <SourceMap.SourceNode> Nodes.Root.Compile(
+                                src as AST.IRoot, baseEnvInfo )
 
                 // handling errors
                 if ( baseEnvInfo.Errors.size > 0 )
@@ -121,14 +119,6 @@ namespace KaryScript.Compiler {
         export interface IFinalError {
             from: 'user' | 'compiler',
             errors: any[ ]
-        }
-
-    //
-    // ─── HANDLE UNIX FIRST LINE ─────────────────────────────────────────────────────
-    //
-
-        function HandleUnixFirstLine ( code: string ) {
-            return code.replace( /^#\![ \t]*\/usr\/bin\/env node\s*\n/, '' )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

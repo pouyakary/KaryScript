@@ -89,10 +89,28 @@ namespace KaryScript.Compiler.AST {
                 | "ReservedIdentifiers"
                 | "FunctionDeclaration"
                 | "RangeLiteral"
+                | "UNIXReference"
 
             location: ILocation
 
             id: string
+        }
+    
+    //
+    // ─── ROOT ───────────────────────────────────────────────────────────────────────
+    //
+
+        export interface IRoot extends IBase {
+            ref:        IUNIXReference | null,
+            body:       IBody | IEmpty
+        }
+
+    //
+    // ─── UNIX REFERENCE ─────────────────────────────────────────────────────────────
+    //
+
+        export interface IUNIXReference extends IBase {
+            value:      string
         }
 
     //
