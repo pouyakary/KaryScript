@@ -818,19 +818,20 @@
         = PipePlaceholder
         / Returnable
 
-    SExpressionCommand
+    FullSExpressionCommand
         = AddressIdentifier
         / ExpressionMember
         / BinaryOperator
         / UnaryOperator
 
-    FullSExpressionCommand
+    SExpressionCommand
         = AddressIdentifier
         / ExpressionMember
+        / UnaryOperator
 
 
     BinaryOperator 'binary operator'
-        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' ) {
+        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' / 'and' / 'or' ) {
             return {
                 type:       "BinaryOperator",
                 location:   location( ),
@@ -840,7 +841,7 @@
         }
 
     UnaryOperator 'unary operator'
-        = op: ( "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone" ) {
+        = op: ( "not" / "async" / "await" / "new" / "delete" / "typeof" / "void" / "clone" / "inc" / "dec" ) {
             return {
                 type:       "UnaryOperator",
                 location:   location( ),
@@ -1445,6 +1446,8 @@
             / "sum"             !IdentifierName
             / "pow"             !IdentifierName
             / "mod"             !IdentifierName
+            / "inc"             !IdentifierName
+            / "dec"             !IdentifierName
             / "on"              !IdentifierName
             / "off"             !IdentifierName
             / "true"            !IdentifierName

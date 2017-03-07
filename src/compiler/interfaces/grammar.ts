@@ -682,7 +682,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface IFunctionCallOnlySExpression extends ISExpression {
             kind:       "FunctionCallOnly"
-            command:    ISExpressionCommand
+            command:    ISExpressionCommand | IUnaryOperator
         }
 
         export interface IUnaryOperatorSExpression extends ISExpression {
@@ -700,7 +700,7 @@ namespace KaryScript.Compiler.AST {
         export interface IUnaryOperator extends IBase {
             type:       "UnaryOperator"
             operator:   "not" | "async" | "await" | "new" | "delete" |
-                        "typeof" | "void" | "clone"
+                        "typeof" | "void" | "clone" | "inc" | "dec"
         }
 
     //
