@@ -156,6 +156,7 @@
         / Identifier
         / HolderIdentifier
         / LambdaExpression
+        / AnonymousFunctionExpression
         / PipeExpression
         / ShorthandIfExpression
         / SExpression
@@ -187,7 +188,6 @@
         / BooleanLiteral
         / TableLiteral
         / RegExpLiteral
-        / AnonymousFunctionLiteral
         / ReservedIdentifiers
 
 //
@@ -647,10 +647,10 @@
 // ─── ANONYMOUS FUNCTION ─────────────────────────────────────────────────────────
 //
 
-    AnonymousFunctionLiteral 'anonymous function'
+    AnonymousFunctionExpression 'anonymous function'
         = "to" __+ params:FunctionIdentifierList __+ "do" body:Body END {
             return {
-                type:       "AnonymousFunctionLiteral",
+                type:       "AnonymousFunctionExpression",
                 location:   location( ),
                 id:         id( ),
                 params:     params,
@@ -659,7 +659,7 @@
         }
         / "do" __+ body:Body END {
             return {
-                type:       "AnonymousFunctionLiteral",
+                type:       "AnonymousFunctionExpression",
                 location:   location( ),
                 id:         id( ),
                 params:     [],

@@ -89,6 +89,7 @@ namespace KaryScript.Compiler.AST {
                 | "ReservedIdentifiers"
                 | "FunctionDeclaration"
                 | "RangeLiteral"
+                | "AnonymousFunctionExpression"
 
             location: ILocation
 
@@ -99,7 +100,7 @@ namespace KaryScript.Compiler.AST {
     // ─── ANONYMOUS FUNCTION ─────────────────────────────────────────────────────────
     //
 
-        export interface AnonymousFunctionLiteral extends IBase {
+        export interface AnonymousFunctionExpression extends IBase {
             params:     IIdentifier[ ]
             body:       IBody
         }
