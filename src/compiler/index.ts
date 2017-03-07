@@ -35,6 +35,9 @@ namespace KaryScript.Compiler {
                 // base env info
                 let baseEnvInfo = GetBaseEnvObjectClone( filename, sourceMap )
 
+                // handling the first line
+                src = HandleUnixFirstLine( src )
+
                 // parsing code
                 let ast
                 try {
@@ -118,6 +121,14 @@ namespace KaryScript.Compiler {
         export interface IFinalError {
             from: 'user' | 'compiler',
             errors: any[ ]
+        }
+
+    //
+    // ─── HANDLE UNIX FIRST LINE ─────────────────────────────────────────────────────
+    //
+
+        function HandleUnixFirstLine ( code: string ) {
+            return code.replace( /^#\![ \t]*\/usr\/bin\/env node\s*\n/, '' )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
