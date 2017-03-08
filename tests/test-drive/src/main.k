@@ -20,7 +20,7 @@
     ]
 
     @procedure = do
-        def editor = (monaco/editor/create element settings)
+        mut editor = (monaco/editor/create element settings)
     end
 
     @path = ['vs/editor/editor.main']

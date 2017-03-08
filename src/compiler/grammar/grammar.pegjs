@@ -53,6 +53,14 @@
                 return ''
             }
 
+        //
+        // ─── GET LOCATION ────────────────────────────────────────────────
+        //
+
+            function getLocation ( ) {
+                
+            }
+
         // ─────────────────────────────────────────────────────────────────
     }
 
@@ -1085,7 +1093,7 @@
 //
 
     DeclarationStatement 'declaration statement'
-        = exported:ExportKey modifier:( "fix" / "def" ) _+
+        = exported:ExportKey modifier:( "fix" / "mut" ) _+
           assignment:DeclarationAssignment {
             return {
                 type:       'DeclarationStatement',
@@ -1097,7 +1105,7 @@
                 assignment: assignment
             }
         }
-        / exported:ExportKey "def" _+ names:NameOnlyDeclarationsArray  {
+        / exported:ExportKey "mut" _+ names:NameOnlyDeclarationsArray  {
             return {
                 type:       'DeclarationStatement',
                 location:   location( ),
