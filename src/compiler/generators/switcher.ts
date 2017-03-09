@@ -24,6 +24,7 @@
 /// <reference path="nodes/literals/range.ts" />
 /// <reference path="nodes/literals/regexp.ts" />
 /// <reference path="nodes/literals/reserved-identifiers.ts" />
+/// <reference path="nodes/literals/reserved-values.ts" />
 /// <reference path="nodes/literals/set.ts" />
 /// <reference path="nodes/literals/string.ts" />
 /// <reference path="nodes/literals/table.ts" />
@@ -207,6 +208,10 @@ namespace KaryScript.Compiler.Nodes {
                 case 'ReservedIdentifiers':
                     return Nodes.ReservedIdentifiers.Compile(
                         node as AST.IReservedIdentifiers )
+
+                case 'ReservedValueLiterals':
+                    return Nodes.ReservedValueLiterals.Compile(
+                        node as AST.IReservedValueLiterals )
 
                 case 'LineTerminator':
                 case 'Empty':
