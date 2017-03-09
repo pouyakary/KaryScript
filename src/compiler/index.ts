@@ -35,17 +35,23 @@ namespace KaryScript.Compiler {
                 // base env info
                 let baseEnvInfo = GetBaseEnvObjectClone( filename, sourceMap )
 
+                console.log(filename)
                 // parsing code
                 let ast
                 try {
+                    console.time('parse')
                     ast = parser.parse( src ) as AST.IBody
+                    console.timeEnd('parse')
                 } catch ( parserError ) {
                     throw Reporter.WrapParserError( baseEnvInfo, parserError as Reporter.ICompilerError )
                 }
                 
                 // generating code
                 try {
-                    return CompileAST( ast, filename, sourceMap, baseEnvInfo )
+                    console.time('compile')
+                    let result = CompileAST( ast, filename, sourceMap, baseEnvInfo )
+                    console.timeEnd('compile')
+                    return result
                 } catch ( codeErrors ) {
                     throw Reporter.HandleCodeErrorsAtCompileEnd( codeErrors )
                 }
