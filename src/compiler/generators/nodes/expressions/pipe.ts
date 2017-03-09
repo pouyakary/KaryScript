@@ -32,14 +32,14 @@ namespace KaryScript.Compiler.Nodes.Pipe {
     //
 
         function CompileLevelsArray ( levels: AST.IBase[ ],
-                                         env: IEnv ): SourceMap.SourceNode {
+                                         env: IEnv ): CompiledCode {
             if ( levels.length === 2 )
                 return SExpression.Compile(
                     <AST.ISExpression> levels[ 0 ], env, levels[ 1 ] )
 
             else
                 return SExpression.Compile( <AST.ISExpression> levels[ 0 ], env,
-                        CompileLevelsArray( levels.splice( 1 ), env ) )
+                        <string> CompileLevelsArray( levels.splice( 1 ), env ) )
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
