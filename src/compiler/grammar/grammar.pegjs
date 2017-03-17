@@ -1059,7 +1059,7 @@
 //
 
     ExportKey
-        = key:("out" _)? _* {
+        = key:("usable" _)? _* {
             return key? true : false
         }
 
@@ -1476,7 +1476,7 @@
             / "when"            !IdentifierName
             / "is"              !IdentifierName
             / "isnt"            !IdentifierName
-            / "out"             !IdentifierName
+            / "usable"          !IdentifierName
             / "do"              !IdentifierName
 
         //
