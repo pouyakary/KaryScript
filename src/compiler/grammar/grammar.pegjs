@@ -1471,7 +1471,6 @@
             / "down"            !IdentifierName
             / "to"              !IdentifierName
             / "via"             !IdentifierName
-            / "hold"            !IdentifierName
             / "clone"           !IdentifierName
             / "zone"            !IdentifierName
             / "when"            !IdentifierName
