@@ -1,9 +1,7 @@
 
-![header](https://cloud.githubusercontent.com/assets/2157285/24024189/a10a9974-0ac6-11e7-8a3f-f8bc44953c4c.jpg)
+![github](https://cloud.githubusercontent.com/assets/2157285/24024252/233cf964-0ac7-11e7-81db-5c08297b7da9.jpg)
 
-[![Build Status](https://travis-ci.org/karyfoundation/karyscript.svg?branch=master)](https://travis-ci.org/karyfoundation/karyscript)
-
-KaryScript is a programming language that is currently under it's initial heavy active development phase.
+KaryScript [![Build Status](https://travis-ci.org/karyfoundation/karyscript.svg?branch=master)](https://travis-ci.org/karyfoundation/karyscript) is a programming language that is currently under it's initial heavy active development phase.
 
 Our goal with the final result is to have a language that is readable (as much as possible with our high standards in KF). This is the main goal. Brining new ways to think, new ways to express and declare and a general shape that at average is more readable than other languages is our main goal.
 
