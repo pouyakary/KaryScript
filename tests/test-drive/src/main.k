@@ -1,29 +1,29 @@
 
-//
-// ─── CONFIGURING ────────────────────────────────────────────────────────────────
-//
 
-    (require/config [
-        paths: [
-            vs: '../node_modules/monaco-editor/min/vs'
-        ]
-    ])
+zone KaryScriptMonaco:
 
-//
-// ─── REQUIRE ────────────────────────────────────────────────────────────────────
-//
+    //
+    // ─── INFORMATION ────────────────────────────────────────────────────────────────
+    //
 
-    fix element = (document/getElementById "container")
-    fix settings = [
-        value:      "var x = 10"
-        language:   "javascript"
-    ]
+        mut editor
 
-    @procedure = do
-        mut editor = (monaco/editor/create element settings)
-    end
+    //
+    // ─── INITIALIZER ────────────────────────────────────────────────────────────────
+    //
 
-    @path = ['vs/editor/editor.main']
-    (require @path @procedure)
+        usable def Init:
 
-// ────────────────────────────────────────────────────────────────────────────────
+            // a simple event
+            window/onresize = do
+                if editor != ufo:
+                    (editor/layout)
+                end
+            end
+
+            // and done, giving user our pointer
+            return editor
+        end
+    // ────────────────────────────────────────────────────────────────────────────────
+
+end
