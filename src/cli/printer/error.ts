@@ -51,7 +51,8 @@ namespace KaryScript.CLI.Printer {
 
         function PrintErrorWithLocation ( error: KaryScript.Compiler.Reporter.ICompilerError ) {
             console.log( fullTermLine( ) )
-            console.log(`  → Error @(line: ${ error.location.start.line }, column: ${ error.location.start.column }): `)
+            console.log(`  → Error @(line: ${ error.location.start.line }, column: ${
+                                error.location.start.column }): `)
             console.log(`      ${ chalk.red.bold( error.message ) }`)
         }
     

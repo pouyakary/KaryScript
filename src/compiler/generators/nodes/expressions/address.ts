@@ -39,7 +39,7 @@ namespace KaryScript.Compiler.Nodes.Address {
                 else
                     address.push( CompileIdentifier( element, env ) )
             }
-            return env.GenerateSourceNode( node, Join('.', address ))
+            return env.GenerateSourceNode( node, Join('.', address ) )
         }
 
     //

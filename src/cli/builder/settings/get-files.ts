@@ -30,7 +30,7 @@ namespace KaryScript.CLI.Builder.Settings {
                             path.resolve( config.srcDir, file ) )
 
             // adding files within the source directory 
-            GetDirectoryFiles( ignoredFiles, <string> config.srcDir, config.srcDir )
+            GetDirectoryFiles( ignoredFiles, <string> config.srcDir )
                 .forEach( x => results.add( x ) )
 
             // done
@@ -46,7 +46,7 @@ namespace KaryScript.CLI.Builder.Settings {
                                           folder?: string ): string[ ] {
             try {
                 // path
-                const currentPath = folder? pwd : path.resolve( pwd, folder )
+                const currentPath = folder? path.join( pwd, folder ) : pwd
 
                 // is this path ignored?
                 if ( IsDirectoryOrFileIgnored( currentPath, ignoredFiles ) )
@@ -61,15 +61,14 @@ namespace KaryScript.CLI.Builder.Settings {
                 // investigating the dir
                 for ( const entry of entries )
                     // going down recursively if it's directory
-                    if ( IsDirectory( pwd, entry ) )
+                    if ( IsDirectory( currentPath, entry ) )
                         results = results.concat(
-                            GetDirectoryFiles( ignoredFiles,
-                                path.join( pwd, folder ), entry ) )
+                            GetDirectoryFiles( ignoredFiles, currentPath, entry ) )
 
                     // or adding files if they are karyscript formatted
                     else
                         if ( /\.k$/.test( entry ) )
-                            results.push( path.join( pwd, entry ) )
+                            results.push( path.join( currentPath, entry ) )
 
                 // done
                 return results
@@ -106,9 +105,13 @@ namespace KaryScript.CLI.Builder.Settings {
     //
 
         function IsDirectoryOrFileIgnored ( filePath: string, ignoredFiles: string[ ] ) {
-            for ( const ignored of ignoredFiles )
+            for ( const ignored of ignoredFiles ) {
                 if ( ( new RegExp(`^${ ignored }`) ).test( filePath ) )
                     return true
+
+                if ( /\/\.git\//.test( filePath ) )
+                    return true
+            }
 
             return false
         }
