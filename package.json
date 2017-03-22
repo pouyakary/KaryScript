@@ -28,7 +28,8 @@
     "pack-cli": "webpack --config ./build/pack-full-cli.js",
     "pack-core": "webpack --config ./build/pack-only-compiler.js",
     "after-pack": "node ./build/after-pack.js",
-    "after-core-pack": "node ./build/after-pack-for-web.js"
+    "after-core-pack": "node ./build/after-pack-for-web.js",
+    "compile-antlr-parser": "antlr4 -no-listener -Dlanguage=JavaScript ./src/compiler/grammar/KaryScript.g4 -o ./bin"
   },
   "repository": {
     "type": "git",
