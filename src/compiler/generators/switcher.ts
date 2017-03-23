@@ -33,6 +33,7 @@
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/declaration/holder.ts" />
 /// <reference path="nodes/statements/declaration/object.ts" />
+/// <reference path="nodes/statements/declaration/array.ts" />
 /// <reference path="nodes/statements/declaration/use.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/zone.ts" />
@@ -99,6 +100,10 @@ namespace KaryScript.Compiler.Nodes {
                 case 'ObjectDeclaration':
                     return Nodes.ObjectDeclaration.Compile(
                         node as AST.IObjectDeclaration, env )
+
+                case 'ArrayDeclaration':
+                    return Nodes.ArrayDeclaration.Compile(
+                        node as AST.IArrayDeclaration, env )
 
                 case 'ZoneDeclaration':
                     return Nodes.ZoneDeclaration.Compile(
