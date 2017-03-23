@@ -36,7 +36,7 @@ namespace KaryScript.Compiler.Nodes.String {
     //
 
         function HandleEscapedSequences ( text: string ) {
-            return text.replace( /[\/\/\b\f\n\r\t]/g , x => '\\' + x )
+            return text.replace( /[\/\/\b\f\n\r\t\'\"]/g , x => '\\' + x )
         }
 
     //
