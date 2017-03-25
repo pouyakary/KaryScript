@@ -517,7 +517,6 @@
 
     Predicate 'predicate'
         = Comparison
-        / SExpressionBody
         / BooleanLiteral
         / Expression
         / Returnable
