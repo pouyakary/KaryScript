@@ -1207,7 +1207,7 @@
 //
 
     AddressIdentifier 'address identifier'
-        = space:Identifier _* "/" _* member:( AddressIdentifier / Identifier ) {
+        = space:IdentifierName _* "/" _* member:( AddressIdentifier / IdentifierName ) {
             return {
                 type:       "AddressIdentifier",
                 location:   location( ),
