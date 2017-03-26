@@ -64,7 +64,7 @@ namespace KaryScript.Compiler.Reporter {
         export function WrapParserError ( env: IEnv, error: ICompilerError ) {
             return {
                 location: error.location,
-                message: error.message
+                message: `L${ error.location.start.line }C${ error.location.start.column }: ${ error.message }`
             }
         }
     
