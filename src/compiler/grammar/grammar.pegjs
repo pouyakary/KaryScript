@@ -98,7 +98,7 @@
 //
 
     Body 'body'
-        = PlainWhiteSpace* statements:SpacedStatements FullPlainWhiteSpace* {
+        = __* statements:SpacedStatements __* {
             return {
                 type:       'Body',
                 location:   location( ),
