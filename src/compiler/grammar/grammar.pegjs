@@ -98,7 +98,7 @@
 //
 
     Body 'body'
-        = PlainWhiteSpace* statements:SpacedStatements+ {
+        = PlainWhiteSpace* statements:SpacedStatements FullPlainWhiteSpace* {
             return {
                 type:       'Body',
                 location:   location( ),
@@ -113,11 +113,12 @@
 //
 
     SpacedStatements
-        = statement:Statement {
-            return statement
+        = statement:Statement FullPlainWhiteSpace+ more:SpacedStatements {
+            return [ statement ].concat( more )
         }
-        / PlainWhiteSpace+
-        / LineTerminator
+        / statement:Statement {
+            return [ statement ]
+        }
 
     FullPlainWhiteSpace
         = LineTerminator
@@ -184,12 +185,12 @@
     ExpressionsButComparison
         = AddressIdentifier
         / Identifier
-        / Literals
         / HolderIdentifier
         / LambdaExpression
         / PipeExpression
         / ShorthandIfExpression
         / SExpression
+        / Literals
         / Selector
         / BracedComparison
 
@@ -214,8 +215,8 @@
         / RangeLiteral
         / StringLiteral
         / NumericLiteral
-        / ReservedValueLiterals
         / BooleanLiteral
+        / ReservedValueLiterals
         / TableLiteral
         / RegExpLiteral
         / ReservedIdentifiers
@@ -1445,7 +1446,6 @@
             / "also"            !IdentifierName
             / "and"             !IdentifierName
             / "or"              !IdentifierName
-            / "not"             !IdentifierName
             / "ufo"             !IdentifierName
             / "sub"             !IdentifierName
             / "mul"             !IdentifierName
@@ -1644,12 +1644,12 @@
 //
 
     BooleanLiteral 'boolean literal'
-        = key:( 'on' / 'off' / 'true' / 'false' / 'yes' / 'no' ) {
+        = !"not" key:( 'on' / 'off' / 'true' / 'false' / 'yes' / "no" ) {
             let result = true
             switch ( key ) {
                 case 'off':
                 case 'false':
-                case 'no':
+                case "no":
                 case 'wrong':
                     result = false
             }
