@@ -20,7 +20,13 @@
 //
 
     const   regex       = /\/\/# sourceMappingURL\=karyscript\-core\.js\.map(?:\s)*\/\*\*\*\/ \}\)\n\/\*\*\*\*\*\*\/ \]\);(?:\s)*$/
-    const   replacement = '\n window.KaryScript = KaryScript;\n }) ]);'
+    const   replacement = `
+        if ( window !== undefined ) {
+            window.KaryScript = KaryScript;
+        } else {
+            module.exports = KaryScript
+        }
+        })]);`
 
 //
 // ─── BIN FILE ───────────────────────────────────────────────────────────────────
