@@ -1508,7 +1508,7 @@
             / "catch"           !IdentifierName
             / "finally"         !IdentifierName
             / "NaN"             !IdentifierName
-            / "null"            !IdentifierName
+            / "nothing"         !IdentifierName
             / "undefined"       !IdentifierName
             / "typeof"          !IdentifierName
             / "instanceof"      !IdentifierName
@@ -1615,7 +1615,7 @@
 //
 
     ReservedValueLiterals 'reserved value'
-        = value:( "nan" / "NaN" / "ufo" / "undefined" / "null" / "empty" ) {
+        = value:( "nan" / "NaN" / "ufo" / "undefined" / "nothing" / "empty" ) {
             let result
             switch ( value ) {
                 case "NaN":
@@ -1626,7 +1626,7 @@
                 case "undefined":
                     result = undefined
                     break
-                case "null":
+                case "nothing":
                 case "empty":
                     result = null
             }
