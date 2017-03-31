@@ -1,6 +1,7 @@
 {
   "name": "karyscript",
-  "version": "0.0.1002",
+  "private": false,
+  "version": "0.0.1005",
   "description": "KaryScript Language Compiler and Infrastructures",
   "main": "bin/karyscript.js",
   "bin": {
