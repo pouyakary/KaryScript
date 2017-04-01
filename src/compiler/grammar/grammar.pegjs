@@ -61,6 +61,16 @@
                 
             }
 
+        //
+        // ─── PREPEND ─────────────────────────────────────────────────────
+        //
+
+            function prepend ( array, value ) {
+                var arr = array.slice( )
+                arr.unshift( value )
+                return arr
+            }
+
         // ─────────────────────────────────────────────────────────────────
     }
 
@@ -114,7 +124,7 @@
 
     SpacedStatements
         = statement:Statement more:(FullPlainWhiteSpace+ Statement)* {
-            return [ statement ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), statement )
         }
 
     FullPlainWhiteSpace
@@ -371,7 +381,7 @@
 
     SelectorQueries
         = query:SelectorQueryPart more:(__* SelectorQueries)* {
-            return [ query ].concat( more.map( x => x[ 1 ] ) )
+            return more.map( x => x[ 1 ] ).unshift( query )
         }
         
     SelectorQueryPart
@@ -495,7 +505,7 @@
 
     UseImportsArgs
         = arg:Identifier more:( SeparatorInline Identifier )* {
-            return [ arg ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), arg )
         }
 
 //
@@ -553,7 +563,7 @@
 
     CaseMembers
         = arg:Returnable more:( SeparatorMultiline Returnable )* {
-            return [ arg ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), arg )
         }
 
 //
@@ -703,7 +713,7 @@
 
     IdentifierList
         = arg:Identifier more:( SeparatorMultiline IdentifierList )* {
-            return [ arg ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), arg )
         }
 
 //
@@ -716,13 +726,13 @@
                 type:       "PipeExpression",
                 location:   location( ),
                 id:         id( ),
-                levels:     [ origin ].concat( parts )
+                levels:     prepend( parts, origin )
             }
         }
 
     PipeExpressionParts
         = origin:SExpression more:( PipeControl SExpression )* {
-            return [ origin ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), origin )
         }
 
     PipeControl
@@ -789,7 +799,7 @@
 
     SExpressionArgumentArray
         = arg:SExpressionArgument more:( SeparatorMultiline SExpressionArgument)* {
-            return [ arg ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), arg )
         } 
 
     SExpressionArgument
@@ -865,7 +875,7 @@
 
     ClassFunctionDeclarations
         = arg:FunctionDeclaration more:( __+ ClassFunctionDeclarations )* {
-            return [ arg ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), arg )
         } 
 
 //
@@ -907,7 +917,7 @@
 
     FunctionIdentifierList
         = param:FunctionIdentifier more:( SeparatorMultiline FunctionIdentifier )* {
-            return [ param ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), param )
         }
 
     FunctionIdentifier
@@ -977,7 +987,7 @@
     // Table Body
     TableBody
         = member:TableRow more:( _* EOL _* TableBody)* {
-            return [ member ].concat( more.map( x => x[ 3 ] ) )
+            return prepend( more.map( x => x[ 3 ] ), member )
         } 
 
     TableRow
@@ -1069,7 +1079,7 @@
 
     NameOnlyDeclarationsArray
         = name:Identifier more:(SeparatorInline NameOnlyDeclarationsArray)* {
-            return [ name ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), name )
         } 
 
 //
@@ -1156,17 +1166,21 @@
 //
 
     AddressIdentifier 'address identifier'
-        = space:IdentifierName _* "/" _* member:( AddressIdentifier / IdentifierName ) {
+        = space:IdentifierName _* "/" _* member:AddressIdentifierTailMember {
             return {
                 type:       "AddressIdentifier",
                 location:   location( ),
                 id:         id( ),
                 address:    ( member.type === "Identifier" )
                             ? [ space, member ]
-                            : [ space ].concat( member.address )
+                            : prepend( member.address, space )
             }
         }
         / Identifier
+
+    AddressIdentifierTailMember
+        = AddressIdentifier
+        / IdentifierName
 
 //
 // ─── IDENTIFIERS ────────────────────────────────────────────────────────────────
@@ -1211,7 +1225,7 @@
 
     MapPairMember
         = member:MapAssignment more:( SeparatorMultiline MapPairMember )* {
-            return [ member ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), member )
         } 
 
     MapAssignment
@@ -1267,7 +1281,7 @@
 
     ObjectPairMember
         = member:ObjectAssignment more:( SeparatorMultiline ObjectPairMember )* {
-            return [ member ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), member )
         } 
 
     ObjectAssignment
@@ -1340,7 +1354,7 @@
 
     ArrayMember
         = member:Returnable more:( SeparatorMultiline ArrayMember )* {
-            return [ member ].concat( more.map( x => x[ 1 ] ) )
+            return prepend( more.map( x => x[ 1 ] ), member )
         } 
 
 
