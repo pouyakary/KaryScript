@@ -113,11 +113,8 @@
 //
 
     SpacedStatements
-        = statement:Statement FullPlainWhiteSpace+ more:SpacedStatements {
-            return [ statement ].concat( more )
-        }
-        / statement:Statement {
-            return [ statement ]
+        = statement:Statement more:(FullPlainWhiteSpace+ Statement)* {
+            return [ statement ].concat( more.map( x => x[ 1 ] ) )
         }
 
     FullPlainWhiteSpace
@@ -373,11 +370,8 @@
           }
 
     SelectorQueries
-        = query:SelectorQueryPart __* more:SelectorQueries {
-            return [ query ].concat( more )
-        }
-        / query:SelectorQueryPart {
-            return [ query ]
+        = query:SelectorQueryPart more:(__* SelectorQueries)* {
+            return [ query ].concat( more.map( x => x[ 1 ] ) )
         }
         
     SelectorQueryPart
@@ -500,11 +494,8 @@
         }
 
     UseImportsArgs
-        = arg:Identifier SeparatorInline more:UseImportsArgs {
-            return [ arg ].concat( more )
-        }
-        / subArg:Identifier {
-            return [ subArg ]
+        = arg:Identifier more:( SeparatorInline Identifier )* {
+            return [ arg ].concat( more.map( x => x[ 1 ] ) )
         }
 
 //
@@ -545,11 +536,8 @@
         }
     
     SwitchCases
-        = arg:CaseStatement more:SwitchCases {
-            return [ arg ].concat( more )
-        }
-        / subArg:CaseStatement {
-            return [ subArg ]
+        = args:CaseStatement+ {
+            return args
         }
 
     CaseStatement 'switch case clause'
@@ -564,11 +552,8 @@
         }
 
     CaseMembers
-        = arg:Returnable SeparatorMultiline more:CaseMembers {
-            return [ arg ].concat( more )
-        }
-        / subArg:Returnable {
-            return [ subArg ]
+        = arg:Returnable more:( SeparatorMultiline Returnable )* {
+            return [ arg ].concat( more.map( x => x[ 1 ] ) )
         }
 
 //
@@ -621,12 +606,7 @@
         }
 
     ElseIfStatementArray
-        = elseIfClause:ElseIfStatement more:ElseIfStatementArray {
-            return [ elseIfClause ].concat( more )
-        } 
-        / elseIfClause:ElseIfStatement {
-            return [ elseIfClause ]
-        }
+        = ElseIfStatement+
 
     ElseIfStatement 'also if clause'
         = FullPlainWhiteSpace* "also" PlainWhiteSpace+ key:IfSwitchKey
@@ -722,11 +702,8 @@
 //
 
     IdentifierList
-        = arg:Identifier SeparatorMultiline more:IdentifierList {
-            return [ arg ].concat( more )
-        }
-        / subArg:Identifier {
-            return [ subArg ]
+        = arg:Identifier more:( SeparatorMultiline IdentifierList )* {
+            return [ arg ].concat( more.map( x => x[ 1 ] ) )
         }
 
 //
@@ -744,11 +721,8 @@
         }
 
     PipeExpressionParts
-        = origin:SExpression PipeControl more:PipeExpressionParts {
-            return [ origin ].concat( more )
-        }
-        / terminal: SExpression {
-            return [ terminal ]
+        = origin:SExpression more:( PipeControl SExpression )* {
+            return [ origin ].concat( more.map( x => x[ 1 ] ) )
         }
 
     PipeControl
@@ -814,13 +788,9 @@
     
 
     SExpressionArgumentArray
-        = arg:SExpressionArgument SeparatorMultiline more:SExpressionArgumentArray {
-            return [ arg ].concat( more )
+        = arg:SExpressionArgument more:( SeparatorMultiline SExpressionArgument)* {
+            return [ arg ].concat( more.map( x => x[ 1 ] ) )
         } 
-        / subArg:SExpressionArgument {
-            return [ subArg ]
-        }
-
 
     SExpressionArgument
         = PipePlaceholder
@@ -894,12 +864,9 @@
         }
 
     ClassFunctionDeclarations
-        = arg:FunctionDeclaration __+ more:ClassFunctionDeclarations {
-            return [ arg ].concat( more )
+        = arg:FunctionDeclaration more:( __+ ClassFunctionDeclarations )* {
+            return [ arg ].concat( more.map( x => x[ 1 ] ) )
         } 
-        / declaration:FunctionDeclaration {
-            return [ declaration ]
-        }
 
 //
 // ─── FUNCTION DECLARATION ───────────────────────────────────────────────────────
@@ -939,11 +906,8 @@
         }
 
     FunctionIdentifierList
-        = param:FunctionIdentifier SeparatorMultiline more:FunctionIdentifierList {
-            return [ param ].concat( more )
-        }
-        / param:FunctionIdentifier {
-            return [ param ]
+        = param:FunctionIdentifier more:( SeparatorMultiline FunctionIdentifier )* {
+            return [ param ].concat( more.map( x => x[ 1 ] ) )
         }
 
     FunctionIdentifier
@@ -986,12 +950,7 @@
 
     // header
     TableColumnHeader
-        = member:TableColumnHeaderMember more:TableColumnHeader {
-            return [ member ].concat( more )
-        } 
-        / member: TableColumnHeaderMember {
-            return [ member ]
-        }
+        = TableColumnHeaderMember+
 
     TableColumnHeaderMember
         = _* name:( "#" / Identifier ) _* "|" {
@@ -1017,12 +976,9 @@
 
     // Table Body
     TableBody
-        = member:TableRow _* EOL _* more:TableBody {
-            return [ member ].concat( more )
+        = member:TableRow more:( _* EOL _* TableBody)* {
+            return [ member ].concat( more.map( x => x[ 3 ] ) )
         } 
-        / member: TableRow {
-            return [ member ]
-        }
 
     TableRow
         = "|" members:TableRowMembers {
@@ -1035,12 +991,7 @@
         }
         
     TableRowMembers
-        = member:TableRowSingleMember more:TableRowMembers {
-            return [ member ].concat( more )
-        } 
-        / member: TableRowSingleMember {
-            return [ member ]
-        }
+        = TableRowSingleMember+
 
     TableRowSingleMember
         = _* expr:Returnable _* "|" {
@@ -1117,12 +1068,9 @@
         }
 
     NameOnlyDeclarationsArray
-        = name:Identifier SeparatorInline more:NameOnlyDeclarationsArray {
-            return [ name ].concat( more )
+        = name:Identifier more:(SeparatorInline NameOnlyDeclarationsArray)* {
+            return [ name ].concat( more.map( x => x[ 1 ] ) )
         } 
-        / name:Identifier {
-            return [ name ]
-        }
 
 //
 // ─── RETURN STATEMENT ───────────────────────────────────────────────────────────
@@ -1262,12 +1210,9 @@
         }
 
     MapPairMember
-        = member:MapAssignment SeparatorMultiline more:MapPairMember {
-            return [ member ].concat( more )
+        = member:MapAssignment more:( SeparatorMultiline MapPairMember )* {
+            return [ member ].concat( more.map( x => x[ 1 ] ) )
         } 
-        / member:MapAssignment {
-            return [ member ]
-        }
 
     MapAssignment
         = key:Returnable _* ObjectAssignmentKeyValueCharacter _*
@@ -1321,12 +1266,9 @@
         }
 
     ObjectPairMember
-        = member:ObjectAssignment SeparatorMultiline more:ObjectPairMember {
-            return [ member ].concat( more )
+        = member:ObjectAssignment more:( SeparatorMultiline ObjectPairMember )* {
+            return [ member ].concat( more.map( x => x[ 1 ] ) )
         } 
-        / member:ObjectAssignment {
-            return [ member ]
-        }
 
     ObjectAssignment
         = name:Identifier _* ObjectAssignmentKeyValueCharacter _*
@@ -1397,12 +1339,10 @@
         }
 
     ArrayMember
-        = member:Returnable SeparatorMultiline more:ArrayMember {
-            return [ member ].concat( more )
+        = member:Returnable more:( SeparatorMultiline ArrayMember )* {
+            return [ member ].concat( more.map( x => x[ 1 ] ) )
         } 
-        / member:Returnable {
-            return [ member ]
-        }
+
 
 //
 // ─── COMMA ──────────────────────────────────────────────────────────────────────
