@@ -712,7 +712,7 @@
 //
 
     IdentifierList
-        = arg:Identifier more:( SeparatorMultiline IdentifierList )* {
+        = arg:Identifier more:( SeparatorMultiline Identifier )* {
             return prepend( more.map( x => x[ 1 ] ), arg )
         }
 
@@ -770,8 +770,8 @@
                 location:   location( ),
                 id:         id( ),
                 kind:       "UnaryOperator",       
-                operator:   operator,
-                arg:        arg
+                command:    operator,
+                params:     [ arg ]
             }
         }
 
@@ -781,7 +781,7 @@
                 type:       "SExpression",
                 location:   location( ),
                 id:         id( ),
-                kind:       "FunctionCallWithArgs",
+                kind:       "FunctionCall",
                 command:    command,
                 params:     params,
             }
@@ -791,8 +791,9 @@
                 type:       "SExpression",
                 location:   location( ),
                 id:         id( ),
-                kind:       "FunctionCallOnly",
-                command:    command
+                kind:       "FunctionCall",
+                command:    command,
+                params:     [ ]
             }
         }
     
@@ -1363,8 +1364,12 @@
 //
 
     SeparatorMultiline
-        = __* ',' __*
-        / __+
+        = __* ',' __* {
+            return null
+        }
+        / __+ {
+            return null
+        }
 
     SeparatorInline
         = _* ',' _*
