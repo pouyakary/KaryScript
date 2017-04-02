@@ -1,2 +1,1 @@
-
-on-hello
+(not 10)

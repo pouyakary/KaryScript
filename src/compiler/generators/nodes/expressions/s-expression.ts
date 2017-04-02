@@ -29,19 +29,19 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                           placeholder?: TPlaceholder ): CompiledCode {
 
             switch ( node.kind ) {
-                case 'FunctionCallWithArgs':
+                case 'FunctionCall':
                     return CompileFunctionCallWithArgs(
-                        node as AST.IFunctionCallWithArgsSExpression, env, placeholder
+                        node as AST.IFunctionCall, env, placeholder
                     )
 
                 case 'UnaryOperator':
                     return CompileUnaryOperator(
-                        node as AST.IUnaryOperatorSExpression, env, placeholder
+                        node as AST.IFunctionCall, env, placeholder
                     )
 
                 case 'FunctionCallOnly':
                     return CompileFunctionCallOnly(
-                        node as AST.IFunctionCallOnlySExpression, env, placeholder
+                        node as AST.IFunctionCall, env, placeholder
                     )
             }
         }
@@ -62,7 +62,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── FUNCTION CALL WITH ARGS ────────────────────────────────────────────────────
     //
 
-        function CompileFunctionCallWithArgs ( node: AST.IFunctionCallWithArgsSExpression, 
+        function CompileFunctionCallWithArgs ( node: AST.IFunctionCall, 
                                                 env: IEnv, 
                                        placeholder?: TPlaceholder ): CompiledCode {
 
@@ -80,7 +80,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── COMPILE BINARY OPERATOR FUNCTION ───────────────────────────────────────────
     //
 
-        function CompileBinaryOperatorFunction ( node: AST.IFunctionCallWithArgsSExpression, 
+        function CompileBinaryOperatorFunction ( node: AST.IFunctionCall, 
                                                   env: IEnv, 
                                          placeholder?: TPlaceholder ): CompiledCode {
             // checks
@@ -110,7 +110,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── CHECK BINARY OPERATOR FUNCTION ─────────────────────────────────────────────
     //
 
-        function CheckBinaryOperatorFunction ( node: AST.IFunctionCallWithArgsSExpression, 
+        function CheckBinaryOperatorFunction ( node: AST.IFunctionCall, 
                                                 env: IEnv, 
                                        placeholder?: TPlaceholder ) {
             const count = ( placeholder? 1 : 0 ) + node.params.length
@@ -126,7 +126,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── COMPILE UNARY SEXPRESSION ──────────────────────────────────────────────────
     //
 
-        function CompileUnaryParameterSExpression ( node: AST.IFunctionCallWithArgsSExpression, 
+        function CompileUnaryParameterSExpression ( node: AST.IFunctionCall, 
                                                      env: IEnv, 
                                             placeholder?: TPlaceholder ) {
             // checks 
@@ -143,7 +143,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── CHECK UNARY PARAMETER SEXPRESSION ──────────────────────────────────────────
     //
 
-        function CheckUnaryParameterSExpression ( node: AST.IFunctionCallWithArgsSExpression, 
+        function CheckUnaryParameterSExpression ( node: AST.IFunctionCall, 
                                                    env: IEnv, 
                                           placeholder?: TPlaceholder ) {
             const count = ( placeholder? 1 : 0 ) + node.params.length
@@ -158,7 +158,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── SIMPLE FUNCTION CALL WITH ARGS ─────────────────────────────────────────────
     //
 
-        function CompileSimpleFunctionCallWithArgs ( node: AST.IFunctionCallWithArgsSExpression, 
+        function CompileSimpleFunctionCallWithArgs ( node: AST.IFunctionCall, 
                                                       env: IEnv, 
                                              placeholder?: TPlaceholder ): SourceMap.SourceNode {
             // checks
@@ -177,7 +177,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── GET FUNCTION ARGS ──────────────────────────────────────────────────────────
     //
 
-        function GetFunctionArgsByApplyingPlaceholder ( node: AST.IFunctionCallWithArgsSExpression, 
+        function GetFunctionArgsByApplyingPlaceholder ( node: AST.IFunctionCall, 
                                                          env: IEnv, 
                                                 placeholder?: TPlaceholder ) {
 
@@ -209,23 +209,24 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── UNARY OPERATOR ─────────────────────────────────────────────────────────────
     //
 
-        function CompileUnaryOperator ( node: AST.IUnaryOperatorSExpression, 
-                                        env: IEnv,
+        function CompileUnaryOperator ( node: AST.IFunctionCall, 
+                                         env: IEnv,
                                 placeholder?: TPlaceholder ): SourceMap.SourceNode {
             return CompileAbstractUnaryOperator(
-                node, node.operator.operator, env, placeholder )
+                node, ( <AST.IUnaryOperator> node.command ).operator, env, placeholder )
         }
 
     //
     // ─── COMPILE ABSTRACT UNARY OPERATOR ────────────────────────────────────────────
     //
 
-        function CompileAbstractUnaryOperator ( node: AST.IBase,
+        function CompileAbstractUnaryOperator ( node: AST.IFunctionCall,
                                             operator: string,
                                                  env: IEnv,
                                         placeholder?: TPlaceholder ) {
 
-            const ph = <AST.ISExpression> ( placeholder? placeholder : operator )
+            const ph = <AST.ISExpression> ( placeholder? placeholder : node.params[ 0 ] )
+            ph
             let result: CompiledCode[]
 
             switch ( operator ) {
@@ -266,7 +267,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── SIMPLE FUNCTION CALL ───────────────────────────────────────────────────────
     //
 
-        function CompileFunctionCallOnly ( node: AST.IFunctionCallOnlySExpression,
+        function CompileFunctionCallOnly ( node: AST.IFunctionCall,
                                             env: IEnv,
                                    placeholder?: TPlaceholder ): CompiledCode {
             // in case of unary operator in pipe expressions
@@ -283,7 +284,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── COMPILE UNARY FUNCTION WITH CALL ONLY ──────────────────────────────────────
     //
 
-        function CompileUnaryFunctionOnCallOnly ( node: AST.IFunctionCallOnlySExpression,
+        function CompileUnaryFunctionOnCallOnly ( node: AST.IFunctionCall,
                                                    env: IEnv,
                                            placeholder?: TPlaceholder ): CompiledCode {
             if ( placeholder ) {
@@ -356,7 +357,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function CheckPlaceholderInFunctionCallWithArgsSExpression
-            ( node: AST.IFunctionCallWithArgsSExpression, env: IEnv, ) {
+            ( node: AST.IFunctionCall, env: IEnv, ) {
             const count = node.params.filter( x => x.type === 'PipePlaceholder' ).length
             return ReportPlaceholderError( count, env, node )
         }
