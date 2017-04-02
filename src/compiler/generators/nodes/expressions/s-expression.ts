@@ -226,7 +226,6 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                                         placeholder?: TPlaceholder ) {
 
             const ph = <AST.ISExpression> ( placeholder? placeholder : node.params[ 0 ] )
-            ph
             let result: CompiledCode[]
 
             switch ( operator ) {
