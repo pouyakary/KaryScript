@@ -1648,14 +1648,16 @@
     DoubleQuotesStringsParts
         = StringInterpolation
         / '\\"'
-        / !( '"' / '#' ) char:. {
+        / "\\'"
+        / !( '"' / '#(' / "#{" ) char:. {
             return char
         }
+
 
     SingleQuotesStringsParts
         = StringInterpolation
         / "\\'"
-        / !( "'" / '#' ) char:. {
+        / !( "'" / '#(' / "#{" ) char:. {
             return char
         }
 
