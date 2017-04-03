@@ -875,7 +875,7 @@
         }
 
     ClassFunctionDeclarations
-        = arg:FunctionDeclaration more:( __+ ClassFunctionDeclarations )* {
+        = arg:FunctionDeclaration more:( __+ FunctionDeclaration )* {
             return prepend( more.map( x => x[ 1 ] ), arg )
         } 
 
@@ -987,7 +987,7 @@
 
     // Table Body
     TableBody
-        = member:TableRow more:( _* EOL _* TableBody)* {
+        = member:TableRow more:( _* EOL _* TableRow)* {
             return prepend( more.map( x => x[ 3 ] ), member )
         } 
 
@@ -1079,7 +1079,7 @@
         }
 
     NameOnlyDeclarationsArray
-        = name:Identifier more:(SeparatorInline NameOnlyDeclarationsArray)* {
+        = name:Identifier more:(SeparatorInline Identifier)* {
             return prepend( more.map( x => x[ 1 ] ), name )
         } 
 
@@ -1225,7 +1225,7 @@
         }
 
     MapPairMember
-        = member:MapAssignment more:( SeparatorMultiline MapPairMember )* {
+        = member:MapAssignment more:( SeparatorMultiline MapAssignment )* {
             return prepend( more.map( x => x[ 1 ] ), member )
         } 
 
@@ -1281,7 +1281,7 @@
         }
 
     ObjectPairMember
-        = member:ObjectAssignment more:( SeparatorMultiline ObjectPairMember )* {
+        = member:ObjectAssignment more:( SeparatorMultiline ObjectAssignment )* {
             return prepend( more.map( x => x[ 1 ] ), member )
         } 
 
@@ -1354,7 +1354,7 @@
         }
 
     ArrayMember
-        = member:Returnable more:( SeparatorMultiline ArrayMember )* {
+        = member:Returnable more:( SeparatorMultiline Returnable )* {
             return prepend( more.map( x => x[ 1 ] ), member )
         } 
 
