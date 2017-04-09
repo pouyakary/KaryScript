@@ -1,5 +1,5 @@
 
-![header-github](https://cloud.githubusercontent.com/assets/2157285/24024297/85eaf368-0ac7-11e7-9720-fa1fa7d137aa.jpg)
+<img src="https://cloud.githubusercontent.com/assets/2157285/24836023/6be6f3f6-1d26-11e7-9c31-bd45209c417a.jpg" width="300">
 
 
 KaryScript is a programming language that is currently under it's initial heavy active development phase.
