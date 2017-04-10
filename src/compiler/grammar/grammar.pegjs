@@ -356,7 +356,7 @@
 //
 
     Selector 'selector expression'
-        = "[" __* searchable:Expression __* queries:SelectorQueries __* "]" {
+        = "[" __* searchable:Expression __* queries:SelectorQueryPart+ "]" {
             return {
                 type:       "Selector",
                 id:         id( ),
@@ -378,14 +378,9 @@
                 end:        end
             }
           }
-
-    SelectorQueries
-        = query:SelectorQueryPart more:(__* SelectorQueries)* {
-            return more.map( x => x[ 1 ] ).unshift( query )
-        }
         
     SelectorQueryPart
-        = "|" __* query:( LambdaBody / Expression ) {
+        = "|" __* query:( LambdaBody / Expression ) __* {
             return query
         }
 
