@@ -74,7 +74,7 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
                                              value: CompiledCode,
                                                env: IEnv ) {
             return [
-                'if (', name , ' == null || ', name , ' == undefined) {',
+                'if (', name , ' === null || ', name , ' === undefined) {',
                     name , ' = ',value,
                 '}'
             ]
