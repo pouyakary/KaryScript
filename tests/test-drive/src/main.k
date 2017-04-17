@@ -1,2 +1,4 @@
-fix letter = [ current-text | counter ]
-fix radius = (get-radius-size counter)
+
+for 1 up to 10:
+    (console/log 23)
+end

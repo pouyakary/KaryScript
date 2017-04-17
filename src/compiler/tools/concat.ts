@@ -26,7 +26,7 @@ namespace KaryScript.Compiler {
             for ( const part of parts ) {
                 result = result.concat( part )
             }
-            return result
+            return result.filter( x => x !== undefined )
         }
 
     //
