@@ -15,6 +15,8 @@ namespace KaryScript.Compiler {
     //
 
         export type TConcatable = ( CompiledCode[ ] | CompiledCode )[ ]
+        
+        type TConcatableNotNullable = CompiledCode[ ] | CompiledCode
 
     //
     // ─── CONCAT ─────────────────────────────────────────────────────────────────────

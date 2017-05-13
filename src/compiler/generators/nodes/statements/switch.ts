@@ -27,16 +27,9 @@ namespace KaryScript.Compiler.Nodes.Switch {
 
             // cases
             if ( node.cases )
-                for ( let caseStatement of node.cases ) {
-                    const cases = caseStatement.cases.map( x =>
-                        env.GenerateSourceNode( caseStatement, Concat([
-                            "case ", Nodes.CompileSingleNode( x, env ), ": " ])))
+                for ( let caseStatement of node.cases )
+                    parts.push( compileCasePart( caseStatement, env ) )
 
-                    parts.push( env.GenerateSourceNode( caseStatement,
-                        ( <CompiledCode[ ]> cases ).concat([
-                            Nodes.CompileSingleNode( caseStatement.body, env),
-                                " break; " ])))
-                }
 
             // default case
             if ( node.defaultBody ) {
@@ -46,6 +39,44 @@ namespace KaryScript.Compiler.Nodes.Switch {
 
             // composing switch:
             return env.GenerateSourceNode( node, parts.concat( '}' ) )
+        }
+
+    //
+    // ─── COMPILE CASE PART ──────────────────────────────────────────────────────────
+    //
+
+        /** compiles each case clause */
+        function compileCasePart ( caseStatement: AST.ICaseStatement, env: IEnv ) {
+            const cases = caseStatement.cases.map( x =>
+                env.GenerateSourceNode( caseStatement, Concat([
+                    "case ", Nodes.CompileSingleNode( x, env ), ": "
+                ])))
+
+            return ( env.GenerateSourceNode( caseStatement,
+                Concat([
+                    ( cases as CompiledCode[ ] ),
+                    Nodes.CompileSingleNode( caseStatement.body, env),
+                    breakIfNotReturning( caseStatement )
+                ])
+            ))
+        }
+
+    //
+    // ─── BREAK LOOKAHEAD ────────────────────────────────────────────────────────────
+    //
+
+        /** If the branch ended without returning it will automatically breaking. */
+        function breakIfNotReturning ( caseStatement: AST.ICaseStatement ) {
+            const breakString = " break; "
+            if ( caseStatement.body.branch instanceof Array ) {
+                const branch = caseStatement.body.branch
+                if ( branch[ branch.length - 1 ].type === "ReturnStatement" ) {
+                    return ''
+                } else {
+                    return breakString
+                }
+            }
+            return breakString
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
