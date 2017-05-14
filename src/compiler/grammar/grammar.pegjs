@@ -248,10 +248,12 @@
     JSXSingle
         = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* "/" __* ">" {
             return {
-                type: "JSX",
-                kind: "terminal",
-                name: name,
-                props: props
+                type:       "JSX",
+                id:         id( ),
+                location:   location( ),
+                name:       name,
+                props:      props,
+                body:       [ ]
             }
         }
 
@@ -261,30 +263,35 @@
                 throw new Error("JSX tags are not matching")
 
             return {
-                type: "JSX",
-                kind: "nested",
-                name: opening.name,
-                props: opening.props,
-                body: body
+                type:       "JSX",
+                id:         id( ),
+                location:   location( ),
+                name:       opening.name,
+                props:      opening.props,
+                body:       body
             }
         }
 
     JSXOpening
         = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* ">" {
             return {
-                type: "JSXTag",
-                part: "opening",
-                name: name,
-                props: props
+                type:       "JSXTag",
+                id:         id( ),
+                location:   location( ),
+                part:       "opening",
+                name:       name,
+                props:      props
             }
         }
 
     JSXEnding
         = "</" __* name:Identifier __* ">" {
             return {
-                type: "JSXTag",
-                part: "closing",
-                name: name
+                type:       "JSXTag",
+                id:         id( ),
+                location:   location( ),
+                part:       "closing",
+                name:       name
             }
         }
 
@@ -308,9 +315,11 @@
     JSXProperty
         = name:Identifier __* "=" __* value:JSXPropertyValues {
             return {
-                type: "JSXProperty",
-                name: name,
-                value: value
+                type:       "JSXProperty",
+                id:         id( ),
+                location:   location( ),
+                name:       name,
+                value:      value
             }
         }
 
@@ -321,8 +330,10 @@
     JSXInlineExpression
         = "{" __* expr: Expression __* "}" {
             return {
-                type: "JSXInlineExpression",
-                value: expr
+                type:       "JSXInlineExpression",
+                id:         id( ),
+                location:   location( ),
+                value:      expr
             }
         }
 
