@@ -246,7 +246,8 @@
         / JSXSingle
 
     JSXSingle
-        = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* "/" __* ">" {
+        = !( "<" __* "/" ) "<" __* name:AddressIdentifier
+                           props:JSXProperties? __* "/" __* ">" {
             return {
                 type:       "JSX",
                 id:         id( ),
@@ -259,9 +260,21 @@
 
     JSXWithBody
         = opening:JSXOpening body:JSXBody closing:JSXEnding {
-            if ( opening.name.name !== closing.name.name )
-                throw new Error("JSX tags are not matching")
+            // checking if the names are matching
+            function getName ( part ) {
+                if ( part.type === 'AddressIdentifier' )
+                    return part.address.join('/')
+                else
+                    return part.name
+            }
 
+            const openingName = getName( opening.name )
+            const endingName = getName( closing.name )
+
+            if ( openingName !== endingName )
+                    throw new Error( "JSX tag names are not matching" )
+
+            // if we're here then we're safe
             return {
                 type:       "JSX",
                 id:         id( ),
@@ -273,7 +286,8 @@
         }
 
     JSXOpening
-        = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* ">" {
+        = !( "<" __* "/" ) "<" __* name:AddressIdentifier
+                           props:JSXProperties? __*  ">" {
             return {
                 name:       name,
                 props:      props
@@ -281,8 +295,10 @@
         }
 
     JSXEnding
-        = "</" __* name:Identifier __* ">" {
-            return name
+        = "</" __* name:AddressIdentifier __* ">" {
+            return {
+                name: name
+            }
         }
 
     JSXBody
