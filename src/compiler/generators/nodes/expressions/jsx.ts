@@ -75,7 +75,9 @@ namespace KaryScript.Compiler.Nodes.JSX {
     //
 
         function compileJSXBodyString ( node: AST.IStringPart ) {
-            return node.part.replace( /[\/\/\b\f\r\t\'\"]/g , x => '\\' + x )
+            return node.part
+                .replace( /[\/\/\b\f\r\t\'\"]/g , x => '\\' + x )
+                .replace( /\s*\n\s*/, '\n')
         }
 
     //
