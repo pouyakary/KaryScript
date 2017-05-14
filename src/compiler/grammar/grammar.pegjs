@@ -275,10 +275,6 @@
     JSXOpening
         = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* ">" {
             return {
-                type:       "JSXTag",
-                id:         id( ),
-                location:   location( ),
-                part:       "opening",
                 name:       name,
                 props:      props
             }
@@ -286,13 +282,7 @@
 
     JSXEnding
         = "</" __* name:Identifier __* ">" {
-            return {
-                type:       "JSXTag",
-                id:         id( ),
-                location:   location( ),
-                part:       "closing",
-                name:       name
-            }
+            return name
         }
 
     JSXBody
