@@ -32,7 +32,7 @@ namespace KaryScript.Compiler.Nodes.JSX {
                                           env: IEnv ): SourceMap.SourceNode {
             const name = Nodes.CompileSingleNode( node.name, env )
             return env.GenerateSourceNode( node, Concat([
-                "<", name, compileProperties( node.props, env ), " />"
+                "<", name, compileProperties( node.props, env ), "/>"
             ]))
         }
 
@@ -75,8 +75,7 @@ namespace KaryScript.Compiler.Nodes.JSX {
     //
 
         function compileJSXBodyString ( node: AST.IStringPart ) {
-            let text = node.part.replace( /\s*\n\s*/, ' ' )
-            return Nodes.String.HandleEscapedSequences( text )
+            return node.part.replace( /[\/\/\b\f\r\t\'\"]/g , x => '\\' + x )
         }
 
     //
