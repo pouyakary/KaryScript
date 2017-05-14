@@ -380,6 +380,7 @@ namespace KaryScript.Compiler.AST {
             = ISExpression
             | IReservedValueLiterals
             | TLiterals
+            | IJSXExpression
 
     //
     // ─── LITERALS ───────────────────────────────────────────────────────────────────
@@ -736,8 +737,21 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IJSXExpression extends IBase {
-            
+            type: "JSX",
+            name: IIdentifier
+            props: IJSXProperty[ ]
+            body: TJSXBodyParts[ ]
         }
+
+        export interface IJSXProperty extends IBase {
+            type:   "JSXProperty",
+            name:   IIdentifier
+            value:  TExpression
+        }
+
+        export type TJSXBodyParts
+            = IStringLiteral
+            | TExpression
 
     // ────────────────────────────────────────────────────────────────────────────────
 
