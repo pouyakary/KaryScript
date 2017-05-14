@@ -30,16 +30,14 @@ namespace KaryScript.Compiler.AST {
     //
 
         export interface IBase {
-            type: "Root"
-                | "Body"
-                | "Empty"
-                | "AddressIdentifier"
+            type: "AddressIdentifier"
                 | "ArrayDeclaration"
                 | "ArrayLiteral"
                 | "ArrayObjectIndexLoader"
                 | "Assignment"
                 | "AwaitStatement"
                 | "BinaryOperator"
+                | "Body"
                 | "BooleanLiteral"
                 | "CaseStatement"
                 | "ClassDeclaration"
@@ -47,6 +45,7 @@ namespace KaryScript.Compiler.AST {
                 | "DeclarationAssignment"
                 | "DeclarationStatement"
                 | "ElseIfStatement"
+                | "Empty"
                 | "EmptyCell"
                 | "ExpressionMember"
                 | "ForStatement"
@@ -57,6 +56,10 @@ namespace KaryScript.Compiler.AST {
                 | "Identifier"
                 | "IfStatement"
                 | "InlineComment"
+                | "JSX"
+                | "JSXInlineExpression"
+                | "JSXProperty"
+                | "JSXTag"
                 | "LambdaExpression"
                 | "LineTerminator"
                 | "MapLiteral"
@@ -73,6 +76,7 @@ namespace KaryScript.Compiler.AST {
                 | "ReservedValueLiterals"
                 | "ReturnKeyword"
                 | "ReturnStatement"
+                | "Root"
                 | "Selector"
                 | "SetLiteral"
                 | "SExpression"
@@ -725,6 +729,14 @@ namespace KaryScript.Compiler.AST {
             type:   "NumericLiteral"
             raw:    string,
             value:  number
+        }
+
+    //
+    // ─── JSX ────────────────────────────────────────────────────────────────────────
+    //
+
+        export interface IJSXExpression extends IBase {
+            
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
