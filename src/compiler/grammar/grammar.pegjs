@@ -200,6 +200,7 @@
         / Literals
         / Selector
         / BracedComparison
+        / JSXExpression
 
     ShorthandIfParts
         = AddressIdentifier
@@ -235,6 +236,95 @@
     FunctionCall 'function call'
         = PipeExpression
         / SExpression
+
+//
+// ─── JSX ────────────────────────────────────────────────────────────────────────
+//
+
+    JSXExpression
+        = JSXWithBody
+        / JSXSingle
+
+    JSXSingle
+        = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* "/" __* ">" {
+            return {
+                type: "JSX",
+                kind: "terminal",
+                name: name,
+                props: props
+            }
+        }
+
+    JSXWithBody
+        = opening:JSXOpening body:JSXBody closing:JSXEnding {
+            if ( opening.name.name !== closing.name.name )
+                throw new Error("JSX tags are not matching")
+
+            return {
+                type: "JSX",
+                kind: "nested",
+                name: opening.name,
+                props: opening.props,
+                body: body
+            }
+        }
+
+    JSXOpening
+        = !( "<" __* "/" ) "<" __* name:Identifier props:JSXProperties? __* ">" {
+            return {
+                type: "JSXTag",
+                part: "opening",
+                name: name,
+                props: props
+            }
+        }
+
+    JSXEnding
+        = "</" __* name:Identifier __* ">" {
+            return {
+                type: "JSXTag",
+                part: "closing",
+                name: name
+            }
+        }
+
+    JSXBody
+        = parts:JSXBodyParts* {
+            return generateStringResult( parts )
+        }
+
+    JSXBodyParts
+        = JSXExpression
+        / JSXInlineExpression
+        / !( "<" / "{" ) char:. {
+            return char
+        }
+
+    JSXProperties
+        = __+ more:( JSXProperty __* )+ {
+            return more.map( x => x[ 0 ] )
+        }
+
+    JSXProperty
+        = name:Identifier __* "=" __* value:JSXPropertyValues {
+            return {
+                type: "JSXProperty",
+                name: name,
+                value: value
+            }
+        }
+
+    JSXPropertyValues
+        = StringLiteral
+        / JSXInlineExpression
+
+    JSXInlineExpression
+        = "{" __* expr: Expression __* "}" {
+            return {
+                type: "JSXInlineExpression",
+                value: expr
+            }
+        }
 
 //
 // ─── RANGE LITERAL ──────────────────────────────────────────────────────────────
@@ -523,7 +613,7 @@
 //
 
     SwitchStatement 'switch statement'
-        = "switch" __+ expr:Returnable __* EndStructureSign __+ cases:SwitchCases
+        = "switch" __+ expr:Returnable __* EndStructureSign __+ cases:CaseStatement+
            defaultBody:SwitchElse? END {
             return {
                 type:           "SwitchStatement",
@@ -538,11 +628,6 @@
     SwitchElse 'switch else clause'
         = __* "else" __ body:Body {
             return body
-        }
-    
-    SwitchCases
-        = args:CaseStatement+ {
-            return args
         }
 
     CaseStatement 'switch case clause'
