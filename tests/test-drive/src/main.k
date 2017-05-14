@@ -1,1 +1,3 @@
-mut smart-tag-generation = <h1></h1> // empty tag
+mut smart-tag-generation = <h1>
+    <b>something</b>
+</h1>

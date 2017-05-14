@@ -58,7 +58,7 @@ namespace KaryScript.Compiler.Nodes.JSX {
         function compileBody ( body: AST.TJSXBodyParts[ ], env: IEnv ): CompiledCode[ ] {
             return body.map( x => {
                 if ( x.type === 'StringPart' )
-                    return Nodes.String.HandleEscapedSequences(( x as AST.IStringPart ).part )
+                    return compileJSXBodyString( x as AST.IStringPart )
 
                 else if ( x.type === "JSX" )
                     return Nodes.CompileSingleNode( x, env )
@@ -68,6 +68,15 @@ namespace KaryScript.Compiler.Nodes.JSX {
                         '{', Nodes.CompileSingleNode( x, env ) ,'}'
                     ])
             })
+        }
+
+    //
+    // ─── COMPILE JSX STRINGS ────────────────────────────────────────────────────────
+    //
+
+        function compileJSXBodyString ( node: AST.IStringPart ) {
+            let text = node.part.replace( /\s*\n\s*/, ' ' )
+            return Nodes.String.HandleEscapedSequences( text )
         }
 
     //
