@@ -1,2 +1,1 @@
-
-mut a = <h1 hello={32}>hello world</h1>
+mut smart-tag-generation = <h1></h1> // empty tag

@@ -253,7 +253,7 @@
                 id:         id( ),
                 location:   location( ),
                 name:       name,
-                props:      props,
+                props:      props? props : [ ],
                 body:       [ ]
             }
         }
@@ -272,7 +272,10 @@
             const endingName = getName( closing.name )
 
             if ( openingName !== endingName )
-                    throw new Error( "JSX tag names are not matching" )
+                throw new Error({
+                    message: "JSX tag names are not matching",
+                    location: location( )
+                })
 
             // if we're here then we're safe
             return {
@@ -290,7 +293,7 @@
                            props:JSXProperties? __*  ">" {
             return {
                 name:       name,
-                props:      props
+                props:      props? props : [ ]
             }
         }
 
@@ -335,12 +338,7 @@
 
     JSXInlineExpression
         = "{" __* expr: Expression __* "}" {
-            return {
-                type:       "JSXInlineExpression",
-                id:         id( ),
-                location:   location( ),
-                value:      expr
-            }
+            return expr
         }
 
 //

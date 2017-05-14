@@ -9,7 +9,7 @@
             },
             "name": "DEBUG",
             "outFiles": [
-                "${workspaceRoot}/bin/cli.js"
+                "${workspaceRoot}/bin/kc.js"
             ],
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/src/cli/main.ts",

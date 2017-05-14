@@ -738,7 +738,7 @@ namespace KaryScript.Compiler.AST {
 
         export interface IJSXExpression extends IBase {
             type: "JSX",
-            name: IIdentifier
+            name: IAddressIdentifier
             props: IJSXProperty[ ]
             body: TJSXBodyParts[ ]
         }
@@ -750,7 +750,7 @@ namespace KaryScript.Compiler.AST {
         }
 
         export type TJSXBodyParts
-            = IStringLiteral
+            = IStringPart
             | TExpression
 
     // ────────────────────────────────────────────────────────────────────────────────

@@ -21,7 +21,7 @@ namespace KaryScript.Compiler.Nodes.Address {
             if ( node.type === 'AddressIdentifier' )
                 result = CompileAddressIdentifier( node as AST.IAddressIdentifier, env )
             else
-                result = CompileFullIdentifer( node as AST.IIdentifier, env )
+                result = CompileIdentiferAndRegister( node as AST.IIdentifier, env )
 
             return env.GenerateSourceNode( node, result )
         }
@@ -35,7 +35,7 @@ namespace KaryScript.Compiler.Nodes.Address {
             for ( let index = 0; index < node.address.length; index++ ) {
                 let element = node.address[ index ]
                 if ( index == 0 )
-                    address.push( CompileFullIdentifer( element, env ) )
+                    address.push( CompileIdentiferAndRegister( element, env ) )
                 else
                     address.push( CompileIdentifier( element, env ) )
             }
@@ -55,7 +55,8 @@ namespace KaryScript.Compiler.Nodes.Address {
     // ─── GET FULL IDENTIFER ─────────────────────────────────────────────────────────
     //
 
-        export function CompileFullIdentifer ( node: AST.IIdentifier, env: IEnv ) {
+        export function CompileIdentiferAndRegister ( node: AST.IIdentifier,
+                                                       env: IEnv ) {
             let base = ''
             if ( env.ZoneStack.length > 0 ) {
                 const baseResult = SearchZoneBaseForIdentifier( node.name, env )

@@ -11,6 +11,7 @@
 /// <reference path="nodes/blocks/body.ts" />
 /// <reference path="nodes/expressions/comparison.ts" />
 /// <reference path="nodes/expressions/exprmember.ts" />
+/// <reference path="nodes/expressions/jsx.ts" />
 /// <reference path="nodes/expressions/lambda.ts" />
 /// <reference path="nodes/expressions/pipe.ts" />
 /// <reference path="nodes/expressions/s-expression.ts" />
@@ -29,11 +30,11 @@
 /// <reference path="nodes/literals/string.ts" />
 /// <reference path="nodes/literals/table.ts" />
 /// <reference path="nodes/statements/assignment.ts" />
+/// <reference path="nodes/statements/declaration/array.ts" />
 /// <reference path="nodes/statements/declaration/class.ts" />
 /// <reference path="nodes/statements/declaration/function.ts" />
 /// <reference path="nodes/statements/declaration/holder.ts" />
 /// <reference path="nodes/statements/declaration/object.ts" />
-/// <reference path="nodes/statements/declaration/array.ts" />
 /// <reference path="nodes/statements/declaration/use.ts" />
 /// <reference path="nodes/statements/declaration/variable.ts" />
 /// <reference path="nodes/statements/declaration/zone.ts" />
@@ -217,6 +218,10 @@ namespace KaryScript.Compiler.Nodes {
                 case 'ReservedValueLiterals':
                     return Nodes.ReservedValueLiterals.Compile(
                         node as AST.IReservedValueLiterals )
+
+                case 'JSX':
+                    return Nodes.JSX.Compile(
+                        node as AST.IJSXExpression, env )
 
                 case 'LineTerminator':
                 case 'Empty':

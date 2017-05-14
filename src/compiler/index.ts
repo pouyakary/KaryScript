@@ -53,7 +53,8 @@ namespace KaryScript.Compiler {
                     console.timeEnd('compile')
                     return result
                 } catch ( codeErrors ) {
-                    throw Reporter.HandleCodeErrorsAtCompileEnd( codeErrors )
+                    //throw Reporter.HandleCodeErrorsAtCompileEnd( codeErrors )
+                    throw codeErrors
                 }
 
             } catch ( crashError ) {
