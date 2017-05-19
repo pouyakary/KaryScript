@@ -423,7 +423,7 @@
           }
 
     TryCatchFinallyBody 'try catch finally body'
-        = 'finally' body:Body {
+        = FinallyKeyword body:Body {
             return body
         }
 
@@ -474,7 +474,7 @@
             }
         }
         / LeftSquareBrace __* searchable:Expression __* BarSign __* start:Returnable
-          __+ "to" __+ end:Returnable __* RightSquareBrace {
+          __+ ToKeyword __+ end:Returnable __* RightSquareBrace {
             return {
                 type:       "Selector",
                 id:         id( ),
@@ -1490,89 +1490,23 @@
 //
 
     ReservedWord 'reserved keyword'
-        
-        //
-        // ─── KARYSCRIPT KEYWORDS ─────────────────────────────────────────
-        //
-
-            = AlsoKeyword           !IdentifierName
-            / AndKeyword            !IdentifierName
-            / CatKeyword            !IdentifierName
-            / CloneKeyword          !IdentifierName
-            / DecKeyword            !IdentifierName
-            / DefKeyword            !IdentifierName
-            / DoKeyword             !IdentifierName
-            / DownKeyword           !IdentifierName
-            / EndKeyword            !IdentifierName
-            / FalseKeyword          !IdentifierName
-            / FixKeyword            !IdentifierName
-            / IncKeyword            !IdentifierName
-            / MutKeyword            !IdentifierName
-            / NanKeyword            !IdentifierName
-            / NoKeyword             !IdentifierName
-            / NotKeyword            !IdentifierName
-            / OffKeyword            !IdentifierName
-            / OnKeyword             !IdentifierName
-            / OrKeyword             !IdentifierName
-            / ToKeyword             !IdentifierName
-            / TrueKeyword           !IdentifierName
-            / UFOKeyword            !IdentifierName
-            / UnlessKeyword         !IdentifierName
-            / UpKeyword             !IdentifierName
-            / UsableKeyword         !IdentifierName
-            / UseKeyword            !IdentifierName
-            / ViaKeyword            !IdentifierName
-            / WhenKeyword           !IdentifierName
-            / YesKeyword            !IdentifierName
-            / ZoneKeyword           !IdentifierName
-            / StepKeyword           !IdentifierName
-            / AsyncKeyword          !IdentifierName
-            / GenKeyword            !IdentifierName
-            / ObjectKeyword         !IdentifierName
-            / TemplateKeyword       !IdentifierName
-            / ArrayKeyword          !IdentifierName
-            / ThisKeyword           !IdentifierName
-            / EmptyKeyword          !IdentifierName
-
-        //
-        // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
-        //
-
-            / CaseKeyword           !IdentifierName
-            / CatchKeyword          !IdentifierName
-            / ClassKeyword          !IdentifierName
-            / ConstKeyword          !IdentifierName
-            / ContinueKeyword       !IdentifierName
-            / DebuggerKeyword       !IdentifierName
-            / DefaultKeyword        !IdentifierName
-            / DeleteKeyword         !IdentifierName
-            / DoKeyword             !IdentifierName
-            / ElseKeyword           !IdentifierName
-            / ExportKeyword         !IdentifierName
-            / ExtendsKeyword        !IdentifierName
-            / FinallyKeyword        !IdentifierName
-            / ForKeyword            !IdentifierName
-            / FromKeyword           !IdentifierName
-            / FunctionKeyword       !IdentifierName
-            / IfKeyword             !IdentifierName
-            / ImportKeyword         !IdentifierName
-            / InKeyword             !IdentifierName
-            / InstanceOfKeyword     !IdentifierName
-            / LetKeyword            !IdentifierName
-            / NewKeyword            !IdentifierName
-            / NothingKeyword        !IdentifierName
-            / OfKeyword             !IdentifierName
-            / ReturnKeyword         !IdentifierName
-            / SuperKeyword          !IdentifierName
-            / SwitchKeyword         !IdentifierName
-            / ThrowKeyword          !IdentifierName
-            / TryKeyword            !IdentifierName
-            / TypeofKeyword         !IdentifierName
-            / UndefinedKeyword      !IdentifierName
-            / VarKeyword            !IdentifierName
-            / VoidKeyword           !IdentifierName
-            / WhileKeyword          !IdentifierName
-            / WithKeyword           !IdentifierName
+        = ( AlsoKeyword / AndKeyword / CatKeyword / CloneKeyword / DecKeyword
+            / DefKeyword / DoKeyword / DownKeyword / EndKeyword / FalseKeyword
+            / FixKeyword / IncKeyword / MutKeyword / NanKeyword / NoKeyword 
+            / NotKeyword / OffKeyword / OnKeyword / OrKeyword / ToKeyword
+            / TrueKeyword / UFOKeyword / UnlessKeyword / UpKeyword / UsableKeyword
+            / UseKeyword / ViaKeyword / WhenKeyword / YesKeyword / ZoneKeyword
+            / StepKeyword / AsyncKeyword / GenKeyword / ObjectKeyword
+            / TemplateKeyword / ArrayKeyword / ThisKeyword / EmptyKeyword
+            / CaseKeyword / CatchKeyword / ClassKeyword / ConstKeyword / ContinueKeyword
+            / DebuggerKeyword / DefaultKeyword / DeleteKeyword / DoKeyword
+            / ElseKeyword / ExportKeyword / ExtendsKeyword / FinallyKeyword
+            / ForKeyword / FromKeyword / FunctionKeyword / IfKeyword / ImportKeyword
+            / InKeyword / InstanceOfKeyword / LetKeyword / NewKeyword / NothingKeyword
+            / OfKeyword / ReturnKeyword / SuperKeyword / SwitchKeyword / ThrowKeyword
+            / TryKeyword / TypeofKeyword / UndefinedKeyword / VarKeyword / VoidKeyword
+            / WhileKeyword / WithKeyword
+        ) !IdentifierName
 
         // ─────────────────────────────────────────────────────────────────
 
