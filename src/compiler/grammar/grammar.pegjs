@@ -246,8 +246,8 @@
         / JSXSingle
 
     JSXSingle
-        = !( "<" __* "/" ) "<" __* name:AddressIdentifier
-                           props:JSXProperties? __* "/" __* ">" {
+        = !( LessThanSign __* SlashSign ) LessThanSign __* name:AddressIdentifier
+                           props:JSXProperties? __* SlashSign __* GreaterThanSign {
             return {
                 type:       "JSX",
                 id:         id( ),
@@ -289,8 +289,8 @@
         }
 
     JSXOpening
-        = !( "<" __* "/" ) "<" __* name:AddressIdentifier
-                           props:JSXProperties? __*  ">" {
+        = !( LessThanSign __* SlashSign ) LessThanSign __* name:AddressIdentifier
+                           props:JSXProperties? __* GreaterThanSign {
             return {
                 name:       name,
                 props:      props? props : [ ]
@@ -298,7 +298,7 @@
         }
 
     JSXEnding
-        = "</" __* name:AddressIdentifier __* ">" {
+        = LessThanSign SlashSign __* name:AddressIdentifier __* GreaterThanSign {
             return {
                 name: name
             }
@@ -312,7 +312,7 @@
     JSXBodyParts
         = JSXExpression
         / JSXInlineExpression
-        / !( "<" / "{" ) char:. {
+        / !( LessThanSign / LeftCurlyBracket ) char:. {
             return char
         }
 
@@ -322,7 +322,7 @@
         }
 
     JSXProperty
-        = name:Identifier __* "=" __* value:JSXPropertyValues {
+        = name:Identifier __* EqualSign __* value:JSXPropertyValues {
             return {
                 type:       "JSXProperty",
                 id:         id( ),
@@ -337,7 +337,7 @@
         / JSXInlineExpression
 
     JSXInlineExpression
-        = "{" __* expr: Expression __* "}" {
+        = LeftCurlyBracket __* expr: Expression __* RightCurlyBracket {
             return expr
         }
 
@@ -346,13 +346,14 @@
 //
 
     RangeLiteral
-        = "[" __* start:RangeExpr __* connector:('...' / '..') __* end:RangeExpr __* "]" {
+        = LeftSquareBrace __* start:RangeExpr __* DotSign DotSign connector:DotSign?
+        __* end:RangeExpr __* RightSquareBrace {
             return {
                 type:       'RangeLiteral',
                 location:   location( ),
                 id:         id( ),
                 start:      start,
-                connector:  connector,
+                connector:  connector? '...' : '..',
                 end:        end
             }
         }
@@ -371,7 +372,7 @@
 //
 
     ZoneDeclaration
-        = 'zone' __+ name:AddressIdentifier __* EndStructureSign
+        = ZoneKeyword __+ name:AddressIdentifier __* EndStructureSign
           body:Body END {
             return {
                 type:       'ZoneDeclaration',
@@ -397,7 +398,7 @@
 //
 
     TryCatchStatement 'try catch statement'
-        = "try" body:Body "catch" __+ exceptionIdentifier:Identifier __*
+        = TryKeyword body:Body CatchKeyword __+ exceptionIdentifier:Identifier __*
           EndStructureSign catchBody:Body finallyBody:TryCatchFinallyBody? END {
               return {
                   type:                 'TryCatchStatement',
@@ -444,15 +445,15 @@
         }
 
     BracedComparison
-        = '(' __* expr:Comparison __* ')' {
+        = LeftParenthesis __* expr:Comparison __* RightParenthesis {
             return expr
         }
 
     ComparisonKey
-        = __* op:( '==' / '<=' / '>=' / '!=' / '<' / '>' / 'is' / 'isnt' ) __* {
+        = __* op:( '==' / '<=' / '>=' / '!=' / LessThanSign / GreaterThanSign ) __* {
             return op
         }
-        / __+ key:( 'and' / 'or' ) __+ {
+        / __+ key:( AndKeyword / OrKeyword ) __+ {
             return key
         }
 
@@ -461,7 +462,8 @@
 //
 
     Selector 'selector expression'
-        = "[" __* searchable:Expression __* queries:SelectorQueryPart+ "]" {
+        = LeftSquareBrace __* searchable:Expression __* queries:SelectorQueryPart+
+          RightSquareBrace {
             return {
                 type:       "Selector",
                 id:         id( ),
@@ -471,8 +473,8 @@
                 queries:    queries,
             }
         }
-        / "[" __* searchable:Expression __* "|" __* start:Returnable __+ "to"
-          __+ end:Returnable __* "]" {
+        / LeftSquareBrace __* searchable:Expression __* BarSign __* start:Returnable
+          __+ "to" __+ end:Returnable __* RightSquareBrace {
             return {
                 type:       "Selector",
                 id:         id( ),
@@ -485,7 +487,7 @@
           }
         
     SelectorQueryPart
-        = "|" __* query:( LambdaBody / Expression ) __* {
+        = BarSign __* query:( LambdaBody / Expression ) __* {
             return query
         }
 
@@ -494,8 +496,8 @@
 //
 
     ForStatement 'for loop statement'
-        = "for" __+ start:Returnable __+ dir:ForDirectionKey __+ "to" __+ end:Returnable
-          step:ForStep? indexVar:ForIndexVar? __* EndStructureSign body:Body END {
+        = ForKeyword __+ start:Returnable __+ dir:ForDirectionKey __+ ToKeyword __+
+          end:Returnable step:ForStep? indexVar:ForIndexVar? __* EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
                 id:         id( ),
@@ -511,7 +513,7 @@
                 },
             }
         }
-        / "for" __+ upLimit:Returnable step:ForStep? indexVar:ForIndexVar? __*
+        / ForKeyword __+ upLimit:Returnable step:ForStep? indexVar:ForIndexVar? __*
           EndStructureSign body:Body END {
             return {
                 type:       "ForStatement",
@@ -528,7 +530,7 @@
                 },
             }
         }
-        / "for" __+ iterator:Identifier __+ key:ForIterationTypeKey __+
+        / ForKeyword __+ iterator:Identifier __+ key:ForIterationTypeKey __+
           iterable:Returnable __* predicate:ForIterationWhen? EndStructureSign
           body:Body END {
             return {
@@ -545,26 +547,26 @@
         }
 
     ForIterationWhen
-        = "when" __+ predicate:Predicate __* {
+        = WhenKeyword __+ predicate:Predicate __* {
             return predicate
         }
 
     ForIterationTypeKey
-        = "of"
-        / "in"
+        = OfKeyword
+        / InKeyword
 
     ForIndexVar
-        = __+ "via" __+ name:Identifier {
+        = __+ ViaKeyword __+ name:Identifier {
             return name
         }
 
     ForStep
-        = __+ "step" __+ stepExp:Returnable {
+        = __+ StepKeyword __+ stepExp:Returnable {
             return stepExp
         }
     
     ForDirectionKey
-        = key:( "up" / "down" ) {
+        = key:( UpKeyword / DownKeyword ) {
             return ( key === "up" )? true : false
         }
 
@@ -573,7 +575,7 @@
 //
 
     UseStatement 'use statement'
-        = "use" __+ args:IdentifierList __+ 'from' __+ origin:StringLiteral {
+        = UseKeyword __+ args:IdentifierList __+ FromKeyword __+ origin:StringLiteral {
             return {
                 type:       'UseStatement',
                 id:         id( ),
@@ -583,7 +585,7 @@
                 args:       args
             }
         }
-        / "use" __+ originId:StringLiteral __+ "as" __+ name:Identifier {
+        / UseKeyword __+ originId:StringLiteral __+ AlsoKeyword __+ name:Identifier {
             return {
                 type:       'UseStatement',
                 id:         id( ),
@@ -593,7 +595,7 @@
                 name:       name,
             }
         }
-        / "use" _+ args:UseImportsArgs {
+        / UseKeyword _+ args:UseImportsArgs {
             return {
                 type:       'UseStatement',
                 id:         id( ),
@@ -628,7 +630,7 @@
 //
 
     SwitchStatement 'switch statement'
-        = "switch" __+ expr:Returnable __* EndStructureSign __+ cases:CaseStatement+
+        = SwitchKeyword __+ expr:Returnable __* EndStructureSign __+ cases:CaseStatement+
            defaultBody:SwitchElse? END {
             return {
                 type:           "SwitchStatement",
@@ -641,12 +643,12 @@
         }
 
     SwitchElse 'switch else clause'
-        = __* "else" __ body:Body {
+        = __* ElseKeyword __ body:Body {
             return body
         }
 
     CaseStatement 'switch case clause'
-        = __* "case" __+ cases: CaseMembers __* EndStructureSign body:Body {
+        = __* CaseKeyword __+ cases: CaseMembers __* EndStructureSign body:Body {
             return {
                 type:       "CaseStatement",
                 id:         id( ),
@@ -691,7 +693,7 @@
               }
           }
         / key:IfSwitchKey predicate:ConditionalsPredicate trueBranch:Body
-          elseIfBranches: ElseIfStatementArray "else" falseBranch:Body END {
+          elseIfBranches: ElseIfStatementArray ElseKeyword falseBranch:Body END {
               return {
                   type:             "IfStatement",
                   location:         location( ),
@@ -706,7 +708,7 @@
           }
 
     IfSwitchKey
-        = key:( "if" / "unless" ) {
+        = key:( IfKeyword / UnlessKeyword ) {
             return key
         }
 
@@ -714,7 +716,7 @@
         = ElseIfStatement+
 
     ElseIfStatement 'also if clause'
-        = FullPlainWhiteSpace* "also" PlainWhiteSpace+ key:IfSwitchKey
+        = FullPlainWhiteSpace* AlsoKeyword PlainWhiteSpace+ key:IfSwitchKey
           predicate:ConditionalsPredicate body:Body {
             return {
                 type:       "ElseIfStatement",
@@ -731,8 +733,8 @@
 //
 
     ShorthandIfExpression 'shorthand if expression'
-        = expr:ShorthandIfParts _* "?" _*  trueExpression:ArgumentReturnable _* "!" _*
-        falseExpression:ArgumentReturnable {
+        = expr:ShorthandIfParts _* QuestionMark _* trueExpression:ArgumentReturnable
+          _* ExclamationMark _* falseExpression:ArgumentReturnable {
             return {
                 type:               "ShorthandIfExpression",
                 location:           location( ),
@@ -748,7 +750,7 @@
 //
 
     WhileStatement 'while statement'
-        = "while" predicate:ConditionalsPredicate body:Body END {
+        = WhileKeyword predicate:ConditionalsPredicate body:Body END {
               return {
                   type:         "WhileStatement",
                   location:     location( ),
@@ -763,7 +765,8 @@
 //
 
     LambdaExpression 'lambda expression'
-        = "[" __* args:IdentifierList __* "=>" __* code:ArgumentReturnable __* "]" {
+        = LeftSquareBrace __* args:IdentifierList __* DoubleArrowSign __*
+          code:ArgumentReturnable __* RightSquareBrace {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -772,7 +775,7 @@
                 code:       code
             }
         }
-        / "to" __+ params:FunctionIdentifierList __+ "do" body:Body END {
+        / ToKeyword __+ params:FunctionIdentifierList __+ DoKeyword body:Body END {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -781,7 +784,7 @@
                 code:       body
             }
         }
-        / "do" __+ body:Body END {
+        / DoKeyword __+ body:Body END {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -792,7 +795,7 @@
         }
 
     LambdaBody 'lambda expression'
-        = args:IdentifierList __* "=>" __* code:ArgumentReturnable {
+        = args:IdentifierList __* DoubleArrowSign __* code:ArgumentReturnable {
             return {
                 type:       "LambdaExpression",
                 location:   location( ),
@@ -831,7 +834,7 @@
         }
 
     PipeControl
-        = __* "->" __*
+        = __* RightArrowSign __*
 
 //
 // ─── RETURN KEYWORD ─────────────────────────────────────────────────────────────
@@ -852,7 +855,7 @@
 //
 
     SExpression
-        = "(" __* body: SExpressionBody __* ")" {
+        = LeftParenthesis __* body: SExpressionBody __* RightParenthesis {
             return body
         }
         / UnaryExpressionBody
@@ -915,7 +918,7 @@
 
 
     BinaryOperator 'binary operator'
-        = op:( 'div' / 'sub' / 'sum' / 'mul' / 'pow' / 'mod' / 'and' / 'or' ) {
+        = op:( '/' / '-' / '+' / '*' / '^' / '%' / AndKeyword / OrKeyword ) {
             return {
                 type:       "BinaryOperator",
                 location:   location( ),
@@ -939,7 +942,7 @@
 //
 
     ClassDeclaration 'class declaration'
-        = exported:ExportKey "class" _+ name:Identifier origin:ClassExtends? _* 
+        = exported:ExportKey ClassKeyword _+ name:Identifier origin:ClassExtends? _* 
           EndStructureSign __* defs:ClassFunctionDeclarations __* END {
             return {
                 type:       'ClassDeclaration',
@@ -951,7 +954,7 @@
                 origin:     origin
             }
         }
-        / exported:ExportKey "class" _+ name:Identifier
+        / exported:ExportKey ClassKeyword _+ name:Identifier
           origin:ClassExtends? _* EndStructureSign __* END {
             return {
                 type:       'ClassDeclaration',
@@ -965,7 +968,7 @@
         }
 
     ClassExtends
-        = _+ 'extends' _+ origin:AddressIdentifier {
+        = _+ ExtendsKeyword _+ origin:AddressIdentifier {
             return origin
         }
 
@@ -1007,7 +1010,7 @@
         }
 
     FunctionDefKind
-        = type:( 'def' / 'async' ) {
+        = type:( DefKeyword / AsyncKeyword / GenKeyword ) {
             return type
         }
 
@@ -1026,7 +1029,7 @@
                 rested:     false
             }
         }
-        / '[' __* name: Identifier __* ']' {
+        / LeftSquareBrace __* name: Identifier __* RightSquareBrace {
             return {
                 type:       "FunctionIdentifier",
                 location:   location( ),
@@ -1041,8 +1044,8 @@
 //
 
     TableLiteral 'table literal'
-        = "|" header: TableColumnHeader _* EOL
-        _* "|" _* TableHeaderLines _* EOL
+        = BarSign header: TableColumnHeader _* EOL
+        _* BarSign _* TableHeaderLines _* EOL
         _* data:TableBody {
             return {
                 type:       "TableLiteral",
@@ -1059,8 +1062,8 @@
         = TableColumnHeaderMember+
 
     TableColumnHeaderMember
-        = _* name:( "#" / Identifier ) _* "|" {
-            if ( name === "#" )
+        = _* name:( OctothorpeSign / Identifier ) _* BarSign {
+            if ( name === OctothorpeSign )
                 return {
                     type:       'Octothorpe',
                     location:   location( ),
@@ -1077,7 +1080,7 @@
         / TableHeaderSingleColumnLine
 
     TableHeaderSingleColumnLine
-        = _* "-"+ _* "|"
+        = _* DashSign+ _* BarSign
 
 
     // Table Body
@@ -1100,10 +1103,10 @@
         = TableRowSingleMember+
 
     TableRowSingleMember
-        = _* expr:Returnable _* "|" {
+        = _* expr:Returnable _* BarSign {
             return expr
         }
-        / _+ "|" {
+        / _+ BarSign {
             return {
                 type:       "EmptyCell",
                 id:         id( ),
@@ -1116,7 +1119,7 @@
 //
 
     ExportKey
-        = key:("usable" _)? _* {
+        = key:( UsableKeyword _ )? _* {
             return key? true : false
         }
 
@@ -1125,7 +1128,7 @@
 //
 
     HolderDeclarationStatement 'hold statement'
-        = holder:HolderIdentifier __* "=" __* value:Returnable {
+        = holder:HolderIdentifier __* EqualSign __* value:Returnable {
             return {
                 type:       'HolderDeclarationStatement',
                 location:   location( ),
@@ -1136,7 +1139,7 @@
         }
 
     HolderIdentifier 'holder identifer'
-        = '@' parts:IdentifierPart+ {
+        = AtSign parts:IdentifierPart+ {
             return {
                 type:       'HolderIdentifier',
                 location:   location( ),
@@ -1150,7 +1153,7 @@
 //
 
     DeclarationStatement 'declaration statement'
-        = exported:ExportKey modifier:( "fix" / "mut" ) _+
+        = exported:ExportKey modifier:( FixKeyword / MutKeyword ) _+
           assignment:DeclarationAssignment {
             return {
                 type:       'DeclarationStatement',
@@ -1162,7 +1165,7 @@
                 assignment: assignment
             }
         }
-        / exported:ExportKey "mut" _+ names:NameOnlyDeclarationsArray  {
+        / exported:ExportKey MutKeyword _+ names:NameOnlyDeclarationsArray  {
             return {
                 type:       'DeclarationStatement',
                 location:   location( ),
@@ -1207,7 +1210,7 @@
 //
 
     DeclarationAssignment 'declaration statement'
-        = name:Identifier __* "=" __* value:Returnable {
+        = name:Identifier __* EqualSign __* value:Returnable {
             return {
                 type:       'DeclarationAssignment',
                 location:   location( ),
@@ -1222,7 +1225,7 @@
 //
 
     SingleAssignmentStatement 'assignment statement'
-        = name:AddressIdentifier __* key:( "=" / "?=" ) __* value:Returnable {
+        = name:AddressIdentifier __* key:( EqualSign / "?=" ) __* value:Returnable {
             return {
                 type:       'SingleAssignmentStatement',
                 location:   location( ),
@@ -1248,7 +1251,7 @@
 //
 
     ExpressionMember 'literal member call'
-        = expr:Expression _* "/" _* member:( AddressIdentifier / Identifier ) {
+        = expr:Expression _* SlashSign _* member:( AddressIdentifier / Identifier ) {
             return {
                 type:       "ExpressionMember",
                 location:   location( ),
@@ -1262,7 +1265,7 @@
 //
 
     AddressIdentifier 'address identifier'
-        = space:IdentifierName _* "/" _* member:AddressIdentifierTailMember {
+        = space:IdentifierName _* SlashSign _* member:AddressIdentifierTailMember {
             return {
                 type:       "AddressIdentifier",
                 location:   location( ),
@@ -1302,7 +1305,7 @@
 //
 
     MapLiteral 'map literal'
-        = "{" __* ObjectAssignmentKeyValueCharacter __* "}" {
+        = LeftCurlyBracket __* ColonSign __* RightCurlyBracket {
             return {
                 type:       "MapLiteral",
                 location:   location( ),
@@ -1310,7 +1313,7 @@
                 value:      [ ]
             }
         }
-        / "{" __* members:MapPairMember __* "}" {
+        / LeftCurlyBracket __* members:MapPairMember __* RightCurlyBracket {
             return {
                 type:       "MapLiteral",
                 location:   location( ),
@@ -1325,7 +1328,7 @@
         } 
 
     MapAssignment
-        = key:Returnable _* ObjectAssignmentKeyValueCharacter _*
+        = key:Returnable _* ColonSign _*
           value:ArgumentReturnable {
             return {
                 location: location( ),
@@ -1339,7 +1342,7 @@
 //
 
     ObjectLiteral 'object literal'
-        = "[" __* ObjectAssignmentKeyValueCharacter __* "]" {
+        = LeftSquareBrace __* ColonSign __* RightSquareBrace {
             return {
                 type:       "ObjectLiteral",
                 location:   location( ),
@@ -1347,7 +1350,7 @@
                 value:      [ ]
             }
         }
-        / "[" __* members:ObjectPairMember __* "]" {
+        / LeftSquareBrace __* members:ObjectPairMember __* RightSquareBrace {
             return {
                 type:       "ObjectLiteral",
                 location:   location( ),
@@ -1371,7 +1374,7 @@
         }
 
     ObjectKindKey
-        = key:( "object" / "template" ) {
+        = key:( ObjectKeyword / TemplateKeyword ) {
             return key
         }
 
@@ -1381,7 +1384,7 @@
         } 
 
     ObjectAssignment
-        = name:Identifier _* ObjectAssignmentKeyValueCharacter _*
+        = name:Identifier _* ColonSign _*
           value:ArgumentReturnable {
             return {
                 key:    name,
@@ -1389,14 +1392,12 @@
             }
         }
 
-    ObjectAssignmentKeyValueCharacter = ":"
-
 //
 // ─── SET LITERALS ───────────────────────────────────────────────────────────────
 //
 
     SetLiteral 'set literal'
-        = "{" __* "}" {
+        = LeftCurlyBracket __* RightCurlyBracket {
             return {
                 type:       "SetLiteral",
                 location:   location( ),
@@ -1404,7 +1405,7 @@
                 value:      [ ]
             }
         }
-        / "{" __* members:ArrayMember __* "}" {
+        / LeftCurlyBracket __* members:ArrayMember __* RightCurlyBracket {
             return {
                 type:       "SetLiteral",
                 location:   location( ),
@@ -1418,7 +1419,7 @@
 //
 
     ArrayLiteral 'array literal'
-        = "[" __* "]" {
+        = LeftSquareBrace __* RightSquareBrace {
             return {
                 type:       "ArrayLiteral",
                 location:   location( ),
@@ -1426,7 +1427,7 @@
                 value:      [ ]
             }
         }
-        / "[" __* members:ArrayMember __* "]" {
+        / LeftSquareBrace __* members:ArrayMember __* RightSquareBrace {
             return {
                 type:       "ArrayLiteral",
                 location:   location( ),
@@ -1436,7 +1437,7 @@
         }
 
     ArrayDeclaration 'array declaration'
-        = exported:ExportKey "array" _+ name:Identifier __* EndStructureSign __*
+        = exported:ExportKey  _+ name:Identifier __* EndStructureSign __*
           members:ArrayMember __+ END {
             return {
                 type:       "ArrayDeclaration",
@@ -1475,7 +1476,7 @@
 //
 
     ReservedIdentifiers
-        = name:( 'this' ) {
+        = name:( ThisKeyword / SuperKeyword ) {
             return {
                 type:       'ReservedIdentifiers',
                 location:   location( ),
@@ -1494,121 +1495,90 @@
         // ─── KARYSCRIPT KEYWORDS ─────────────────────────────────────────
         //
 
-            = "end"             !IdentifierName
-            / "def"             !IdentifierName
-            / "unless"          !IdentifierName
-            / "also"            !IdentifierName
-            / "and"             !IdentifierName
-            / "or"              !IdentifierName
-            / "ufo"             !IdentifierName
-            / "sub"             !IdentifierName
-            / "mul"             !IdentifierName
-            / "div"             !IdentifierName
-            / "sum"             !IdentifierName
-            / "pow"             !IdentifierName
-            / "mod"             !IdentifierName
-            / "inc"             !IdentifierName
-            / "dec"             !IdentifierName
-            / "on"              !IdentifierName
-            / "off"             !IdentifierName
-            / "true"            !IdentifierName
-            / "false"           !IdentifierName
-            / "yes"             !IdentifierName
-            / "no"              !IdentifierName
-            / "not"             !IdentifierName
-            / "cat"             !IdentifierName
-            / "nan"             !IdentifierName
-            / "fix"             !IdentifierName
-            / "use"             !IdentifierName
-            / "up"              !IdentifierName
-            / "down"            !IdentifierName
-            / "to"              !IdentifierName
-            / "via"             !IdentifierName
-            / "clone"           !IdentifierName
-            / "zone"            !IdentifierName
-            / "when"            !IdentifierName
-            / "is"              !IdentifierName
-            / "isnt"            !IdentifierName
-            / "usable"          !IdentifierName
-            / "do"              !IdentifierName
+            = AlsoKeyword           !IdentifierName
+            / AndKeyword            !IdentifierName
+            / CatKeyword            !IdentifierName
+            / CloneKeyword          !IdentifierName
+            / DecKeyword            !IdentifierName
+            / DefKeyword            !IdentifierName
+            / DivKeyword            !IdentifierName
+            / DoKeyword             !IdentifierName
+            / DownKeyword           !IdentifierName
+            / EndKeyword            !IdentifierName
+            / FalseKeyword          !IdentifierName
+            / FixKeyword            !IdentifierName
+            / IncKeyword            !IdentifierName
+            / ModKeyword            !IdentifierName
+            / MutKeyword            !IdentifierName
+            / MulKeyword            !IdentifierName
+            / NanKeyword            !IdentifierName
+            / NoKeyword             !IdentifierName
+            / NotKeyword            !IdentifierName
+            / OffKeyword            !IdentifierName
+            / OnKeyword             !IdentifierName
+            / OrKeyword             !IdentifierName
+            / PowKeyword            !IdentifierName
+            / SubKeyword            !IdentifierName
+            / SumKeyword            !IdentifierName
+            / ToKeyword             !IdentifierName
+            / TrueKeyword           !IdentifierName
+            / UFOKeyword            !IdentifierName
+            / UnlessKeyword         !IdentifierName
+            / UpKeyword             !IdentifierName
+            / UsableKeyword         !IdentifierName
+            / UseKeyword            !IdentifierName
+            / ViaKeyword            !IdentifierName
+            / WhenKeyword           !IdentifierName
+            / YesKeyword            !IdentifierName
+            / ZoneKeyword           !IdentifierName
+            / StepKeyword           !IdentifierName
+            / AsyncKeyword          !IdentifierName
+            / GenKeyword            !IdentifierName
+            / ObjectKeyword         !IdentifierName
+            / TemplateKeyword       !IdentifierName
+            / ArrayKeyword          !IdentifierName
+            / ThisKeyword           !IdentifierName
+            / EmptyKeyword          !IdentifierName
 
         //
         // ─── JAVASCRIPT KEYWORDS ─────────────────────────────────────────
         //
 
-            / "let"             !IdentifierName
-            / "var"             !IdentifierName
-            / "const"           !IdentifierName
-            / "class"           !IdentifierName
-            / "function"        !IdentifierName
-            / "import"          !IdentifierName
-            / "from"            !IdentifierName
-            / "for"             !IdentifierName
-            / "of"              !IdentifierName
-            / "in"              !IdentifierName
-            / "while"           !IdentifierName
-            / "continue"        !IdentifierName
-            / "debugger"        !IdentifierName
-            / "delete"          !IdentifierName
-            / "do"              !IdentifierName
-            / "export"          !IdentifierName
-            / "extends"         !IdentifierName
-            / "if"              !IdentifierName
-            / "else"            !IdentifierName
-            / "switch"          !IdentifierName
-            / "case"            !IdentifierName
-            / "default"         !IdentifierName
-            / "try"             !IdentifierName
-            / "catch"           !IdentifierName
-            / "finally"         !IdentifierName
-            / "NaN"             !IdentifierName
-            / "nothing"         !IdentifierName
-            / "undefined"       !IdentifierName
-            / "typeof"          !IdentifierName
-            / "instanceof"      !IdentifierName
-            / "new"             !IdentifierName
-            / "return"          !IdentifierName
-            / "super"           !IdentifierName
-            / "throw"           !IdentifierName
-            / "void"            !IdentifierName
-            / "with"            !IdentifierName
-            / "yield"           !IdentifierName
-
-        //
-        // ─── FUTURE JAVASCRIPT KEYWORDS ──────────────────────────────────
-        //
-
-            / "enum"            !IdentifierName
-            / "implements"      !IdentifierName
-            / "package"         !IdentifierName
-            / "interface"       !IdentifierName
-            / "private"         !IdentifierName
-            / "protected"       !IdentifierName
-            / "public"          !IdentifierName
-            / "static"          !IdentifierName
-            / "async"           !IdentifierName
-            / "await"           !IdentifierName
-
-        //
-        // ─── OLDER SPECIFICATION RESERVED WORDS ──────────────────────────
-        //
-
-            / "abstract"        !IdentifierName
-            / "boolean"         !IdentifierName
-            / "byte"            !IdentifierName
-            / "char"            !IdentifierName
-            / "double"          !IdentifierName
-            / "final"           !IdentifierName
-            / "float"           !IdentifierName
-            / "goto"            !IdentifierName
-            / "int"             !IdentifierName
-            / "long"            !IdentifierName
-            / "native"          !IdentifierName
-            / "short"           !IdentifierName
-            / "synchronized"    !IdentifierName
-            / "throws"          !IdentifierName
-            / "transient"       !IdentifierName
-            / "volatile"        !IdentifierName
+            / CaseKeyword           !IdentifierName
+            / CatchKeyword          !IdentifierName
+            / ClassKeyword          !IdentifierName
+            / ConstKeyword          !IdentifierName
+            / ContinueKeyword       !IdentifierName
+            / DebuggerKeyword       !IdentifierName
+            / DefaultKeyword        !IdentifierName
+            / DeleteKeyword         !IdentifierName
+            / DoKeyword             !IdentifierName
+            / ElseKeyword           !IdentifierName
+            / ExportKeyword         !IdentifierName
+            / ExtendsKeyword        !IdentifierName
+            / FinallyKeyword        !IdentifierName
+            / ForKeyword            !IdentifierName
+            / FromKeyword           !IdentifierName
+            / FunctionKeyword       !IdentifierName
+            / IfKeyword             !IdentifierName
+            / ImportKeyword         !IdentifierName
+            / InKeyword             !IdentifierName
+            / InstanceOfKeyword     !IdentifierName
+            / LetKeyword            !IdentifierName
+            / NewKeyword            !IdentifierName
+            / NothingKeyword        !IdentifierName
+            / OfKeyword             !IdentifierName
+            / ReturnKeyword         !IdentifierName
+            / SuperKeyword          !IdentifierName
+            / SwitchKeyword         !IdentifierName
+            / ThrowKeyword          !IdentifierName
+            / TryKeyword            !IdentifierName
+            / TypeofKeyword         !IdentifierName
+            / UndefinedKeyword      !IdentifierName
+            / VarKeyword            !IdentifierName
+            / VoidKeyword           !IdentifierName
+            / WhileKeyword          !IdentifierName
+            / WithKeyword           !IdentifierName
 
         // ─────────────────────────────────────────────────────────────────
 
@@ -1624,7 +1594,7 @@
 //
 
     RegExpLiteral "regular expression"
-        = "/" pattern:$RegularExpressionBody "/" flags:$RegularExpressionFlags {
+        = SlashSign pattern:$RegularExpressionBody SlashSign flags:$RegularExpressionFlags {
 
             return {
                 type:       "RegExpLiteral",
@@ -1669,7 +1639,8 @@
 //
 
     ReservedValueLiterals 'reserved value'
-        = value:( "nan" / "NaN" / "ufo" / "undefined" / "nothing" / "empty" ) {
+        = value:( NanKeyword / UFOKeyword / UndefinedKeyword / NothingKeyword /
+                  EmptyKeyword ) {
             let result
             switch ( value ) {
                 case "NaN":
@@ -1698,7 +1669,8 @@
 //
 
     BooleanLiteral 'boolean literal'
-        = !"not" key:( 'on' / 'off' / 'true' / 'false' / 'yes' / "no" ) {
+        = !NotKeyword key:( OnKeyword / OffKeyword / TrueKeyword / FalseKeyword /
+                            YesKeyword / NoKeyword ) {
             let result = true
             switch ( key ) {
                 case 'off':
@@ -1721,7 +1693,7 @@
 //
 
     StringLiteral 'string literal'
-        = '"' body:( DoubleQuotesStringsParts )* '"' {
+        = QuotationMark body:( DoubleQuotesStringsParts )* QuotationMark {
             return {
                 type:       "StringLiteral",
                 location:   location( ),
@@ -1730,7 +1702,7 @@
                 parts:      generateStringResult( body ),
             }
         }
-        / "'" body:( SingleQuotesStringsParts )* "'" {
+        / ApostropheSign body:( SingleQuotesStringsParts )* ApostropheSign {
             return {
                 type:       "StringLiteral",
                 location:   location( ),
@@ -1757,7 +1729,7 @@
         }
 
     StringInterpolation
-        = '#' expr:SExpression {
+        = OctothorpeSign expr:SExpression {
             return expr
         }
 
@@ -1766,7 +1738,7 @@
 //
 
     NumericLiteral 'numeric literal'
-        = sign:'-'? '0x' numerics:[0-9a-f]+ {
+        = sign:DashSign? '0x' numerics:[0-9a-f]+ {
             let number = ( sign? sign : '' ) + '0x' + numerics.join('')
             return {
                 type:       'NumericLiteral',
@@ -1776,7 +1748,7 @@
                 value:      eval( number )
             }
         }
-        / sign:'-'? start:[0-9]+ decimals:('.'[0-9]+)? {
+        / sign:DashSign? start:[0-9]+ decimals:('.'[0-9]+)? {
             let number = (
                 ( sign? sign : '' ) + start.join('') +
                 ( decimals? '.' + decimals[ 1 ].join('') : '' )
@@ -1808,7 +1780,7 @@
 //
 
     END 'end keyword'
-        = "end"
+        = EndKeyword
 
 //
 // ─── FULL SPACE ─────────────────────────────────────────────────────────────────
@@ -1823,7 +1795,7 @@
 //
 
     InlineComment 'inline comment'
-        = '//' text:(!EOL .)* {
+        = SlashSign SlashSign text:(!EOL .)* {
             return {
                 type:       "InlineComment",
                 location:   location( ),
@@ -1836,7 +1808,7 @@
 // ─── SPECIAL CHARACTERS ─────────────────────────────────────────────────────────
 //
 
-    EndStructureSign = ":"
+    EndStructureSign = ColonSign
 
 //
 // ─── WHITESPACE ─────────────────────────────────────────────────────────────────
@@ -2102,5 +2074,114 @@
     // Separator, Space
     Zs = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
-// ────────────────────────────────────────────────────────────────────────────────
+//
+// ─── LANGUAGE SPECIAL CHARACTERS ────────────────────────────────────────────────
+//
 
+    LeftSquareBrace     = "["
+    RightSquareBrace    = "]"
+    LessThanSign        = "<"
+    GreaterThanSign     = ">"
+    SlashSign           = "/"
+    LeftCurlyBracket    = "{"
+    RightCurlyBracket   = "}"
+    EqualSign           = "="
+    DotSign             = "."
+    LeftParenthesis     = "("
+    RightParenthesis    = ")"
+    BarSign             = "|"
+    QuestionMark        = "?"
+    ExclamationMark     = "!"
+    RightArrowSign      = "->"
+    DoubleArrowSign     = "=>"
+    OctothorpeSign      = "#"
+    DashSign            = "-"
+    AtSign              = "@"
+    ColonSign           = ":"
+    QuotationMark       = "\""
+    ApostropheSign      = "'"
+
+
+//
+// ─── KEYWORDS ───────────────────────────────────────────────────────────────────
+//
+
+    EmptyKeyword        = "empty"
+    ArrayKeyword        = "array"
+    ThisKeyword         = "this"
+    AlsoKeyword         = "also"
+    AndKeyword          = "and"
+    CaseKeyword         = "case"
+    CatchKeyword        = "catch"
+    CatKeyword          = "cat"
+    ClassKeyword        = "class"
+    CloneKeyword        = "clone"
+    ConstKeyword        = "const"
+    ContinueKeyword     = "continue"
+    DebuggerKeyword     = "debugger"
+    DecKeyword          = "dec"
+    DefaultKeyword      = "default"
+    DefKeyword          = "def"
+    DeleteKeyword       = "delete"
+    DivKeyword          = "div"
+    DoKeyword           = "do"
+    DownKeyword         = "down"
+    ElseKeyword         = "else"
+    EndKeyword          = "end"
+    ExportKeyword       = "export"
+    ExtendsKeyword      = "extends"
+    FalseKeyword        = "false"
+    FinallyKeyword      = "finally"
+    FixKeyword          = "fix"
+    ForKeyword          = "for"
+    FromKeyword         = "from"
+    FunctionKeyword     = "function"
+    IfKeyword           = "if"
+    ImportKeyword       = "import"
+    IncKeyword          = "inc"
+    InKeyword           = "in"
+    InstanceOfKeyword   = "instanceof"
+    LetKeyword          = "let"
+    ModKeyword          = "mod"
+    MulKeyword          = "mul"
+    MutKeyword          = "mut"
+    NanKeyword          = "nan" / "NaN"
+    NewKeyword          = "new"
+    NoKeyword           = "no"
+    NothingKeyword      = "nothing"
+    NotKeyword          = "not"
+    OffKeyword          = "off"
+    OfKeyword           = "of"
+    OnKeyword           = "on"
+    OrKeyword           = "or"
+    PowKeyword          = "pow"
+    SubKeyword          = "sub"
+    SumKeyword          = "sum"
+    SuperKeyword        = "super"
+    SwitchKeyword       = "switch"
+    ThrowKeyword        = "throw"
+    ToKeyword           = "to"
+    TrueKeyword         = "true"
+    TryKeyword          = "try"
+    TypeofKeyword       = "typeof"
+    UFOKeyword          = "ufo"
+    UndefinedKeyword    = "undefined"
+    UnlessKeyword       = "unless"
+    UpKeyword           = "up"
+    UsableKeyword       = "usable"
+    UseKeyword          = "use"
+    VarKeyword          = "var"
+    ViaKeyword          = "via"
+    VoidKeyword         = "void"
+    WhenKeyword         = "when"
+    WhileKeyword        = "while"
+    WithKeyword         = "with"
+    YesKeyword          = "yes"
+    ZoneKeyword         = "zone"
+    StepKeyword         = "step"
+    AsyncKeyword        = "async"
+    GenKeyword          = "gen"
+    ObjectKeyword       = "object"
+    TemplateKeyword     = "template"
+
+// ────────────────────────────────────────────────────────────────────────────────
