@@ -1523,7 +1523,6 @@
 
     RegExpLiteral "regular expression"
         = SlashSign pattern:$RegularExpressionBody SlashSign flags:$RegularExpressionFlags {
-
             return {
                 type:       "RegExpLiteral",
                 id:         id(),
@@ -1553,7 +1552,7 @@
         = !LineTerminator SourceCharacter
 
     RegularExpressionClass
-        = "[" RegularExpressionClassChar* "]"
+        = LeftSquareBrace RegularExpressionClassChar* RightSquareBrace
 
     RegularExpressionClassChar
         = ![\]\\] RegularExpressionNonTerminator
@@ -1695,7 +1694,7 @@
 //
 
     PipePlaceholder 'pipe placeholder'
-        = "%" {
+        = OctothorpeSign {
             return {
                 type:       "PipePlaceholder",
                 id:         id( ),
@@ -1746,8 +1745,6 @@
         = FullPlainWhiteSpace* {
             return {
                 type:       'Empty',
-                location:   location( ),
-                id:         id( ),
             }
         }
     _
@@ -1758,8 +1755,6 @@
         = _* LineTerminator {
             return {
                 type:       'LineTerminator',
-                location:   location( ),
-                id:         id( ),
             }
         }
 
@@ -1771,9 +1766,6 @@
         = spaces:( "\t" / "\v" / "\f" / " " / "\u00A0" / "\uFEFF" / SeparatorSpaces ) {
             return {
                 type:       '_',
-                location:   location( ),
-                id:         id( ),
-                value:      spaces
             }
         }
 
@@ -1781,8 +1773,6 @@
         = [\n\r\u2028\u2029] {
             return {
                 type:       'LineTerminator',
-                location:   location( ),
-                id:         id( ),
             }
         }
 
@@ -1790,8 +1780,6 @@
         = ( "\n"  / "\r\n" / "\r" / "\u2028" / "\u2029" ) {
             return {
                 type:       'LineTerminatorSequence',
-                location:   location( ),
-                id:         id( ),
             }
         }
 
