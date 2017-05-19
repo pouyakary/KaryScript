@@ -1501,25 +1501,19 @@
             / CloneKeyword          !IdentifierName
             / DecKeyword            !IdentifierName
             / DefKeyword            !IdentifierName
-            / DivKeyword            !IdentifierName
             / DoKeyword             !IdentifierName
             / DownKeyword           !IdentifierName
             / EndKeyword            !IdentifierName
             / FalseKeyword          !IdentifierName
             / FixKeyword            !IdentifierName
             / IncKeyword            !IdentifierName
-            / ModKeyword            !IdentifierName
             / MutKeyword            !IdentifierName
-            / MulKeyword            !IdentifierName
             / NanKeyword            !IdentifierName
             / NoKeyword             !IdentifierName
             / NotKeyword            !IdentifierName
             / OffKeyword            !IdentifierName
             / OnKeyword             !IdentifierName
             / OrKeyword             !IdentifierName
-            / PowKeyword            !IdentifierName
-            / SubKeyword            !IdentifierName
-            / SumKeyword            !IdentifierName
             / ToKeyword             !IdentifierName
             / TrueKeyword           !IdentifierName
             / UFOKeyword            !IdentifierName
