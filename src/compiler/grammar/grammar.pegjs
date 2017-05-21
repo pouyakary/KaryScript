@@ -1291,7 +1291,7 @@
         }
 
     IdentifierName
-        = identiferStart:IdentifierStart tail:IdentifierPart* {
+        = identiferStart:[\$a-zA-Z\-\_] tail:[\$\a-zA-Z0-9\-_]* {
             return {
                 type:       'Identifier',
                 location:   location( ),
@@ -1299,6 +1299,14 @@
                 name:       identiferStart + tail.join('')
             }
         }
+        /* = identiferStart:IdentifierStart tail:IdentifierPart* {
+            return {
+                type:       'Identifier',
+                location:   location( ),
+                id:         id( ),
+                name:       identiferStart + tail.join('')
+            }
+        }*/
 
 //
 // ─── MAP LITERAL ────────────────────────────────────────────────────────────────
