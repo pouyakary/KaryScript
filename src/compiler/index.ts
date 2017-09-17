@@ -29,23 +29,30 @@ namespace KaryScript.Compiler {
                              filename: string ): SourceMap.CodeWithSourceMap {
             try {
                 // imports
-                const parser = require( './parser.js' )
-                const sourceMap = require( 'source-map' )
+                const parser =
+                    require( './parser.js' )
+                const sourceMap =
+                    require( 'source-map' )
+
+                // source code
+                const givenSourceCode =
+                    src? src : ""
 
                 // base env info
-                let baseEnvInfo = GetBaseEnvObjectClone( filename, sourceMap )
+                const baseEnvInfo =
+                    GetBaseEnvObjectClone( filename, sourceMap )
 
                 console.log(filename)
                 // parsing code
                 let ast
                 try {
                     console.time('parse')
-                    ast = parser.parse( src ) as AST.IBody
+                    ast = parser.parse( givenSourceCode ) as AST.IBody
                     console.timeEnd('parse')
                 } catch ( parserError ) {
                     throw Reporter.WrapParserError( baseEnvInfo, parserError as Reporter.ICompilerError )
                 }
-                
+
                 // generating code
                 try {
                     console.time('compile')
@@ -99,14 +106,14 @@ namespace KaryScript.Compiler {
     //
 
         export const BaseNodeObject: AST.IBase = {
-            type: 'Root',
-            id: 'R00000',
+            type:   'Root',
+            id:     'R00000',
             location: {
-                start: { offset: 0, column: 0, line: 0 },
-                end: { offset: 0, column: 0, line: 0 }
+                start:  { offset: 0, column: 0, line: 0 },
+                end:    { offset: 0, column: 0, line: 0 },
             }
         }
-    
+
     //
     // ─── SOURCE RESULT ──────────────────────────────────────────────────────────────
     //
@@ -124,7 +131,7 @@ namespace KaryScript.Compiler {
     //
 
         export interface IFinalError {
-            from: 'user' | 'compiler',
+            from:   'user' | 'compiler',
             errors: any[ ]
         }
 

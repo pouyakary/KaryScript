@@ -33,28 +33,26 @@ namespace KaryScript.Compiler.Nodes.ObjectLiteral {
     // ─── COMPILE OBJECT BODY ────────────────────────────────────────────────────────
     //
 
-        export function CompileObjectBody ( node: AST.IObjectLiteral,
-                                             env: IEnv ): SourceMap.SourceNode[ ] {
-
-            return <SourceMap.SourceNode[ ]>
+        type TCompileObjectBody =
+            ( node: AST.IObjectLiteral, env: IEnv ) => SourceMap.SourceNode[ ]
+        export const CompileObjectBody: TCompileObjectBody = ( node, env ) =>
+            <SourceMap.SourceNode[ ]>
                 Join( ", ",
                     node.value.map( pair =>
                         env.GenerateSourceNode( node,
-                            CompileObjectPair( pair, env ))))
-        }
+                            CompileObjectPair( pair, env ) ) ) )
 
     //
     // ─── COMPILE OBJECT PAIR ────────────────────────────────────────────────────────
     //
 
-        export function CompileObjectPair ( pair: AST.IObjectMemberPair,
-                                             env: IEnv ): CompiledCode[ ] {
-            return [
-                Nodes.CompileSingleNode( pair.key, env ),
-                ": ",
-                Nodes.CompileSingleNode( pair.value, env )
+        type TCompileObjectPair =
+            ( pair: AST.IObjectMemberPair, env: IEnv ) => CompiledCode[ ]
+        export const CompileObjectPair: TCompileObjectPair = ( pair, env ) =>
+            [ Nodes.CompileSingleNode( pair.key, env )
+            , ": "
+            , Nodes.CompileSingleNode( pair.value, env )
             ]
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

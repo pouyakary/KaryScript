@@ -17,15 +17,14 @@ namespace KaryScript.Compiler.Nodes.ShorthandIf {
     // ─── COMPILE IF ─────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IShorthandIfExpression,
-                                   env: IEnv ): SourceMap.SourceNode {
-
-            return env.GenerateSourceNode( node, [
+        type TCompile =
+            ( node: AST.IShorthandIfExpression, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            env.GenerateSourceNode( node, [
                 '(', Nodes.CompileSingleNode( node.predicate, env ), ")? ",
                 Nodes.CompileSingleNode( node.trueExpression, env ), " : ",
                 Nodes.CompileSingleNode( node.falseExpression, env )
             ])
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

@@ -16,14 +16,13 @@ namespace KaryScript.Compiler.Nodes.For {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IForStatement,
-                                   env: IEnv ): SourceMap.SourceNode {
-
-            if ( node.kind === 'repeat' )
-                return CompileRepeatFor( node as AST.IRepeatForLoop, env )
-            else
-                return CompileForeachForLoop( node as AST.IForeachForLoop, env )
-        }
+        type TCompile =
+            ( node: AST.IForStatement, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile ( node, env ) =>
+            ( node.kind === 'repeat'
+                ? CompileRepeatFor( node as AST.IRepeatForLoop, env )
+                : CompileForeachForLoop( node as AST.IForeachForLoop, env )
+                )
 
     //
     // ─── REPEAT FOR ─────────────────────────────────────────────────────────────────
@@ -50,7 +49,7 @@ namespace KaryScript.Compiler.Nodes.For {
                 const startingValue = HandleForChangeableExpressions( node, env, true )
                 const endingValue   = HandleForChangeableExpressions( node, env, false )
 
-                const defs = Join( ' ', 
+                const defs = Join( ' ',
                                    <CompiledCode[ ]> [ startingValue, endingValue ]
                                         .filter( x => x.type === 'def' )
                                         .map( x => x.def ))
@@ -60,13 +59,13 @@ namespace KaryScript.Compiler.Nodes.For {
             //
 
                 const body = Nodes.CompileSingleNode( node.body, env )
-            
+
             //
             // ─── COMPOSING MAIN DATA ─────────────────────────────────────────
             //
 
                 const header = (( node.direction )
-                    // up direction 
+                    // up direction
                     ? env.GenerateSourceNode( node, [
                         "for (let ", iterator,  " = ", startingValue.inLocation,
                         "; ", iterator, " < ", endingValue.inLocation, "; ",
@@ -195,7 +194,7 @@ namespace KaryScript.Compiler.Nodes.For {
                         inLocation:     identifierName,
                         def:            env.GenerateSourceNode( node, [
                                             "const ", identifierName, " = ",
-                                            compiledNode, "; "]) 
+                                            compiledNode, "; "])
                     }
                 }
 
@@ -207,12 +206,12 @@ namespace KaryScript.Compiler.Nodes.For {
     // ─── GENERATE RANDOM NAME ───────────────────────────────────────────────────────
     //
 
-        export function GenerateRandomId ( ) {
-            return  "__$KK" +
-                    Math.floor( Math.random( ) * Date.now( ) )
-                        .toString( )
-                        .substring( 2, 6 )
-        }
+        type TGenerateRandomId = ( ) => string
+        export const GenerateRandomId: TGenerateRandomId = ( ) =>
+            "__$KK" +
+            Math.floor( Math.random( ) * Date.now( ) )
+                .toString( )
+                .substring( 2, 6 )
 
     // ────────────────────────────────────────────────────────────────────────────────
 

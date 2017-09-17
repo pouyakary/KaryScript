@@ -17,40 +17,37 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     // ─── DECLARATION ───────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.DeclarationStatementBase,
-                                   env: IEnv ): SourceMap.SourceNode {
-
-            if ( node.kind === "SingleAllocInit" )
-                return CompileSingleAllocInit( node as AST.SingleAllocInitDeclaration , env )
-            else
-                return CompileMultiAlloc( node as AST.MultiAllocDeclaration, env )
-        }
+        type TCompile =
+            ( node: AST.DeclarationStatementBase, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            ( node.kind === "SingleAllocInit"
+                ? CompileSingleAllocInit( node as AST.SingleAllocInitDeclaration , env )
+                : CompileMultiAlloc( node as AST.MultiAllocDeclaration, env )
+                )
 
     //
     // ─── SINGLE ALLOC INIT DECLARATION ─────────────────────────────────────────────
     //
 
-        function CompileSingleAllocInit ( node: AST.SingleAllocInitDeclaration,
-                                           env: IEnv ): SourceMap.SourceNode {
-
-            if ( env.ZoneStack.length > 0 && node.exported )
-                return CompileExportedAlloc( node, env )
-            else
-                return CompileSingleAllocForGeneralScope( node, env )
-        }
+        type CompileSingleAllocInit =
+            ( node: AST.SingleAllocInitDeclaration, env: IEnv ) => SourceMap.SourceNode
+        const CompileSingleAllocInit: CompileSingleAllocInit = ( node, env ) =>
+            ( env.ZoneStack.length > 0 && node.exported
+                ? CompileExportedAlloc( node, env )
+                : CompileSingleAllocForGeneralScope( node, env )
+                )
 
     //
     // ─── MULTI ALLOC DECLARATION ───────────────────────────────────────────────────
     //
 
-        function CompileMultiAlloc ( node: AST.MultiAllocDeclaration,
-                                      env: IEnv ): SourceMap.SourceNode {
-
-            if ( env.ZoneStack.length === 0 )
-                return CompileNotExportedMultiAlloc( node, env )
-            else
-                return CompileExportedMultiAlloc( node, env )
-        }
+        type TCompileMultiAlloc =
+                ( node: AST.MultiAllocDeclaration, env: IEnv ) => SourceMap.SourceNode
+        const CompileMultiAlloc: TCompileMultiAlloc = ( node, env ) =>
+            ( env.ZoneStack.length === 0
+                ? CompileNotExportedMultiAlloc( node, env )
+                : CompileExportedMultiAlloc( node, env )
+                )
 
     //
     // ─── COMPILE SINGLE ALLOCATION IN CASE OF BEING IN THE GENERAL SCOPE ────────────
@@ -90,7 +87,7 @@ namespace KaryScript.Compiler.Nodes.Declaration {
     //
 
         /**
-         * When you declare something and you export it (say `export def x = 4`), 
+         * When you declare something and you export it (say `export def x = 4`),
          * Based on what ever environment you're doing it, result must be compiled
          * differently:
          * - on global zone &rightarrow; `export var x = 4`
@@ -126,28 +123,28 @@ namespace KaryScript.Compiler.Nodes.Declaration {
 
     //
     // ─── COMPILE EXPORTED MULTI ALLOC ───────────────────────────────────────────────
-    // 
+    //
 
-        function CompileExportedMultiAlloc ( node: AST.MultiAllocDeclaration,
-                                              env: IEnv ): SourceMap.SourceNode {
-
-            const zoneId = env.ZoneStack.join('/')
-
-            return env.GenerateSourceNode( node, 
+        type TCompileExportedMultiAlloc =
+            ( node: AST.MultiAllocDeclaration, env: IEnv ) => SourceMap.SourceNode
+        const CompileExportedMultiAlloc: TCompileExportedMultiAlloc = ( node, env ) =>
+            env.GenerateSourceNode( node,
                 Join( '; ',
                     node.names.map( x => {
                         env.PushZoneIdentifier( env, x )
-                        return env.GenerateSourceNode( x, GetBaseName( x, env ) ) 
+                        return env.GenerateSourceNode( x, GetBaseName( x, env ) )
                     })))
-        }
 
     //
     // ─── GET DECLARATION KEY ───────────────────────────────────────────────────────
     //
 
-        export function GetDeclarationKey ( env: IEnv ) {
-            return ( env.ParentNode.length === 3 )? 'var' : 'let'
-        }
+        type TGetDeclarationKey = ( env: IEnv ) => 'var' | 'let'
+        export const GetDeclarationKey: TGetDeclarationKey = env =>
+            ( env.ParentNode.length === 3
+                ? 'var'
+                : 'let'
+                )
 
     // ────────────────────────────────────────────────────────────────────────────────
 

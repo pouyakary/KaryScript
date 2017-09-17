@@ -18,7 +18,7 @@ namespace KaryScript.Compiler.Reporter {
             message:    string
             location:   AST.ILocation
         }
-        
+
     //
     // ─── REPORTER ───────────────────────────────────────────────────────────────────
     //
@@ -47,27 +47,23 @@ namespace KaryScript.Compiler.Reporter {
     // ─── RETURN ERRORS AT FINALE ────────────────────────────────────────────────────
     //
 
-        export function WrapReturnErrorsAtTheEnd ( error: IErrorBox ) {
-            if ( error.from === 'user' || error.from === 'parser' )
-                return error
-            else
-                return {
-                    from: 'compiler',
-                    errors: [ error ]
-                }
-        }
+        type TWrapReturnErrorsAtTheEnd = ( error: IErrorBox ) => IErrorBox
+        export const WrapReturnErrorsAtTheEnd: TWrapReturnErrorsAtTheEnd = error =>
+            ( error.from === 'user' || error.from === 'parser'
+                ? error
+                : { from: 'compiler' , errors: error.errors }
+                )
 
     //
     // ─── WRAP PARSER ERRORS ─────────────────────────────────────────────────────────
     //
 
-        export function WrapParserError ( env: IEnv, error: ICompilerError ) {
-            return {
-                location: error.location,
-                message: `L${ error.location.start.line }C${ error.location.start.column }: ${ error.message }`
-            }
-        }
-    
+        type TWrapParserError = ( env: IEnv, error: ICompilerError ) => ICompilerError
+        export const WrapParserError: TWrapParserError = ( env, error ) =>
+            ({  location: error.location
+            ,   message: `L${ error.location.start.line }C${ error.location.start.column }: ${ error.message }`
+            })
+
     //
     // ─── CONCAT ERRORS ──────────────────────────────────────────────────────────────
     //

@@ -19,9 +19,10 @@ namespace KaryScript.Compiler.Nodes.ObjectDeclaration {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IObjectDeclaration,
-                                   env: IEnv ): SourceMap.SourceNode {
-            return HandleExportedKey( node, env, Address.NormalizeName( node.name ),
+        type TCompile =
+            ( node: AST.IObjectDeclaration,  env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            HandleExportedKey( node, env, Address.NormalizeName( node.name ),
                 Concat([
                     (( node.kind === 'object' )?
                         Nodes.Declaration.GetDeclarationKey( env ) : 'const'),
@@ -31,7 +32,6 @@ namespace KaryScript.Compiler.Nodes.ObjectDeclaration {
                     Nodes.ObjectLiteral.Compile( node, env )
                 ])
             )
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

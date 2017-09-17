@@ -72,7 +72,7 @@ namespace KaryScript.Compiler.Nodes.Table {
                     ": ",
                      CompileRow( header, node.data[ index ], env, true )
                 ]))
-            
+
             return env.GenerateSourceNode( node, Concat([ "{", Join(', ', rows),  "}" ]))
         }
 

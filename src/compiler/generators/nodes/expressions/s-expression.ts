@@ -25,7 +25,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         export function Compile ( node: AST.ISExpression,
-                                   env: IEnv, 
+                                   env: IEnv,
                           placeholder?: TPlaceholder ): CompiledCode {
 
             switch ( node.kind ) {
@@ -50,20 +50,20 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── HANDLE PLACEHOLDER ─────────────────────────────────────────────────────────
     //
 
-        function CompilePlaceholder ( placeholder: TPlaceholder,
-                                              env: IEnv ): CompiledCode {
-            if ( placeholder['$$$isSourceNode$$$'] )
-                return <SourceMap.SourceNode> placeholder
-            else
-                return Nodes.CompileSingleNode( placeholder as AST.IBase, env )
-        }
+        type TCompilePlaceholder =
+            ( placeholder: TPlaceholder, env: IEnv ) => CompiledCode
+        export const CompilePlaceholder: TCompilePlaceholder = ( placeholder, env ) =>
+            ( placeholder['$$$isSourceNode$$$']
+                ? <SourceMap.SourceNode> placeholder
+                : Nodes.CompileSingleNode( placeholder as AST.IBase, env )
+                )
 
     //
     // ─── FUNCTION CALL WITH ARGS ────────────────────────────────────────────────────
     //
 
-        function CompileFunctionCallWithArgs ( node: AST.IFunctionCall, 
-                                                env: IEnv, 
+        function CompileFunctionCallWithArgs ( node: AST.IFunctionCall,
+                                                env: IEnv,
                                        placeholder?: TPlaceholder ): CompiledCode {
 
             if ( node.command.type === "BinaryOperator" )
@@ -80,8 +80,8 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── COMPILE BINARY OPERATOR FUNCTION ───────────────────────────────────────────
     //
 
-        function CompileBinaryOperatorFunction ( node: AST.IFunctionCall, 
-                                                  env: IEnv, 
+        function CompileBinaryOperatorFunction ( node: AST.IFunctionCall,
+                                                  env: IEnv,
                                          placeholder?: TPlaceholder ): CompiledCode {
             // checks
             if ( !CheckPlaceholderInFunctionCallWithArgsSExpression( node, env ) )
@@ -90,17 +90,19 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                 return ''
 
             // info
-            const params        = GetFunctionArgsByApplyingPlaceholder(
-                                    node, env, placeholder )
+            const params
+                = GetFunctionArgsByApplyingPlaceholder( node, env, placeholder )
 
-            const operator      = TranslateOperator((
-                                    node.command as AST.IBinaryOperator ).operator )
+            const operator
+                = TranslateOperator(( node.command as AST.IBinaryOperator ).operator )
 
-            const compiledParts = Join( ` ${ operator } `, params )
-            
-            const chunk         = [ '(' as CompiledCode ]
-                                    .concat( compiledParts )
-                                    .concat([ ')' ])
+            const compiledParts =
+                Join( ` ${ operator } `, params )
+
+            const chunk =
+                [ '(' as CompiledCode ]
+                    .concat( compiledParts )
+                    .concat([ ')' ])
 
             // done
             return env.GenerateSourceNode( node, chunk )
@@ -110,15 +112,18 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── CHECK BINARY OPERATOR FUNCTION ─────────────────────────────────────────────
     //
 
-        function CheckBinaryOperatorFunction ( node: AST.IFunctionCall, 
-                                                env: IEnv, 
+        function CheckBinaryOperatorFunction ( node: AST.IFunctionCall,
+                                                env: IEnv,
                                        placeholder?: TPlaceholder ) {
-            const count = ( placeholder? 1 : 0 ) + node.params.length
+            const count =
+                ( placeholder? 1 : 0 ) + node.params.length
+
             if ( count < 2 ) {
                 Reporter.Report( env, node,
                         "Binary s-expressions cannot contain less than 2 arguments" )
                 return false
             }
+
             return true
         }
 
@@ -126,13 +131,13 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── COMPILE UNARY SEXPRESSION ──────────────────────────────────────────────────
     //
 
-        function CompileUnaryParameterSExpression ( node: AST.IFunctionCall, 
-                                                     env: IEnv, 
+        function CompileUnaryParameterSExpression ( node: AST.IFunctionCall,
+                                                     env: IEnv,
                                             placeholder?: TPlaceholder ) {
-            // checks 
+            // checks
             if ( !CheckUnaryParameterSExpression( node, env, placeholder ) )
                 return ''
-        
+
             // generating
             return CompileAbstractUnaryOperator(
                 node, ( node.command as AST.IUnaryOperator ).operator,
@@ -143,10 +148,12 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── CHECK UNARY PARAMETER SEXPRESSION ──────────────────────────────────────────
     //
 
-        function CheckUnaryParameterSExpression ( node: AST.IFunctionCall, 
-                                                   env: IEnv, 
+        function CheckUnaryParameterSExpression ( node: AST.IFunctionCall,
+                                                   env: IEnv,
                                           placeholder?: TPlaceholder ) {
-            const count = ( placeholder? 1 : 0 ) + node.params.length
+            const count =
+                ( placeholder? 1 : 0 ) + node.params.length
+
             if ( count > 1 ) {
                 Reporter.Report( env, node, "Unary operators can't take more than one parameter" )
                 return false
@@ -158,15 +165,16 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── SIMPLE FUNCTION CALL WITH ARGS ─────────────────────────────────────────────
     //
 
-        function CompileSimpleFunctionCallWithArgs ( node: AST.IFunctionCall, 
-                                                      env: IEnv, 
+        function CompileSimpleFunctionCallWithArgs ( node: AST.IFunctionCall,
+                                                      env: IEnv,
                                              placeholder?: TPlaceholder ): SourceMap.SourceNode {
             // checks
             if ( !CheckPlaceholderInFunctionCallWithArgsSExpression( node, env ) )
                 return env.GenerateSourceNode( node, '' )
 
             // compiling args
-            const args = GetFunctionArgsByApplyingPlaceholder( node, env, placeholder )
+            const args =
+                GetFunctionArgsByApplyingPlaceholder( node, env, placeholder )
 
             // and done.
             return env.GenerateSourceNode( node,
@@ -177,12 +185,13 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── GET FUNCTION ARGS ──────────────────────────────────────────────────────────
     //
 
-        function GetFunctionArgsByApplyingPlaceholder ( node: AST.IFunctionCall, 
-                                                         env: IEnv, 
+        function GetFunctionArgsByApplyingPlaceholder ( node: AST.IFunctionCall,
+                                                         env: IEnv,
                                                 placeholder?: TPlaceholder ) {
 
             // data
-            let args = new Array<SourceMap.SourceNode>( )
+            let args =
+                new Array<SourceMap.SourceNode>( )
 
             // if place holder sign is present
             if ( node.params.find( x => x.type === 'PipePlaceholder' ) === undefined ) {
@@ -209,12 +218,16 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── UNARY OPERATOR ─────────────────────────────────────────────────────────────
     //
 
-        function CompileUnaryOperator ( node: AST.IFunctionCall, 
-                                         env: IEnv,
-                                placeholder?: TPlaceholder ): SourceMap.SourceNode {
-            return CompileAbstractUnaryOperator(
-                node, ( <AST.IUnaryOperator> node.command ).operator, env, placeholder )
-        }
+        type TCompileUnaryOperator =
+            ( node: AST.IFunctionCall, env: IEnv, placeholder?: TPlaceholder ) =>
+                SourceMap.SourceNode
+
+        export const CompileUnaryOperator: TCompileUnaryOperator = ( node, env, placeholder? ) =>
+            CompileAbstractUnaryOperator(
+                node, ( <AST.IUnaryOperator> node.command ).operator,
+                env,
+                placeholder
+            )
 
     //
     // ─── COMPILE ABSTRACT UNARY OPERATOR ────────────────────────────────────────────
@@ -225,8 +238,10 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                                                  env: IEnv,
                                         placeholder?: TPlaceholder ) {
 
-            const ph = <AST.ISExpression> ( placeholder? placeholder : node.params[ 0 ] )
-            let result: CompiledCode[]
+            const ph = <AST.ISExpression>
+                ( placeholder? placeholder : node.params[ 0 ] )
+
+            let result: CompiledCode[ ]
 
             switch ( operator ) {
                 case "async":
@@ -241,7 +256,7 @@ namespace KaryScript.Compiler.Nodes.SExpression {
                 case "not":
                     result = [ "!", CompilePlaceholder( ph, env ) ]
                     break
-                
+
                 case "clone":
                     result = [ "Object.assign({ }, ", CompilePlaceholder( ph, env ), ")" ]
                     break
@@ -272,9 +287,13 @@ namespace KaryScript.Compiler.Nodes.SExpression {
             // in case of unary operator in pipe expressions
             if ( node.command.type === "UnaryOperator" )
                 return CompileUnaryFunctionOnCallOnly( node, env, placeholder )
-            
+
             // the normal way
-            const ph = placeholder? CompilePlaceholder( placeholder, env ) : ''
+            const ph =
+                placeholder
+                    ? CompilePlaceholder( placeholder, env )
+                    : ''
+
             return env.GenerateSourceNode( node,
                 [ Nodes.CompileSingleNode( node.command, env ),  "(", ph, ")"  ])
         }
@@ -357,7 +376,9 @@ namespace KaryScript.Compiler.Nodes.SExpression {
 
         function CheckPlaceholderInFunctionCallWithArgsSExpression
             ( node: AST.IFunctionCall, env: IEnv, ) {
-            const count = node.params.filter( x => x.type === 'PipePlaceholder' ).length
+            const count =
+                node.params.filter( x => x.type === 'PipePlaceholder' ).length
+
             return ReportPlaceholderError( count, env, node )
         }
 
@@ -366,8 +387,11 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     //
 
         function ReportPlaceholderError ( count: number, env: IEnv, node: AST.IBase ) {
-            const countLimit = GetPlaceholderCountLimit( env )
-            const state = countLimit >= count
+            const countLimit =
+                GetPlaceholderCountLimit( env )
+            const state =
+                countLimit >= count
+
             if ( !state ) {
                 if ( countLimit === 0 )
                     Reporter.Report( env, node,
@@ -384,9 +408,9 @@ namespace KaryScript.Compiler.Nodes.SExpression {
     // ─── GET PLACEHOLDER COUNT LIMIT ────────────────────────────────────────────────
     //
 
-        function GetPlaceholderCountLimit ( env: IEnv ) {
-            return ( Env.GetParentType( env ) === 'PipeExpression' )? 1 : 0
-        }
+        type TGetPlaceholderCountLimit = ( env: IEnv ) => 1 | 0
+        export const GetPlaceholderCountLimit: TGetPlaceholderCountLimit = env =>
+            ( Env.GetParentType( env ) === 'PipeExpression' )? 1 : 0
 
     // ────────────────────────────────────────────────────────────────────────────────
 

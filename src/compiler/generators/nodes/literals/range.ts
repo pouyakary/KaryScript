@@ -14,12 +14,12 @@ namespace KaryScript.Compiler.Nodes.Range {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IRangeLiteral, env: IEnv ) {
-            if ( node.start.type === 'NumericLiteral' && node.end.type === 'NumericLiteral' )
-                return CompileWithExactStartEnd( node, env )
-            else
-                return CompileUnkownRange( node, env )
-        }
+        type TCompile =
+            ( node: AST.IRangeLiteral, env: IEnv ) => string | SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            node.start.type === 'NumericLiteral' && node.end.type === 'NumericLiteral'
+                ? CompileWithExactStartEnd( node, env )
+                : CompileUnkownRange( node, env )
 
     //
     // ─── IN CASE WE KNOW EXACTLY WHAT START AND END ARE ─────────────────────────────
@@ -78,12 +78,17 @@ namespace KaryScript.Compiler.Nodes.Range {
             const counterIdentifier      = Nodes.For.GenerateRandomId( )
 
             // info
-            const start         = ( node.start as AST.INumericLiteral ).value
-            const end           = ( node.end as AST.INumericLiteral ).value
-            const incOperator   = ( start > end )? '--' : '++'
-            const check         = ( start > end )? ' >'  : ' <'
-            const checkTail     = ( node.connector === '...' )? '= ' : ' '
-    
+            const start =
+                ( node.start as AST.INumericLiteral ).value
+            const end =
+                ( node.end as AST.INumericLiteral ).value
+            const incOperator =
+                ( start > end ? '--' : '++' )
+            const check =
+                ( start > end )? ' >'  : ' <'
+            const checkTail =
+                ( node.connector === '...'? '= ' : ' ' )
+
             // result container
             let results = [
                 '(function (){let ', resultsArrayIdentifier, ' = []; for(let ',
@@ -104,18 +109,31 @@ namespace KaryScript.Compiler.Nodes.Range {
 
         function CompileUnkownRange ( node: AST.IRangeLiteral, env: IEnv ) {
             // info
-            const resultsArrayIdentifier    = Nodes.For.GenerateRandomId( )
-            const counterIdentifier         = Nodes.For.GenerateRandomId( )
-            const start                     = GenerateUnknownReference(
-                                                node.start, env )
-            const end                       = GenerateUnknownReference(
-                                                node.end, env )
-            const startAssignment           = (( start.assignment )?
-                                                start.assignment : start.reference )
-            const assignment                = AssembleAssignments([
-                                                startAssignment, end.assignment
-                                            ])
-            const checkTail                 = ( node.connector === '...' )? '= ' : ' '
+            const resultsArrayIdentifier =
+                Nodes.For.GenerateRandomId( )
+            const counterIdentifier =
+                Nodes.For.GenerateRandomId( )
+            const start =
+                GenerateUnknownReference( node.start, env )
+            const end =
+                GenerateUnknownReference( node.end, env )
+            const startAssignment =
+                ( start.assignment
+                    ? start.assignment
+                    : start.reference
+                    )
+
+            const assignment =
+                AssembleAssignments([
+                    startAssignment,
+                    end.assignment
+                ])
+
+            const checkTail =
+                ( node.connector === '...'
+                    ? '= '
+                    : ' '
+                    )
 
             // result array
             let result = [
@@ -146,7 +164,8 @@ namespace KaryScript.Compiler.Nodes.Range {
                                              env: IEnv ): IUnknownReferenceResult {
 
             if ( node.type === 'PipeExpression' || node.type === 'SExpression' ) {
-                const supportRef = Nodes.For.GenerateRandomId( )
+                const supportRef =
+                    Nodes.For.GenerateRandomId( )
                 return {
                     assignment: `${ supportRef } = ${
                         Nodes.CompileSingleNode( node, env ).toString( ) }`,
@@ -154,7 +173,8 @@ namespace KaryScript.Compiler.Nodes.Range {
                 }
 
             } else {
-                const ref = Nodes.CompileSingleNode( node, env ).toString( )
+                const ref =
+                    Nodes.CompileSingleNode( node, env ).toString( )
                 return {
                     assignment: null,
                     reference: ref
@@ -166,12 +186,12 @@ namespace KaryScript.Compiler.Nodes.Range {
     // ─── JOIN ASSIGNMENT ────────────────────────────────────────────────────────────
     //
 
-        function AssembleAssignments ( parts: ( string | null )[ ] ): string {
-            if ( parts[ 1 ] !== null )
-                return parts.join(', ')
-            else
-                return <string> parts[ 0 ]
-        }
+        type TAssembleAssignments = ( parts: ( string | null )[ ] ) => string
+        const AssembleAssignments: TAssembleAssignments = parts =>
+            ( parts[ 1 ] !== null
+                ? parts.join(', ')
+                : <string> parts[ 0 ]
+                )
 
     // ────────────────────────────────────────────────────────────────────────────────
 

@@ -17,12 +17,11 @@ namespace KaryScript.Compiler.Nodes.JSX {
     // ─── JSX ────────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IJSXExpression, env: IEnv ): SourceMap.SourceNode {
-            if ( node.body.length === 0 )
-                return compileTerminalJSXTag( node, env )
-            else
-                return compileNestedJSXTag( node, env )
-        }
+        type TCompile = ( ( node: AST.IJSXExpression, env: IEnv ) => SourceMap.SourceNode )
+        export const Compile: TCompile = ( node, env ) =>
+            node.body.length === 0
+                ? compileTerminalJSXTag( node, env )
+                : compileNestedJSXTag( node, env )
 
     //
     // ─── COMPILED TERMINAL JSX ──────────────────────────────────────────────────────
@@ -30,7 +29,9 @@ namespace KaryScript.Compiler.Nodes.JSX {
 
         function compileTerminalJSXTag ( node: AST.IJSXExpression,
                                           env: IEnv ): SourceMap.SourceNode {
-            const name = Nodes.CompileSingleNode( node.name, env )
+            const name =
+                Nodes.CompileSingleNode( node.name, env )
+
             return env.GenerateSourceNode( node, Concat([
                 "<", name, compileProperties( node.props, env ), "/>"
             ]))
@@ -42,8 +43,11 @@ namespace KaryScript.Compiler.Nodes.JSX {
 
         function compileNestedJSXTag ( node: AST.IJSXExpression,
                                         env: IEnv ): SourceMap.SourceNode {
-            const name = Nodes.CompileSingleNode( node.name, env )
-            const body = compileBody( node.body, env )
+            const name =
+                Nodes.CompileSingleNode( node.name, env )
+            const body =
+                compileBody( node.body, env )
+
             return env.GenerateSourceNode( node, Concat([
                 "<", name, compileProperties( node.props, env ), ">",
                 body,
@@ -74,32 +78,38 @@ namespace KaryScript.Compiler.Nodes.JSX {
     // ─── COMPILE JSX STRINGS ────────────────────────────────────────────────────────
     //
 
-        function compileJSXBodyString ( node: AST.IStringPart ) {
-            return node.part
+        type TCompileJSXBodyString = ( node: AST.IStringPart ) => string
+        export const compileJSXBodyString: TCompileJSXBodyString = node =>
+            node.part
                 .replace( /[\/\/\b\f\r\t\'\"]/g , x => '\\' + x )
                 .replace( /\s*\n\s*/, '\n')
-        }
 
     //
     // ─── COMPILE PROPERTIES ─────────────────────────────────────────────────────────
     //
 
-        function compileProperties ( props: AST.IJSXProperty[ ], env: IEnv ) {
-            return props.map( x => compileJSXProperty( x, env ) )
-        }
+        type TCompileProperties =
+            ( props: AST.IJSXProperty[ ], env: IEnv ) => SourceMap.SourceNode[ ]
+        export const compileProperties: TCompileProperties = ( props, env ) =>
+            props.map( x => compileJSXProperty( x, env ) )
 
     //
     // ─── COMPILE PROPERTY ───────────────────────────────────────────────────────────
     //
 
         function compileJSXProperty ( prop: AST.IJSXProperty, env: IEnv ) {
-            const name  = Address.CompileIdentifier( prop.name, env )
-            const value = Nodes.CompileSingleNode( prop.value, env )
+            const name =
+                Address.CompileIdentifier( prop.name, env )
+            const value =
+                Nodes.CompileSingleNode( prop.value, env )
 
             console.log( prop.value, value)
 
-            const braces = ((prop.value.type === "StringLiteral")?
-                { l: '', r: '' } : { l: '{', r: '}' })
+            const braces =
+                ( ( prop.value.type === "StringLiteral" )
+                    ? { l: '', r: '' }
+                    : { l: '{', r: '}' }
+                    )
 
             return env.GenerateSourceNode( prop, [
                 ' ', name, '=', braces.l, value, braces.r ])

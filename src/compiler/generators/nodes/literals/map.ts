@@ -22,7 +22,7 @@ namespace KaryScript.Compiler.Nodes.Map {
             if ( node.value.length === 0 )
                 return env.GenerateSourceNode( node, 'new Map( )' )
 
-            return env.GenerateSourceNode( node, 
+            return env.GenerateSourceNode( node,
                 [ <any> "(new Map( ))" ]
                     .concat( node.value.map( x => CompileMapPair( x, env ))))
         }
@@ -31,15 +31,16 @@ namespace KaryScript.Compiler.Nodes.Map {
     // ─── COMPILE PAIR ───────────────────────────────────────────────────────────────
     //
 
-        function CompileMapPair ( node: AST.IMapMemberPair, env: IEnv ) {
-            return env.GenerateSourceNode( node, [
-                ".set(", 
+        type TCompileMapPair =
+            ( node: AST.IMapMemberPair, env: IEnv ) => SourceMap.SourceNode
+        export const CompileMapPair: TCompileMapPair = ( node, env ) =>
+            env.GenerateSourceNode( node, [
+                ".set(",
                 Nodes.CompileSingleNode( node.key, env ),
                 ", ",
                 Nodes.CompileSingleNode( node.value, env ),
                 ")"
             ])
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

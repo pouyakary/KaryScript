@@ -35,19 +35,19 @@ namespace KaryScript.Compiler.Nodes.String {
     // ─── HANDLE STRING PART ─────────────────────────────────────────────────────────
     //
 
-        export function HandleEscapedSequences ( text: string ) {
-            return text.replace( /[\/\/\b\f\n\r\t\'\"]/g , x => '\\' + x )
-        }
+        type THandleEscapedSequences = ( text: string ) => string
+        export const HandleEscapedSequences: THandleEscapedSequences = text =>
+            text.replace( /[\/\/\b\f\n\r\t\'\"]/g , x => '\\' + x )
 
     //
     // ─── COMPILE NORMAL STRING ──────────────────────────────────────────────────────
     //
 
-        function CompileNormalString ( node: AST.IStringPart,
-                                        env: IEnv):SourceMap.SourceNode {
-            return env.GenerateSourceNode( node, '"' +
+        type TCompileNormalString =
+            ( node: AST.IStringPart, env: IEnv ) => SourceMap.SourceNode
+        const CompileNormalString = ( node, env ) =>
+            env.GenerateSourceNode( node, '"' +
                 HandleEscapedSequences( node.part ) + '"' )
-        }
 
     //
     // ─── COMPILING STRING WITH INTERPOLATION ────────────────────────────────────────
@@ -55,7 +55,7 @@ namespace KaryScript.Compiler.Nodes.String {
 
         function CompileStringWithInterpolation ( node: AST.IStringLiteral,
                                                    env: IEnv ): SourceMap.SourceNode {
-        
+
             let parts = new Array<CompiledCode>( )
             for ( let part of node.parts ) {
                 if ( part.type === 'StringPart' )
@@ -71,7 +71,7 @@ namespace KaryScript.Compiler.Nodes.String {
             // \x60 is the https://en.wikipedia.org/wiki/Grave_accent used to make
             // template strings in javascript
             return env.GenerateSourceNode( node,
-                [ <any> '\x60' ].concat( parts ).concat( '\x60' ))    
+                [ <any> '\x60' ].concat( parts ).concat( '\x60' ))
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

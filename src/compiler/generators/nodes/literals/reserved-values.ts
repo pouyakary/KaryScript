@@ -14,9 +14,9 @@ namespace KaryScript.Compiler.Nodes.ReservedValueLiterals {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IReservedValueLiterals ) {
-            return `${ node.value }`
-        }
+        type TCompile = ( node: AST.IReservedValueLiterals ) => string
+        export const Compile: TCompile = node =>
+            `${ node.value }`
 
     // ────────────────────────────────────────────────────────────────────────────────
 

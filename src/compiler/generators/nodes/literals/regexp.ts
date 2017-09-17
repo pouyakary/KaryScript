@@ -16,11 +16,12 @@ namespace KaryScript.Compiler.Nodes.RegExpLiteral {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IRegExpLiteral, env: IEnv ) {
-            if ( !CheckRegExp( node, env ) ) return ''
-
-            return `/${ node.pattern }/${ node.flags }`
-        }
+        type TCompile = ( node: AST.IRegExpLiteral, env: IEnv ) => string
+        export const Compile: TCompile = ( node, env ) =>
+            ( CheckRegExp( node, env )
+                ? `/${ node.pattern }/${ node.flags }`
+                : ''
+                )
 
     //
     // ─── PERFORM REGEXP CHECKS ──────────────────────────────────────────────────────
@@ -32,7 +33,7 @@ namespace KaryScript.Compiler.Nodes.RegExpLiteral {
                 return true
             } catch ( e ) {
                 Reporter.Report( env, node, e.toString( ) )
-                return false   
+                return false
             }
         }
 

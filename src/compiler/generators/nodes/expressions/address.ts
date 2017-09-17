@@ -46,10 +46,11 @@ namespace KaryScript.Compiler.Nodes.Address {
     // ─── COMPILE IDENTIFIER NAME ────────────────────────────────────────────────────
     //
 
-        export function CompileIdentifier ( node: AST.IIdentifier, env: IEnv ) {
-            return env.GenerateSourceNode( node,
+        type TCompileIdentifier =
+            ( node: AST.IIdentifier, env: IEnv ) => SourceMap.SourceNode
+        export const CompileIdentifier: TCompileIdentifier = ( node, env ) =>
+            env.GenerateSourceNode( node,
                 node.name.replace( /-/g, '_' ), node.name )
-        }
 
     //
     // ─── GET FULL IDENTIFER ─────────────────────────────────────────────────────────
@@ -91,10 +92,10 @@ namespace KaryScript.Compiler.Nodes.Address {
     // ─── NORMALIZE NAME ─────────────────────────────────────────────────────────────
     //
 
-        export function NormalizeName ( node: AST.IIdentifier ) {
-            return node.name.replace( /-/g, '_' )
-        }
-    
+        type TNormalizeName = ( node: AST.IIdentifier ) => string
+        export const NormalizeName: TNormalizeName = node =>
+            node.name.replace( /-/g, '_' )
+
     // ────────────────────────────────────────────────────────────────────────────────
 
 }

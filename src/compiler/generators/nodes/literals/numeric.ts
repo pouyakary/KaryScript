@@ -14,11 +14,10 @@ namespace KaryScript.Compiler.Nodes.Numeric {
     // ─── NUMERIC LITERALS ───────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.INumericLiteral,
-                                   env: IEnv ): SourceMap.SourceNode{
-
-            return env.GenerateSourceNode( node, node.value.toString( ) )
-        }
+        type TCompile =
+            ( node: AST.INumericLiteral, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            env.GenerateSourceNode( node, node.value.toString( ) )
 
     // ────────────────────────────────────────────────────────────────────────────────
 

@@ -19,9 +19,10 @@ namespace KaryScript.Compiler.Nodes.ArrayDeclaration {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IArrayDeclaration,
-                                   env: IEnv ): SourceMap.SourceNode {
-            return HandleExportedKey( node, env, Address.NormalizeName( node.name ),
+        type TCompile =
+            ( node: AST.IArrayDeclaration, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            HandleExportedKey( node, env, Address.NormalizeName( node.name ),
                 Concat([
                     Nodes.Declaration.GetDeclarationKey( env ),
                     " ",
@@ -30,7 +31,6 @@ namespace KaryScript.Compiler.Nodes.ArrayDeclaration {
                     Nodes.ArrayLiteral.Compile( node, env )
                 ])
             )
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

@@ -16,15 +16,13 @@ namespace KaryScript.Compiler.Nodes.Set {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ISetLiteral,
-                                   env: IEnv ): SourceMap.SourceNode {
-
-            return env.GenerateSourceNode( node, [
+        type TCompile = ( node: AST.ISetLiteral, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            env.GenerateSourceNode( node, [
                 "new Set(",
                 Nodes.ArrayLiteral.Compile( <AST.IArrayLiteral> node, env ),
                 ")"
             ])
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

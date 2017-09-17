@@ -14,12 +14,11 @@ namespace KaryScript.Compiler.Nodes.Boolean {
     // ─── BOOLEAN NODE ───────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IBooleanLiteral,
-                                   env: IEnv ): SourceMap.SourceNode {
-
-            return env.GenerateSourceNode( node,
+        type TCompile =
+            ( node: AST.IBooleanLiteral, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            env.GenerateSourceNode( node,
                 ( node.value )? 'true' : 'false' )
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

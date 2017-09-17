@@ -24,7 +24,7 @@ namespace KaryScript.Compiler.Nodes.Selector {
             switch ( node.kind ) {
                 case 'query':
                     return CompileQuerySelector( node as AST.IQuerySelector, env )
-                
+
                 case 'range':
                     return CompileRangeSelector( node as AST.IRangeSelector, env )
             }
@@ -54,7 +54,8 @@ namespace KaryScript.Compiler.Nodes.Selector {
 
         function CompileSingleQuery ( node: AST.IBase, env: IEnv ) {
 
-            const query = Nodes.CompileSingleNode( node, env )
+            const query =
+                Nodes.CompileSingleNode( node, env )
             let result: CompiledCode[ ]
 
             if ( node.type === "LambdaExpression" )
@@ -89,12 +90,14 @@ namespace KaryScript.Compiler.Nodes.Selector {
         function CompileNumberLiteralRangeSelector ( node: AST.IRangeSelector,
                                                       env: IEnv ) {
 
-            const searchable = Nodes.CompileSingleNode( node.searchable, env )
-
-            const start = ( node.start as AST.INumericLiteral ).value
-            const end   = ( node.end as AST.INumericLiteral ).value
-
-            const identifier = For.GenerateRandomId( )
+            const searchable =
+                Nodes.CompileSingleNode( node.searchable, env )
+            const start =
+                ( node.start as AST.INumericLiteral ).value
+            const end =
+                ( node.end as AST.INumericLiteral ).value
+            const identifier =
+                For.GenerateRandomId( )
 
             return env.GenerateSourceNode( node, [
                 searchable, '.slice(', Math.min( start, end ).toString( ), ', ',
@@ -109,10 +112,12 @@ namespace KaryScript.Compiler.Nodes.Selector {
         function CompileVarRangeSelector ( node: AST.IRangeSelector,
                                             env: IEnv ) {
 
-            const searchable = Nodes.CompileSingleNode( node.searchable, env )
-
-            const start = Nodes.CompileSingleNode( node.start, env )
-            const end   = Nodes.CompileSingleNode( node.end, env )
+            const searchable =
+                Nodes.CompileSingleNode( node.searchable, env )
+            const start =
+                Nodes.CompileSingleNode( node.start, env )
+            const end =
+                Nodes.CompileSingleNode( node.end, env )
 
             return env.GenerateSourceNode( node, [
                 searchable, '.slice(Math.min(', start, ', ', end, '), Math.max(',

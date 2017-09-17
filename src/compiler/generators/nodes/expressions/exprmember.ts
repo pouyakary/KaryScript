@@ -16,13 +16,14 @@ namespace KaryScript.Compiler.Nodes.ExpressionMember {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IExpressionMember, env: IEnv ) {
-            return env.GenerateSourceNode( node, [
+        type TCompile =
+            ( node: AST.IExpressionMember, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            env.GenerateSourceNode( node, [
                 Nodes.CompileSingleNode( node.expr, env ),
                 ".",
                 Nodes.CompileSingleNode( node.member, env )
             ])
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

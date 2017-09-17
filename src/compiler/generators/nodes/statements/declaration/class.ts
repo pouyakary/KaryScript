@@ -28,7 +28,7 @@ namespace KaryScript.Compiler.Nodes.ClassDeclaration {
 
             let defBody = new Array<CompiledCode>( )
             for ( let def of node.defs )
-                defBody.push( env.GenerateSourceNode( def, 
+                defBody.push( env.GenerateSourceNode( def,
                     Nodes.FunctionDeclaration.Compile( def, env, true ) ) )
 
             return HandleExportedKey( node, env, name,
@@ -39,9 +39,10 @@ namespace KaryScript.Compiler.Nodes.ClassDeclaration {
     // ─── COMPILE HEADER ─────────────────────────────────────────────────────────────
     //
 
-        function GenerateHeader ( node: AST.IClassDeclaration,
-                                   env: IEnv ): SourceMap.SourceNode {
-            return env.GenerateSourceNode( node, [
+        type TGenerateHeader =
+            ( node: AST.IClassDeclaration, env: IEnv ) => SourceMap.SourceNode
+        const GenerateHeader: TGenerateHeader = ( node, env ) =>
+            env.GenerateSourceNode( node, [
                 "class ",
                 Nodes.Address.CompileIdentifier( node.name, env ),
                 (( node.origin !== null )?
@@ -49,7 +50,6 @@ namespace KaryScript.Compiler.Nodes.ClassDeclaration {
                         ' extends ',  Address.Compile( node.origin, env )]) : ''),
                 ' {'
             ])
-        }
 
     // ────────────────────────────────────────────────────────────────────────────────
 

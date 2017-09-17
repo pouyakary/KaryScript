@@ -14,10 +14,10 @@ namespace KaryScript.Compiler.Nodes.ReservedIdentifiers {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IReservedIdentifiers ) {
-            return node.name
-        }
-    
+        type TCompile = ( node: AST.IReservedIdentifiers ) => string
+        export const Compile: TCompile = node =>
+            node.name
+
     // ────────────────────────────────────────────────────────────────────────────────
 
 }

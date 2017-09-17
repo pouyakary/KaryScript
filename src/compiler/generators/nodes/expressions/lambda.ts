@@ -17,21 +17,23 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     // ─── LAMBDA EXPRESSION ──────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.ILambdaExpression,
-                                   env: IEnv ): SourceMap.SourceNode {
-            if ( node.code.type === 'Body' )
-                return CompileComplexLambda( node, env )
-            else
-                return CompileSimpleLambda( node, env )
-        }
+        type TCompile = ( node: AST.ILambdaExpression, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile = ( node, env ) =>
+            ( node.code.type === 'Body'
+                ? CompileComplexLambda( node, env )
+                : CompileSimpleLambda( node, env )
+                )
 
     //
     // ─── COMPILE SIMPLE LAMBDA ──────────────────────────────────────────────────────
     //
 
         function CompileSimpleLambda ( node: AST.ILambdaExpression, env: IEnv ) {
-            const chunk = GetLambdaHeaderParts( node, env )
+            const chunk =
+                GetLambdaHeaderParts( node, env )
+
             chunk.push( Nodes.CompileSingleNode( node.code, env ) )
+
             return env.GenerateSourceNode( node, chunk )
         }
 
@@ -40,10 +42,13 @@ namespace KaryScript.Compiler.Nodes.Lambda {
     //
 
         function CompileComplexLambda ( node: AST.ILambdaExpression, env: IEnv ) {
-            const chunk = GetLambdaHeaderParts( node, env )
+            const chunk =
+                GetLambdaHeaderParts( node, env )
+
             chunk.push('{ ')
             chunk.push( Nodes.CompileSingleNode( node.code, env ) )
             chunk.push(' }')
+
             return env.GenerateSourceNode( node, chunk )
         }
 
@@ -57,9 +62,9 @@ namespace KaryScript.Compiler.Nodes.Lambda {
                     Address.CompileIdentifier( x, env ) ) )
 
             let parts = Array<CompiledCode>( )
-            if ( node.args.length === 1 ) {
+            if ( node.args.length === 1 )
                 parts = parts.concat( args )
-            } else {
+            else {
                 if ( args[ 0 ] === undefined )
                     args[ 0 ] = ''
 

@@ -14,17 +14,19 @@ namespace KaryScript.Compiler.Env {
     // ─── SEMICOLON ──────────────────────────────────────────────────────────────────
     //
 
-        export function Semicolon ( env ) {
-            return ( GetParentType( env ) === 'Body' )? '; ' : ''
-        }
+        export const Semicolon = env =>
+            ( GetParentType( env ) === 'Body'
+                ? '; '
+                : ''
+                )
 
     //
     // ─── GET PARENT TYPE ────────────────────────────────────────────────────────────
     //
 
-        export function GetParentType( env: IEnv ) {
-            return env.ParentNode[ env.ParentNode.length - 2 ].type;
-        }
+        type TGetParentType = ( env: IEnv ) => string
+        export const GetParentType: TGetParentType = env =>
+             env.ParentNode[ env.ParentNode.length - 2 ].type
 
     // ────────────────────────────────────────────────────────────────────────────────
 

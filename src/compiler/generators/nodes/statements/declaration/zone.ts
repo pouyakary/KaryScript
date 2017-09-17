@@ -14,21 +14,23 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
     // ─── COMPILE ────────────────────────────────────────────────────────────────────
     //
 
-        export function Compile ( node: AST.IZoneDeclaration, env: IEnv ) {
-            if ( node.kind === "named" )
-                return CompileNamedZoneNode( node as AST.INamedZone, env )
-            else
-                return CompileSimpleZoneNode( node as AST.ISimpleZone, env )
-        }
+        type TCompile =
+            ( node: AST.IZoneDeclaration, env: IEnv ) => SourceMap.SourceNode
+        export const Compile: TCompile ( node, env ) =>
+            ( node.kind === "named"
+                ? CompileNamedZoneNode( node as AST.INamedZone, env )
+                : CompileSimpleZoneNode( node as AST.ISimpleZone, env )
+                )
 
     //
     // ─── COMPILE SIMPLE NODE ZONE ───────────────────────────────────────────────────
     //
 
-        function CompileSimpleZoneNode ( node: AST.ISimpleZone, env: IEnv ) {
-            return env.GenerateSourceNode( node, [
+        type TCompileSimpleZoneNode =
+            ( node: AST.ISimpleZone, env: IEnv ) => SourceMap.SourceNode
+        const CompileSimpleZoneNode: TCompileSimpleZoneNode = ( node, env ) =>
+            env.GenerateSourceNode( node, [
                 '(function() {', Nodes.CompileSingleNode( node, env ), '})()'])
-        }
 
     //
     // ─── COMPILE NAMED ZONE ─────────────────────────────────────────────────────────
@@ -95,7 +97,7 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
             // pushing self
             env.ZoneStack.push( name )
 
-            // pushing zone into zone identifier listing 
+            // pushing zone into zone identifier listing
             if ( env.ZoneIdentifiers[ name ] === undefined )
                 env.ZoneIdentifiers[ <string> env.GetZoneId( env ) ] = {
                     zoneId: <string> env.GetZoneId( env ),
@@ -108,9 +110,9 @@ namespace KaryScript.Compiler.Nodes.ZoneDeclaration {
     // ─── GET NAME ───────────────────────────────────────────────────────────────────
     //
 
-        function GetRightName ( name: AST.IIdentifier ) {
-            return name.name.replace( /\-/g, '_' )
-        }
+        type TGetRightName = ( node: AST.IIdentifier ) => string
+        const GetRightName: TGetRightName = node =>
+            node.name.replace( /\-/g, '_' )
 
     // ────────────────────────────────────────────────────────────────────────────────
 

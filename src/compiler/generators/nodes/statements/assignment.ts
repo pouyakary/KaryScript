@@ -46,39 +46,30 @@ namespace KaryScript.Compiler.Nodes.SingleAssignment {
     // ─── COMPILE SIMPLE ASSIGNMENT ──────────────────────────────────────────────────
     //
 
-        function CompileSingleAssignment ( name: CompiledCode,
-                                          value: CompiledCode,
-                                            env: IEnv ) {
-            return [
-                name, ' = ', value
-            ]
-        }
+        type TCompileAssignment =
+            ( name: CompiledCode, value: CompiledCode, env: IEnv ) => CompiledCode[ ]
+        const CompileSingleAssignment: TCompileAssignment =
+            ( name, value, env ) =>
+                [ name, ' = ', value ]
 
     //
     // ─── COMPILE SLASH ASSIGNMENTS ──────────────────────────────────────────────────
     //
 
-        function CompileSlashAssignment ( name: CompiledCode,
-                                         value: CompiledCode,
-                                           env: IEnv ) {
-            return [
-                name, ' = ', name, '.', value
-            ]
-        }
+        const CompileSlashAssignment: TCompileAssignment =
+            ( name, value, env ) =>
+                [ name, ' = ', name, '.', value  ]
 
     //
     // ─── COMPILE NULL CHECK ASSIGN ──────────────────────────────────────────────────
     //
 
-        function CompileNullCheckAssignment ( name: CompiledCode,
-                                             value: CompiledCode,
-                                               env: IEnv ) {
-            return [
-                'if (', name , ' === null || ', name , ' === undefined) {',
-                    name , ' = ',value,
-                '}'
-            ]
-        }
+        const CompileNullCheckAssignment: TCompileAssignment =
+            ( name, value, env ) =>
+                [ 'if (', name , ' === null || ', name , ' === undefined) {'
+                ,  name , ' = ', value
+                , '}'
+                ]
 
     // ────────────────────────────────────────────────────────────────────────────────
 
