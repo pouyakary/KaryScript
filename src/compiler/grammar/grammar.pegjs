@@ -58,7 +58,7 @@
         //
 
             function getLocation ( ) {
-                
+
             }
 
         //
@@ -130,7 +130,7 @@
     FullPlainWhiteSpace
         = LineTerminator
         / PlainWhiteSpace
-    
+
 
     EmptyLineStatement
         = PlainWhiteSpace* LineTerminator {
@@ -191,11 +191,11 @@
 
     ExpressionsButComparison
         = AddressIdentifier
+        / ShorthandIfExpression
         / Identifier
         / HolderIdentifier
         / LambdaExpression
         / PipeExpression
-        / ShorthandIfExpression
         / SExpression
         / Literals
         / Selector
@@ -485,7 +485,7 @@
                 end:        end
             }
           }
-        
+
     SelectorQueryPart
         = BarSign __* query:( LambdaBody / Expression ) __* {
             return query
@@ -564,7 +564,7 @@
         = __+ StepKeyword __+ stepExp:Returnable {
             return stepExp
         }
-    
+
     ForDirectionKey
         = key:( UpKeyword / DownKeyword ) {
             return ( key === "up" )? true : false
@@ -733,8 +733,8 @@
 //
 
     ShorthandIfExpression 'shorthand if expression'
-        = expr:ShorthandIfParts _* QuestionMark _* trueExpression:ArgumentReturnable
-          _* ExclamationMark _* falseExpression:ArgumentReturnable {
+        = LeftSquareBrace __* expr:ShorthandIfParts __* QuestionMark __* trueExpression:ArgumentReturnable
+          __* ExclamationMark __* falseExpression:ArgumentReturnable __* RightSquareBrace {
             return {
                 type:               "ShorthandIfExpression",
                 location:           location( ),
@@ -867,7 +867,7 @@
                 type:       "SExpression",
                 location:   location( ),
                 id:         id( ),
-                kind:       "UnaryOperator",       
+                kind:       "UnaryOperator",
                 command:    operator,
                 params:     [ arg ]
             }
@@ -894,12 +894,12 @@
                 params:     [ ]
             }
         }
-    
+
 
     SExpressionArgumentArray
         = arg:SExpressionArgument more:( SeparatorMultiline SExpressionArgument)* {
             return prepend( more.map( x => x[ 1 ] ), arg )
-        } 
+        }
 
     SExpressionArgument
         = PipePlaceholder
@@ -942,7 +942,7 @@
 //
 
     ClassDeclaration 'class declaration'
-        = exported:ExportKey ClassKeyword _+ name:Identifier origin:ClassExtends? _* 
+        = exported:ExportKey ClassKeyword _+ name:Identifier origin:ClassExtends? _*
           EndStructureSign __* defs:ClassFunctionDeclarations __* END {
             return {
                 type:       'ClassDeclaration',
@@ -975,7 +975,7 @@
     ClassFunctionDeclarations
         = arg:FunctionDeclaration more:( __+ FunctionDeclaration )* {
             return prepend( more.map( x => x[ 1 ] ), arg )
-        } 
+        }
 
 //
 // ─── FUNCTION DECLARATION ───────────────────────────────────────────────────────
@@ -1087,7 +1087,7 @@
     TableBody
         = member:TableRow more:( _* EOL _* TableRow)* {
             return prepend( more.map( x => x[ 3 ] ), member )
-        } 
+        }
 
     TableRow
         = "|" members:TableRowMembers {
@@ -1098,7 +1098,7 @@
                 cells:      members
             }
         }
-        
+
     TableRowMembers
         = TableRowSingleMember+
 
@@ -1179,7 +1179,7 @@
     NameOnlyDeclarationsArray
         = name:Identifier more:(SeparatorInline Identifier)* {
             return prepend( more.map( x => x[ 1 ] ), name )
-        } 
+        }
 
 //
 // ─── RETURN STATEMENT ───────────────────────────────────────────────────────────
@@ -1333,7 +1333,7 @@
     MapPairMember
         = member:MapAssignment more:( SeparatorMultiline MapAssignment )* {
             return prepend( more.map( x => x[ 1 ] ), member )
-        } 
+        }
 
     MapAssignment
         = key:Returnable _* ColonSign _*
@@ -1366,7 +1366,7 @@
                 value:      members
             }
         }
-      
+
     ObjectDeclaration 'object declaration'
         = exported:ExportKey kind:ObjectKindKey __* name:Identifier __*
           EndStructureSign __* members:ObjectPairMember __+ END {
@@ -1389,7 +1389,7 @@
     ObjectPairMember
         = member:ObjectAssignment more:( SeparatorMultiline ObjectAssignment )* {
             return prepend( more.map( x => x[ 1 ] ), member )
-        } 
+        }
 
     ObjectAssignment
         = name:Identifier _* ColonSign _*
@@ -1460,7 +1460,7 @@
     ArrayMember
         = member:Returnable more:( SeparatorMultiline Returnable )* {
             return prepend( more.map( x => x[ 1 ] ), member )
-        } 
+        }
 
 
 //
@@ -1500,7 +1500,7 @@
     ReservedWord 'reserved keyword'
         = ( AlsoKeyword / AndKeyword / CatKeyword / CloneKeyword / DecKeyword
             / DefKeyword / DoKeyword / DownKeyword / EndKeyword / FalseKeyword
-            / FixKeyword / IncKeyword / MutKeyword / NanKeyword / NoKeyword 
+            / FixKeyword / IncKeyword / MutKeyword / NanKeyword / NoKeyword
             / NotKeyword / OffKeyword / OnKeyword / OrKeyword / ToKeyword
             / TrueKeyword / UFOKeyword / UnlessKeyword / UpKeyword / UsableKeyword
             / UseKeyword / ViaKeyword / WhenKeyword / YesKeyword / ZoneKeyword
