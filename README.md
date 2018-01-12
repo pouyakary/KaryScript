@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/pmkary/karyscript.svg?branch=master)](https://travis-ci.org/pmkary/karyscript)
 
-**KaryScript is a programming language that is currently under it's initial heavy active development phase.**
+**KaryScript is a programming language that is currently under its initial heavy active development phase.**
 
 My goal with the final result is to have a language that is readable (as much as possible using the backgrounds of [my research in readability](http://kary.us/2017/05/16/my-journey-to-clean-code/) and what I've collected from other languages). This is the main goal. Bringing new ways to think, new ways to express and declare and a general shape that at average is more readable than other languages. That is my main goal within this language:
 
