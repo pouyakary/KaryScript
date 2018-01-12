@@ -1,7 +1,7 @@
 
 <img src="https://cloud.githubusercontent.com/assets/2157285/24836023/6be6f3f6-1d26-11e7-9c31-bd45209c417a.jpg" width="300">
 
-[![Build Status](https://travis-ci.org/pmkary/karyscript.svg?branch=master)](https://travis-ci.org/pmkary/karyscript)
+[![Build Status](https://travis-ci.org/pmkary/KaryScript.svg?branch=master)](https://travis-ci.org/pmkary/KaryScript)
 
 **KaryScript is a programming language that is currently under its initial heavy active development phase.**
 
